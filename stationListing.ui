@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>marta-logo.jpg</normaloff>marta-logo.jpg</iconset>
+    <normaloff>marta-logo.png</normaloff>marta-logo.png</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">QFrame {Background-color: #ffffff;}</string>
