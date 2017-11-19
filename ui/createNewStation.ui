@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>335</width>
-    <height>344</height>
+    <height>345</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,7 +26,7 @@
   <property name="frameShadow">
    <enum>QFrame::Raised</enum>
   </property>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="stationNameLabel">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -39,7 +39,7 @@
     <string>Station Name</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_2">
+  <widget class="QLabel" name="stopIdLabel">
    <property name="geometry">
     <rect>
      <x>50</x>
@@ -52,7 +52,7 @@
     <string>Stop ID</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_3">
+  <widget class="QLabel" name="entryFareLabel">
    <property name="geometry">
     <rect>
      <x>40</x>
@@ -65,7 +65,7 @@
     <string>Entry Fare</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_4">
+  <widget class="QLabel" name="stationTypeLabel">
    <property name="geometry">
     <rect>
      <x>36</x>
@@ -78,7 +78,7 @@
     <string>Station Type</string>
    </property>
   </widget>
-  <widget class="QPlainTextEdit" name="confirmpasswordTextEdit">
+  <widget class="QPlainTextEdit" name="nearestIntersectionTextEdit">
    <property name="geometry">
     <rect>
      <x>110</x>
@@ -91,7 +91,7 @@
     <enum>Qt::ScrollBarAlwaysOff</enum>
    </property>
   </widget>
-  <widget class="QPlainTextEdit" name="usernameTextEdit">
+  <widget class="QPlainTextEdit" name="stationNameTextEdit">
    <property name="geometry">
     <rect>
      <x>100</x>
@@ -104,7 +104,7 @@
     <enum>Qt::ScrollBarAlwaysOff</enum>
    </property>
   </widget>
-  <widget class="QPlainTextEdit" name="emailaddressTextEdit">
+  <widget class="QPlainTextEdit" name="stopIdTextEdit">
    <property name="geometry">
     <rect>
      <x>100</x>
@@ -117,7 +117,7 @@
     <enum>Qt::ScrollBarAlwaysOff</enum>
    </property>
   </widget>
-  <widget class="QPlainTextEdit" name="passwordTextEdit">
+  <widget class="QPlainTextEdit" name="entryFareTextEdit">
    <property name="geometry">
     <rect>
      <x>100</x>
@@ -133,7 +133,7 @@
     <string>$</string>
    </property>
   </widget>
-  <widget class="QRadioButton" name="radioButton">
+  <widget class="QRadioButton" name="busStationButton">
    <property name="geometry">
     <rect>
      <x>110</x>
@@ -146,7 +146,7 @@
     <string>Bus Station</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_5">
+  <widget class="QLabel" name="nearestIntersectionLabel">
    <property name="geometry">
     <rect>
      <x>110</x>
@@ -164,7 +164,7 @@
     <string>Nearest Intersection</string>
    </property>
   </widget>
-  <widget class="QRadioButton" name="radioButton_2">
+  <widget class="QRadioButton" name="trainStationButton">
    <property name="geometry">
     <rect>
      <x>110</x>
@@ -177,7 +177,7 @@
     <string>Train Station</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="checkBox">
+  <widget class="QCheckBox" name="openStationBox">
    <property name="geometry">
     <rect>
      <x>50</x>
@@ -190,7 +190,7 @@
     <string>Open Station</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_6">
+  <widget class="QLabel" name="warningLabel">
    <property name="geometry">
     <rect>
      <x>70</x>
@@ -208,7 +208,7 @@
     <string>When Checked, Passengers can enter at this station</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="createStationButton">
    <property name="geometry">
     <rect>
      <x>130</x>

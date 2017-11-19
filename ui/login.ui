@@ -10,6 +10,9 @@
     <height>300</height>
    </rect>
   </property>
+  <property name="focusPolicy">
+   <enum>Qt::ClickFocus</enum>
+  </property>
   <property name="windowTitle">
    <string>Login</string>
   </property>
@@ -59,6 +62,9 @@
      <pointsize>8</pointsize>
     </font>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::StrongFocus</enum>
+   </property>
    <property name="lineWidth">
     <number>2</number>
    </property>
@@ -87,6 +93,9 @@
      <width>191</width>
      <height>21</height>
     </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
    </property>
    <property name="verticalScrollBarPolicy">
     <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -156,6 +165,9 @@
      <width>16777000</width>
      <height>16777000</height>
     </size>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
    </property>
    <property name="verticalScrollBarPolicy">
     <enum>Qt::ScrollBarAlwaysOff</enum>

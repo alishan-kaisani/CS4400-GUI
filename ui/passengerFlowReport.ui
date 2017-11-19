@@ -1,18 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>Frame</class>
+ <widget class="QFrame" name="Frame">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>527</width>
-    <height>300</height>
+    <width>522</width>
+    <height>303</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Passenger Flow Report</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>marta-logo.png</normaloff>marta-logo.png</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QFrame {background-color: #ffffff}</string>
+  </property>
+  <property name="frameShape">
+   <enum>QFrame::StyledPanel</enum>
+  </property>
+  <property name="frameShadow">
+   <enum>QFrame::Raised</enum>
+  </property>
+  <widget class="QLabel" name="frameLabelTop">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>0</y>
+     <width>211</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel {background-color: transparent}</string>
+   </property>
+   <property name="text">
+    <string>Passenger Flow Report</string>
+   </property>
+  </widget>
   <widget class="Line" name="line">
    <property name="windowModality">
     <enum>Qt::ApplicationModal</enum>
@@ -43,7 +80,7 @@
     <bool>false</bool>
    </property>
    <property name="styleSheet">
-    <string notr="true"/>
+    <string notr="true">#line {background-color: transparent}</string>
    </property>
    <property name="frameShadow">
     <enum>QFrame::Plain</enum>
@@ -55,44 +92,20 @@
     <enum>Qt::Horizontal</enum>
    </property>
   </widget>
-  <widget class="QLabel" name="frameLabelTop">
+  <widget class="QPlainTextEdit" name="startTimeTextEdit">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>0</y>
-     <width>211</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>14</pointsize>
-    </font>
-   </property>
-   <property name="autoFillBackground">
-    <bool>false</bool>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QLabel {background-color: transparent}</string>
-   </property>
-   <property name="text">
-    <string>Passenger Flow Report</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
+     <x>90</x>
      <y>50</y>
-     <width>47</width>
-     <height>13</height>
+     <width>151</width>
+     <height>21</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Start Time</string>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
    </property>
   </widget>
-  <widget class="QLabel" name="label_2">
+  <widget class="QLabel" name="endTimeLabel">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -103,58 +116,6 @@
    </property>
    <property name="text">
     <string>End Time</string>
-   </property>
-  </widget>
-  <widget class="QPlainTextEdit" name="plainTextEdit">
-   <property name="geometry">
-    <rect>
-     <x>90</x>
-     <y>50</y>
-     <width>151</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="verticalScrollBarPolicy">
-    <enum>Qt::ScrollBarAlwaysOff</enum>
-   </property>
-  </widget>
-  <widget class="QPlainTextEdit" name="plainTextEdit_2">
-   <property name="geometry">
-    <rect>
-     <x>90</x>
-     <y>80</y>
-     <width>151</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="verticalScrollBarPolicy">
-    <enum>Qt::ScrollBarAlwaysOff</enum>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton">
-   <property name="geometry">
-    <rect>
-     <x>260</x>
-     <y>60</y>
-     <width>75</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Update</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton_2">
-   <property name="geometry">
-    <rect>
-     <x>350</x>
-     <y>60</y>
-     <width>75</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Reset</string>
    </property>
   </widget>
   <widget class="QTableWidget" name="tableWidget">
@@ -191,6 +152,58 @@
      <string>Revenue</string>
     </property>
    </column>
+  </widget>
+  <widget class="QLabel" name="startTimeLabel">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>50</y>
+     <width>47</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Start Time</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="resetButton">
+   <property name="geometry">
+    <rect>
+     <x>350</x>
+     <y>60</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Reset</string>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="endTimeTextEdit">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>80</y>
+     <width>151</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="updateButton">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>60</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Update</string>
+   </property>
   </widget>
  </widget>
  <resources/>

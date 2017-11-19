@@ -56,7 +56,7 @@
     </property>
    </column>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="createNewStationButton">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -69,7 +69,7 @@
     <string>Create New Station</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="viewStationButton">
    <property name="geometry">
     <rect>
      <x>350</x>

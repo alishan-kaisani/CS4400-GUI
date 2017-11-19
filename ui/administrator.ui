@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>173</width>
-    <height>256</height>
+    <width>264</width>
+    <height>244</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,11 +26,11 @@
   <property name="frameShadow">
    <enum>QFrame::Raised</enum>
   </property>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="stationManagementButton">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>50</y>
+     <x>80</x>
+     <y>40</y>
      <width>111</width>
      <height>23</height>
     </rect>
@@ -39,11 +39,11 @@
     <string>Station Management</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_3">
+  <widget class="QPushButton" name="breezeCardManagementButton">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>130</y>
+     <x>60</x>
+     <y>120</y>
      <width>141</width>
      <height>23</height>
     </rect>
@@ -52,11 +52,11 @@
     <string>Breeze Card Management</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_4">
+  <widget class="QPushButton" name="passengerFlowReportButton">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>170</y>
+     <x>70</x>
+     <y>160</y>
      <width>121</width>
      <height>23</height>
     </rect>
@@ -65,11 +65,11 @@
     <string>Passenger Flow Report</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_5">
+  <widget class="QPushButton" name="suspendedCardsButton">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>90</y>
+     <x>90</x>
+     <y>80</y>
      <width>91</width>
      <height>23</height>
     </rect>
@@ -78,11 +78,11 @@
     <string>Suspend Cards</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_6">
+  <widget class="QPushButton" name="logOutButton">
    <property name="geometry">
     <rect>
-     <x>70</x>
-     <y>220</y>
+     <x>110</x>
+     <y>200</y>
      <width>51</width>
      <height>23</height>
     </rect>
@@ -99,7 +99,7 @@
     <rect>
      <x>0</x>
      <y>20</y>
-     <width>221</width>
+     <width>271</width>
      <height>20</height>
     </rect>
    </property>
@@ -138,7 +138,7 @@
     <rect>
      <x>10</x>
      <y>0</y>
-     <width>211</width>
+     <width>241</width>
      <height>31</height>
     </rect>
    </property>
@@ -158,6 +158,13 @@
    </property>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>stationManagementButton</tabstop>
+  <tabstop>suspendedCardsButton</tabstop>
+  <tabstop>breezeCardManagementButton</tabstop>
+  <tabstop>passengerFlowReportButton</tabstop>
+  <tabstop>logOutButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
