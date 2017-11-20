@@ -18,6 +18,10 @@ def VerifyLogin(self):
     		cursor.execute(sql)
             global is_admin
             is_admin = bool(cursor.fetchall()[2])
+            # Open a new window if login is successful
+            # You can do this with the following code:
+            # if cursor.fetchall():
+                # Open new window here
             return 1 if cursor.fetchall() else -1 # 1 if successful, -1 if unsuccessful
     except:
     	print("This should have worked. Blame Joel")
