@@ -12,6 +12,7 @@ class StationDetailFrame(QtWidgets.QFrame, Ui_Frame):
 		Ui_Frame.__init__(self)
 		self.setupUi(self)
 		self.updateFareLabel.mousePressEvent = self.UpdateFare
+		self.updateStationButton.clicked.connect(self.UpdateStation)
 	def InitFromOtherFile(self,Ui_Frame):
 		Ui_Frame.__init__(self)
 		self.setupUi(self)
@@ -19,6 +20,8 @@ class StationDetailFrame(QtWidgets.QFrame, Ui_Frame):
 	def UpdateFare(self, event): 
 		fare = self.fareTextEdit.toPlainText()
 		print("updating fare...")
+	def UpdateStation(self):
+		print("updating station")
 
 
 if __name__ == "__main__":

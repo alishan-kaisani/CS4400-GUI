@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>303</height>
    </rect>
   </property>
   <property name="focusPolicy">
@@ -17,11 +17,12 @@
    <string>Login</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>marta-logo.png</normaloff>marta-logo.png</iconset>
+   <iconset resource="../qtResources.qrc">
+    <normaloff>:/newPrefix/ui/marta-logo.png</normaloff>:/newPrefix/ui/marta-logo.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">QFrame {background-color: #ffffff}</string>
+   <string notr="true">QFrame {background-color: #ffffff} QLabel {color: #009fd7; font-weight: bold;}
+#frameLabelTop {background-color: transparent; color: #ee9306; font-size: 30px;}</string>
   </property>
   <property name="frameShape">
    <enum>QFrame::StyledPanel</enum>
@@ -33,9 +34,9 @@
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>140</y>
-     <width>47</width>
-     <height>13</height>
+     <y>180</y>
+     <width>61</width>
+     <height>16</height>
     </rect>
    </property>
    <property name="text">
@@ -46,7 +47,7 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>20</y>
+     <y>30</y>
      <width>401</width>
      <height>20</height>
     </rect>
@@ -76,9 +77,9 @@
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>80</y>
-     <width>47</width>
-     <height>13</height>
+     <y>120</y>
+     <width>61</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
@@ -89,7 +90,7 @@
    <property name="geometry">
     <rect>
      <x>130</x>
-     <y>80</y>
+     <y>120</y>
      <width>191</width>
      <height>21</height>
     </rect>
@@ -108,10 +109,13 @@
    <property name="geometry">
     <rect>
      <x>170</x>
-     <y>190</y>
+     <y>220</y>
      <width>75</width>
      <height>23</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
    </property>
    <property name="text">
     <string>Log In</string>
@@ -122,17 +126,19 @@
     <rect>
      <x>10</x>
      <y>0</y>
-     <width>51</width>
-     <height>31</height>
+     <width>91</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <pointsize>14</pointsize>
+     <pointsize>-1</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">QLabel {background-color: transparent}</string>
+    <string notr="true"/>
    </property>
    <property name="text">
     <string>Login</string>
@@ -142,7 +148,7 @@
    <property name="geometry">
     <rect>
      <x>170</x>
-     <y>230</y>
+     <y>260</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -155,7 +161,7 @@
    <property name="geometry">
     <rect>
      <x>130</x>
-     <y>140</y>
+     <y>180</y>
      <width>191</width>
      <height>21</height>
     </rect>
@@ -182,7 +188,22 @@
     <bool>false</bool>
    </property>
   </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>50</y>
+     <width>231</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/newPrefix/ui/marta-logo-dark.gif&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../qtResources.qrc"/>
+ </resources>
  <connections/>
 </ui>

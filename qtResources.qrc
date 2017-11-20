@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="newPrefix">
+    <file>ui/marta-logo.png</file>
+    <file>ui/marta-logo-dark.gif</file>
+  </qresource>
+</RCC>

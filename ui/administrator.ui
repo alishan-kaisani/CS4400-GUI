@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>264</width>
-    <height>244</height>
+    <width>249</width>
+    <height>254</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Administrator</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>marta-logo.png</normaloff>marta-logo.png</iconset>
+   <iconset resource="../qtResources.qrc">
+    <normaloff>:/newPrefix/ui/marta-logo.png</normaloff>:/newPrefix/ui/marta-logo.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">QFrame {background-color: #ffffff}</string>
+   <string notr="true">QFrame {background-color: #ffffff} QLabel {color: #009fd7; font-weight: bold;}</string>
   </property>
   <property name="frameShape">
    <enum>QFrame::StyledPanel</enum>
@@ -29,7 +29,7 @@
   <widget class="QPushButton" name="stationManagementButton">
    <property name="geometry">
     <rect>
-     <x>80</x>
+     <x>70</x>
      <y>40</y>
      <width>111</width>
      <height>23</height>
@@ -42,7 +42,7 @@
   <widget class="QPushButton" name="breezeCardManagementButton">
    <property name="geometry">
     <rect>
-     <x>60</x>
+     <x>50</x>
      <y>120</y>
      <width>141</width>
      <height>23</height>
@@ -55,7 +55,7 @@
   <widget class="QPushButton" name="passengerFlowReportButton">
    <property name="geometry">
     <rect>
-     <x>70</x>
+     <x>60</x>
      <y>160</y>
      <width>121</width>
      <height>23</height>
@@ -68,7 +68,7 @@
   <widget class="QPushButton" name="suspendedCardsButton">
    <property name="geometry">
     <rect>
-     <x>90</x>
+     <x>80</x>
      <y>80</y>
      <width>91</width>
      <height>23</height>
@@ -81,7 +81,7 @@
   <widget class="QPushButton" name="logOutButton">
    <property name="geometry">
     <rect>
-     <x>110</x>
+     <x>100</x>
      <y>200</y>
      <width>51</width>
      <height>23</height>
@@ -144,14 +144,16 @@
    </property>
    <property name="font">
     <font>
-     <pointsize>14</pointsize>
+     <pointsize>-1</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
     </font>
    </property>
    <property name="autoFillBackground">
     <bool>false</bool>
    </property>
    <property name="styleSheet">
-    <string notr="true">QLabel {background-color: transparent}</string>
+    <string notr="true">#frameLabelTop {background-color: transparent; color: #ee9306; font-size: 30px;}</string>
    </property>
    <property name="text">
     <string>Administrator</string>
@@ -165,6 +167,8 @@
   <tabstop>passengerFlowReportButton</tabstop>
   <tabstop>logOutButton</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../qtResources.qrc"/>
+ </resources>
  <connections/>
 </ui>

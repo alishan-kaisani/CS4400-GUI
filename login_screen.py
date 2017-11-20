@@ -3,6 +3,7 @@ from PyQt5 import QtCore, QtGui, uic, QtWidgets
 import backend
 import administrator_screen
 import createAccount_screen
+import welcomeToMarta_screen
 
 qtCreatorFile = "ui/login.ui" # Enter file here.
 
@@ -23,9 +24,15 @@ class LoginFrame(QtWidgets.QFrame, Ui_Frame):
 	def VerifyLogin(self): 
 		username = str(self.usernameTextEdit.toPlainText())
 		password = str(self.passwordTextEdit.toPlainText())
-		print(username + " " + password)
-		if username == "admin": 
-			self.OpenAdministrator()
+		out = backend.VerifyLogin(username,password)
+		print(type(out));
+		if out[0] == -1:
+			print('error')
+		else:
+			if is_admin:
+				self.OpenAdministrator()
+			else:
+				self.OpenWelcomeToMarta()
 	def OpenCreateAccount(self):
 		self.frame = createAccount_screen.CreateAccountFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)
@@ -33,6 +40,11 @@ class LoginFrame(QtWidgets.QFrame, Ui_Frame):
 		self.hide()
 	def OpenAdministrator(self): 
 		self.frame = administrator_screen.AdministratorFrame()
+		self.frame.InitFromOtherFile(Ui_Frame)
+		self.frame.show()
+		self.hide()
+	def OpenWelcomeToMarta():
+		self.frame = welcomeToMarta_screen.WelcomeToMartaFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)
 		self.frame.show()
 		self.hide()

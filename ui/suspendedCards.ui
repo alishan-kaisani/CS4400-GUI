@@ -14,11 +14,13 @@
    <string>Suspended Cards</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>marta-logo.png</normaloff>marta-logo.png</iconset>
+   <iconset resource="../qtResources.qrc">
+    <normaloff>:/newPrefix/ui/marta-logo.png</normaloff>:/newPrefix/ui/marta-logo.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">QFrame {background-color: #ffffff;}</string>
+   <string notr="true">QFrame {background-color: #ffffff} 
+QLabel {color: #009fd7; font-weight: bold;}
+#frameLabelTop {background-color: transparent; color: #ee9306; font-size: 30px;}</string>
   </property>
   <property name="frameShape">
    <enum>QFrame::StyledPanel</enum>
@@ -37,7 +39,9 @@
    </property>
    <property name="font">
     <font>
-     <pointsize>14</pointsize>
+     <pointsize>-1</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
     </font>
    </property>
    <property name="autoFillBackground">
@@ -174,6 +178,8 @@
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../qtResources.qrc"/>
+ </resources>
  <connections/>
 </ui>

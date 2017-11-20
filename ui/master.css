@@ -1,5 +1,11 @@
 /*CSS to apply to all screens*/
 
-QFrame {
-	background-color: #ffffff
-}
+/*
+marta blue: #009fd7;
+marta yellow: #f2c200;
+marta orange: #ee9306;
+*/
+
+QFrame {background-color: #ffffff} 
+QLabel {color: #009fd7; font-weight: bold;}
+#frameLabelTop {background-color: transparent; color: #ee9306; font-size: 30px;}

@@ -14,11 +14,13 @@
    <string>Welcome to MARTA</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>marta-logo.png</normaloff>marta-logo.png</iconset>
+   <iconset resource="../qtResources.qrc">
+    <normaloff>:/newPrefix/ui/marta-logo.png</normaloff>:/newPrefix/ui/marta-logo.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">QLabel {font-weight: bold;} QFrame {background-color: #ffffff}</string>
+   <string notr="true">QFrame {background-color: #ffffff} 
+QLabel {color: #009fd7; font-weight: bold;}
+#frameLabelTop {background-color: transparent; color: #ee9306; font-size: 30px;}</string>
   </property>
   <property name="frameShape">
    <enum>QFrame::StyledPanel</enum>
@@ -179,7 +181,7 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">QLabel {font: normal;}</string>
+    <string notr="true">QLabel {font: normal; color: black;}</string>
    </property>
    <property name="text">
     <string>$ MONEY</string>
@@ -245,12 +247,13 @@
     <rect>
      <x>10</x>
      <y>0</y>
-     <width>241</width>
+     <width>321</width>
      <height>31</height>
     </rect>
    </property>
    <property name="font">
     <font>
+     <pointsize>-1</pointsize>
      <weight>75</weight>
      <bold>true</bold>
     </font>
@@ -266,6 +269,8 @@
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../qtResources.qrc"/>
+ </resources>
  <connections/>
 </ui>
