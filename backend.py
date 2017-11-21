@@ -17,7 +17,7 @@ def VerifyLogin(self):
     	    sql = 'SELECT * FROM User WHERE Username = "{}" and Password = "{}"'.format(username, hashlib.md5(password.encode('utf-8')).hexdigest())
 	    cursor.execute(sql)
             global is_admin
-            is_admin = bool(cursor.fetchall()[0][2]) if cursor.fetchall()
+            is_admin = bool(cursor.fetchall()[0][2]) if cursor.fetchall() else None
             # Open a new window if login is successful
             # You can do this with the following code:
             # if cursor.fetchall():
