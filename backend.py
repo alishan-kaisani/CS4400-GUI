@@ -38,9 +38,11 @@ def CreateNewUser(username, password):
     try:
         with connection.cursor() as cursor:
             cursor.execute(sql)
-            return 1
-        except:
+            connection.commit()
+            # Tell the GUI to do something if necessary
+	    return 1
+    except:
             print("Something went wrong. Blame Joel")
-        finally:
-            connection.close()
-            # print("Finished creating new user") #For testing purposes only
+    finally:
+        connection.close()
+        # print("Finished creating new user") #For testing purposes only
