@@ -3,6 +3,7 @@
 
 import pymysql
 import hashlib
+from random import randrange
 
 def VerifyLogin(self):	
 	username = str(self.usernameTextEdit.toPlainText())
@@ -29,8 +30,28 @@ def VerifyLogin(self):
     	connection.close()
     	# print("Finished login query") #For testing purposes only
 
-def CreateNewUser(username, password):
+def GenerateNewCardNumber():
+    while True:
+        newnum = randrange(int(1e15), int(1e16))
+        sql = 'SELECT * FROM Breezecard WHERE BreezecardNum = "{}"'.format(newnum)
+        connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+                                user = 'cs4400_Group_110',
+                                password = 'KAfx5IQr',
+                                db = 'cs4400_Group_110')
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            result = cursor.fetchall()
+        connection.close()
+        if len(result) == 0:
+            return newnum
+
+def CreateNewUser(username, email, password, cardnumber=None): #cardnumber may be either a string or a 16-digit integer
+    if cardnumber is None:
+        cardnumber = GenerateNewCardNumber()
+    assert len(str(cardnumber)) == 16, "Card number must be 16 digits"
     sql = 'INSERT INTO User VALUES ("{}", "{}", false)'.format(username, hashlib.md5(password.encode('utf-8')).hexdigest()) #New users are always passengers, not admins
+    sql2 = 'INSERT INTO Passenger VALUES ("{}", "{}")'.format(username, email)
+    sql3 = 'INSERT INTO Breezecard VALUES ("{}", 0.00, "{}")'.format(cardnumber, username)
     connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
                                 user = 'cs4400_Group_110',
                                 password = 'KAfx5IQr',
@@ -39,10 +60,14 @@ def CreateNewUser(username, password):
         with connection.cursor() as cursor:
             cursor.execute(sql)
             connection.commit()
-            # Tell the GUI to do something if necessary
-	    return 1
-    except:
-            print("Something went wrong. Blame Joel")
+            cursor.execute(sql2)
+            connection.commit()
+            cursor.execute(sql3)
+            connection.commit()
+            # Tell the GUI to do something (if necessary)
+            return 1
+   # except:
+    #        print("Something went wrong. Blame Joel")
     finally:
         connection.close()
         # print("Finished creating new user") #For testing purposes only
