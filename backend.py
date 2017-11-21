@@ -30,7 +30,7 @@ def VerifyLogin(self):
     	# print("Finished login query") #For testing purposes only
 
 def CreateNewUser(username, password):
-    sql = 'INSERT INTO USER VALUES ("{}", "{}", false)'.format(username, hashlib.md5(password.encode('utf-8')).hexdigest()) #New users are always passengers, not admins
+    sql = 'INSERT INTO User VALUES ("{}", "{}", false)'.format(username, hashlib.md5(password.encode('utf-8')).hexdigest()) #New users are always passengers, not admins
     connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
                                 user = 'cs4400_Group_110',
                                 password = 'KAfx5IQr',
