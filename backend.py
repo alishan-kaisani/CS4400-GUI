@@ -12,7 +12,7 @@ def VerifyLogin(username, password):
 	try:
 		with connection.cursor() as cursor:
 			# We have to somehow hash the password to make sure it's the same in the database
-			sql = 'SELECT * FROM User WHERE Username = {} and Password = {}'.format(username, hashlib.md5(password).hexdigest())
+			sql = 'SELECT * FROM User WHERE Username = {} and Password = {}'.format(username, hashlib.md5(password.encode("utf-8")).hexdigest())
 			cursor.execute(sql)
 			global is_admin
 			is_admin = bool(cursor.fetchall()[2])

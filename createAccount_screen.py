@@ -25,7 +25,15 @@ class CreateAccountFrame(QtWidgets.QFrame, Ui_Frame):
 		existingCard = self.existingBreezecardButton.isChecked()
 		#Should assert that newCard == ~existingCard
 		print("creating an account...")
-		self.OpenLogin()
+		out = backend.CreateAccount(username,email,password,confrimPassword,newCard,existingCard)
+		if out is None: 
+			print("eror in Backend")
+		else:
+			if out == 1:
+				print("Account created successfully")
+				self.OpenLogin()
+			else:
+				print("Error in Account Creation")
 	def OpenLogin(self): 
 		self.frame = login_screen.LoginFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)

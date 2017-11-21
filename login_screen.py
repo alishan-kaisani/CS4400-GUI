@@ -5,6 +5,8 @@ import administrator_screen
 import createAccount_screen
 import welcomeToMarta_screen
 
+#File loads up GUI Frame described below - connects all buttons and clicks & ties functions to backend
+
 qtCreatorFile = "ui/login.ui" # Enter file here.
 
 Ui_Frame, QtBaseClass = uic.loadUiType(qtCreatorFile)
@@ -24,15 +26,22 @@ class LoginFrame(QtWidgets.QFrame, Ui_Frame):
 	def VerifyLogin(self): 
 		username = str(self.usernameTextEdit.toPlainText())
 		password = str(self.passwordTextEdit.toPlainText())
-		out = backend.VerifyLogin(username,password)
-		print(type(out));
-		if out[0] == -1:
-			print('error')
-		else:
-			if is_admin:
-				self.OpenAdministrator()
-			else:
-				self.OpenWelcomeToMarta()
+		#out = backend.VerifyLogin(username,password)
+		# if out is None:
+		# 	print('backend function failed')
+		# else:
+		# 	if -1 == -1:
+		# 		print('Invalid Username/Password')
+		# 		self.frame = errorDialog_screen.ErrorDialogFrame()
+		# 		self.frame.newText= "Invalid Username/Password"
+		# 		self.frame.UpdateText()
+		# 		self.frame.InitFromOtherFile(self,Ui_Frame)
+		# 		self.frame.show()
+		# 	else:
+		# 		if is_admin:
+		# 			self.OpenAdministrator()
+		# 		else:
+		# 			self.OpenWelcomeToMarta()
 	def OpenCreateAccount(self):
 		self.frame = createAccount_screen.CreateAccountFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)
