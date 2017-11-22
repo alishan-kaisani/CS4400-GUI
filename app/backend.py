@@ -110,13 +110,19 @@ def ViewStations():
 	finally:
 		connection.close()
 
+#EDIT: Convert closedStatus booleans into strings before passing to GUI
 def PrettifyViewStations():
 	"""Makes the station listing from the ViewStations() function usable, since each station's fare will no longer be a Decimal object.
 	Returns a list of several tuples where the Decimal object is replaced by a floating point number (otherwise an exception would have been raised)."""
 	listing = ViewStations()
 	newlisting = []
+	closed = ""
 	for tup in listing:
-		newlisting.append((tup[0], tup[1], round(float(tup[2]), 2), tup[3]))
+		if tup[3]:
+			closed = "Closed"
+		else: 
+			closed = "Open"
+		newlisting.append((tup[0], tup[1], round(float(tup[2]), 2), closed))
 	return newlisting
 
 def CreateTrainStation(stationName, stopID, entryFare, closedStatus):

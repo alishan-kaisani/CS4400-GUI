@@ -4,6 +4,7 @@ import createNewStation_screen
 import stationDetail_screen
 import error_screen
 import success_screen
+import backend
 
 qtCreatorFile = "ui/stationListing.ui" # Enter file here.
 
@@ -16,29 +17,41 @@ class StationListingFrame(QtWidgets.QFrame, Ui_Frame):
 		self.setupUi(self)
 		self.createNewStationButton.clicked.connect(self.OpenCreateNewStation)
 		self.viewStationButton.clicked.connect(self.ViewStation)
-		self.CreateModel()
+		self.CreateView()
 	def InitFromOtherFile(self,Ui_Frame):
 		Ui_Frame.__init__(self)
 		self.setupUi(self)
 		self.createNewStationButton.clicked.connect(self.OpenCreateNewStation)
 		self.viewStationButton.clicked.connect(self.ViewStation)
-		self.CreateModel()
+		self.CreateView()
 	def OpenCreateNewStation(self): 
 		self.frame = createNewStation_screen.CreateNewStationFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)
 		self.frame.show()
 		self.hide()
-	def CreateModel(self):
-		data = [[1,2,3,4],[5,6,7,8]]
+	def CreateView(self):
+		data = backend.PrettifyViewStations()
 		self.tableWidget.setRowCount = len(data)
-		self.tableWidget.sortingEnabled = False
 		for i in range(0,len(data)):
 			rowInd = i
 			self.tableWidget.insertRow(i)
+			if data[i][3] == "Closed":
+				closed = True;
+			else:
+				closed = False;
 			for j in range(0,self.tableWidget.columnCount()):
-				self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(str(data[i][j])))
-		self.tableWidget.sortingEnabled = True
+				if j != 2:
+					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(str(data[i][j])))
+				else:
+					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem("$"+"{0:.2f}".format(data[i][j])))
+				if closed:
+					self.tableWidget.item(i,j).setBackground(QtGui.QBrush(QtGui.QColor(242, 194, 0)))
+		self.tableWidget.horizontalHeader().setSectionResizeMode(0,QtWidgets.QHeaderView.ResizeToContents)
+		self.tableWidget.horizontalHeader().setSectionResizeMode(1,QtWidgets.QHeaderView.ResizeToContents)
+		self.tableWidget.horizontalHeader().setSectionResizeMode(2,QtWidgets.QHeaderView.ResizeToContents)
 	def ViewStation(self):
+		cur_stopId = cur_station.data("Stop Id")
+		
 		self.error = "ViewStation Function not Defined Yet"
 		self.OpenError()
 	def OpenStationDetail(self): 

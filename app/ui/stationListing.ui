@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>439</width>
-    <height>331</height>
+    <width>502</width>
+    <height>375</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,7 +32,7 @@ QLabel {color: #009fd7; font-weight: bold;}
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>290</y>
+     <y>340</y>
      <width>111</width>
      <height>23</height>
     </rect>
@@ -44,8 +44,8 @@ QLabel {color: #009fd7; font-weight: bold;}
   <widget class="QPushButton" name="viewStationButton">
    <property name="geometry">
     <rect>
-     <x>350</x>
-     <y>290</y>
+     <x>400</x>
+     <y>340</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -62,7 +62,7 @@ QLabel {color: #009fd7; font-weight: bold;}
     <rect>
      <x>0</x>
      <y>30</y>
-     <width>441</width>
+     <width>501</width>
      <height>20</height>
     </rect>
    </property>
@@ -127,9 +127,27 @@ QLabel {color: #009fd7; font-weight: bold;}
     <rect>
      <x>10</x>
      <y>50</y>
-     <width>421</width>
-     <height>231</height>
+     <width>481</width>
+     <height>281</height>
     </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::StrongFocus</enum>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#tableWidget {background-color: #c8cbd1;}</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::WinPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Plain</enum>
+   </property>
+   <property name="sizeAdjustPolicy">
+    <enum>QAbstractScrollArea::AdjustToContents</enum>
    </property>
    <property name="editTriggers">
     <set>QAbstractItemView::NoEditTriggers</set>
@@ -149,6 +167,15 @@ QLabel {color: #009fd7; font-weight: bold;}
    <property name="columnCount">
     <number>4</number>
    </property>
+   <attribute name="horizontalHeaderCascadingSectionResizes">
+    <bool>true</bool>
+   </attribute>
+   <attribute name="horizontalHeaderStretchLastSection">
+    <bool>true</bool>
+   </attribute>
+   <attribute name="verticalHeaderVisible">
+    <bool>false</bool>
+   </attribute>
    <column>
     <property name="text">
      <string>Station Name</string>

@@ -1,4 +1,4 @@
-newimport sys
+import sys
 import sys
 from PyQt5 import QtCore, QtGui, uic, QtWidgets
 import error_screen
