@@ -122,7 +122,7 @@ QLabel {color: #009fd7; font-weight: bold;}
     <string>Station Listing</string>
    </property>
   </widget>
-  <widget class="QTableView" name="tableView">
+  <widget class="QTableWidget" name="tableWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -131,6 +131,44 @@ QLabel {color: #009fd7; font-weight: bold;}
      <height>231</height>
     </rect>
    </property>
+   <property name="editTriggers">
+    <set>QAbstractItemView::NoEditTriggers</set>
+   </property>
+   <property name="alternatingRowColors">
+    <bool>true</bool>
+   </property>
+   <property name="selectionMode">
+    <enum>QAbstractItemView::SingleSelection</enum>
+   </property>
+   <property name="selectionBehavior">
+    <enum>QAbstractItemView::SelectRows</enum>
+   </property>
+   <property name="sortingEnabled">
+    <bool>true</bool>
+   </property>
+   <property name="columnCount">
+    <number>4</number>
+   </property>
+   <column>
+    <property name="text">
+     <string>Station Name</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Stop ID</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Fare</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Status</string>
+    </property>
+   </column>
   </widget>
  </widget>
  <resources>

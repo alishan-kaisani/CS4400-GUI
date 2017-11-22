@@ -50,7 +50,6 @@ class AdministratorFrame(QtWidgets.QFrame, Ui_Frame):
 		self.frame.show()
 		print("opening passenger flow report...\n")
 	def LogOut(self):
-		print("Loggining Out...\n")
 		self.frame = login_screen.LoginFrame()
 		self.frame.InitFromOtherFile(Ui_Frame) 
 		self.frame.show()
@@ -58,11 +57,11 @@ class AdministratorFrame(QtWidgets.QFrame, Ui_Frame):
 		self.success = "Logged Out Successfully"
 		self.OpenSuccess()
 	def OpenSuccess(self):
-		self.frame = success_screen.SuccessFrame()
-		self.frame.InitFromOtherFile(Ui_Frame)
-		self.frame.text = self.success
-		self.frame.UpdateText()
-		self.frame.show()
+		self.newframe = success_screen.SuccessFrame()
+		self.newframe.InitFromOtherFile(Ui_Frame)
+		self.newframe.text = self.success
+		self.newframe.UpdateText()
+		self.newframe.show()
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)

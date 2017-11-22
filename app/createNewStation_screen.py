@@ -1,5 +1,4 @@
 import sys
-import sys
 from PyQt5 import QtCore, QtGui, uic, QtWidgets
 import stationListing_screen
 import error_screen
@@ -39,26 +38,25 @@ class CreateNewStationFrame(QtWidgets.QFrame, Ui_Frame):
 		trainStation = self.trainStationButton.isChecked()
 		openStation = self.openStationBox.isChecked()
 		self.error = "Create new station function not defined yet"
-		self.OpenError()
-		time.sleep(2)
 		self.OpenStationListing()
+		self.OpenError()
 	def OpenStationListing(self):
 		self.frame = stationListing_screen.StationListingFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)
 		self.frame.show()
 		self.hide()
 	def OpenError(self):
-		self.frame = error_screen.ErrorFrame()
-		self.frame.InitFromOtherFile(Ui_Frame)
-		self.text = self.error;
-		self.frame.UpdateText()
-		self.frame.show()
+		self.newframe = error_screen.ErrorFrame()
+		self.newframe.InitFromOtherFile(Ui_Frame)
+		self.newframe.text = self.error;
+		self.newframe.UpdateText()
+		self.newframe.show()
 	def OpenSuccess(self):
-		self.frame = success_screen.SuccessFrame()
-		self.frame.InitFromOtherFile(Ui_Frame)
-		self.frame.text = self.success;
-		self.UpdateText()
-		self.frame.show()
+		self.newframe = success_screen.SuccessFrame()
+		self.newframe.InitFromOtherFile(Ui_Frame)
+		self.newframe.text = self.success;
+		self.newframe.UpdateText()
+		self.newframe.show()
 
 
 if __name__ == "__main__":

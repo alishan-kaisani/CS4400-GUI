@@ -16,21 +16,28 @@ class StationListingFrame(QtWidgets.QFrame, Ui_Frame):
 		self.setupUi(self)
 		self.createNewStationButton.clicked.connect(self.OpenCreateNewStation)
 		self.viewStationButton.clicked.connect(self.ViewStation)
+		self.CreateModel()
 	def InitFromOtherFile(self,Ui_Frame):
 		Ui_Frame.__init__(self)
 		self.setupUi(self)
 		self.createNewStationButton.clicked.connect(self.OpenCreateNewStation)
 		self.viewStationButton.clicked.connect(self.ViewStation)
+		self.CreateModel()
 	def OpenCreateNewStation(self): 
 		self.frame = createNewStation_screen.CreateNewStationFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)
 		self.frame.show()
 		self.hide()
-	# def CreateModel(self):
-	# 	model = QAbstractItemModel()
-	# 	stations = backend.PrettifyViewStations()
-		
-	# 	model.setData(0,len())
+	def CreateModel(self):
+		data = [[1,2,3,4],[5,6,7,8]]
+		self.tableWidget.setRowCount = len(data)
+		self.tableWidget.sortingEnabled = False
+		for i in range(0,len(data)):
+			rowInd = i
+			self.tableWidget.insertRow(i)
+			for j in range(0,self.tableWidget.columnCount()):
+				self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(str(data[i][j])))
+		self.tableWidget.sortingEnabled = True
 	def ViewStation(self):
 		self.error = "ViewStation Function not Defined Yet"
 		self.OpenError()
@@ -44,17 +51,17 @@ class StationListingFrame(QtWidgets.QFrame, Ui_Frame):
 		self.frame.UpdateValues(stationName,stopId,fare,isOpen)
 		self.frame.show()
 	def OpenError(self):
-		self.frame = error_screen.ErrorFrame()
-		self.frame.InitFromOtherFile(Ui_Frame)
-		self.frame.text = self.error
-		self.frame.UpdateText()
-		self.frame.show()
+		self.newframe = error_screen.ErrorFrame()
+		self.newframe.InitFromOtherFile(Ui_Frame)
+		self.newframe.text = self.error
+		self.newframe.UpdateText()
+		self.newframe.show()
 	def OpenSuccess(self):
-		self.frame = success_screen.SuccessFrame()
-		self.frame.InitFromOtherFile(Ui_Frame)
-		self.frame.text = self.success;
-		self.UpdateText()
-		self.frame.show()
+		self.newframe = success_screen.SuccessFrame()
+		self.newframe.InitFromOtherFile(Ui_Frame)
+		self.newframe.text = self.success;
+		self.newframe.UpdateText()
+		self.newframe.show()
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)

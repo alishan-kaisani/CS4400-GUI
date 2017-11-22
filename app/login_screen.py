@@ -38,25 +38,23 @@ class LoginFrame(QtWidgets.QFrame, Ui_Frame):
 				self.OpenError()
 			else:
 				self.success = "Logged In Successfully\nUsername: %s" % (backend.username) 
-				self.OpenSuccess()
 				if backend.is_admin:
-					time.sleep(2)
 					self.OpenAdministrator()
 				else:
-					time.sleep(2)
 					self.OpenWelcomeToMarta()
+				self.OpenSuccess()
 	def OpenError(self):
-		self.frame = error_screen.ErrorFrame()
-		self.frame.InitFromOtherFile(Ui_Frame)
-		self.frame.text = self.error
-		self.frame.UpdateText()
-		self.frame.show()
+		self.newframe = error_screen.ErrorFrame()
+		self.newframe.InitFromOtherFile(Ui_Frame)
+		self.newframe.text = self.error
+		self.newframe.UpdateText()
+		self.newframe.show()
 	def OpenSuccess(self):
-		self.frame = success_screen.SuccessFrame()
-		self.frame.InitFromOtherFile(Ui_Frame)
-		self.frame.text = self.success;
-		self.frame.UpdateText()
-		self.frame.show()
+		self.newframe = success_screen.SuccessFrame()
+		self.newframe.InitFromOtherFile(Ui_Frame)
+		self.newframe.text = self.success;
+		self.newframe.UpdateText()
+		self.newframe.show()
 	def OpenCreateAccount(self):
 		self.frame = createAccount_screen.CreateAccountFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)

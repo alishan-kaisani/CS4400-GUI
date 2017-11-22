@@ -3,6 +3,7 @@ import sys
 from PyQt5 import QtCore, QtGui, uic, QtWidgets
 import error_screen
 import success_screen
+import login_screen
 
 qtCreatorFile = "ui/welcomeToMarta.ui" # Enter file here.
 
@@ -34,20 +35,24 @@ class WelcomeToMartaFrame(QtWidgets.QFrame, Ui_Frame):
 		self.error = "ViewTripHistory Function Not Defined Yet"
 		self.OpenError()
 	def LogOut(self): 
-		self.error = "LogOut Function Not Defined Yet"
-		self.OpenError()
+		self.frame = login_screen.LoginFrame()
+		self.frame.InitFromOtherFile(Ui_Frame) 
+		self.frame.show()
+		self.hide()
+		self.success = "Logged Out Successfully"
+		self.OpenSuccess()
 	def OpenError(self):
-		self.frame = error_screen.ErrorFrame()
-		self.frame.InitFromOtherFile(Ui_Frame)
-		self.frame.text = self.error
-		self.frame.UpdateText()
-		self.frame.show()
+		self.newframe = error_screen.ErrorFrame()
+		self.newframe.InitFromOtherFile(Ui_Frame)
+		self.newframe.text = self.error
+		self.newframe.UpdateText()
+		self.newframe.show()
 	def OpenSuccess(self):
-		self.frame = success_screen.SuccessFrame()
-		self.frame.InitFromOtherFile(Ui_Frame)
-		self.text = self.success;
-		self.UpdateText()
-		self.frame.show()
+		self.newframe = success_screen.SuccessFrame()
+		self.newframe.InitFromOtherFile(Ui_Frame)
+		self.newframe.text = self.success;
+		self.newframe.UpdateText()
+		self.newframe.show()
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)

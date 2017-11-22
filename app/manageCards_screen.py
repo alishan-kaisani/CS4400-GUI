@@ -27,17 +27,17 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 		self.error = "Add Value Function Not Defined Yet"
 		self.OpenError()
 	def OpenError(self):
-		self.frame = error_screen.ErrorFrame()
-		self.frame.InitFromOtherFile(Ui_Frame)
-		self.frame.text = self.error
-		self.frame.UpdateText()
-		self.frame.show()
+		self.newframe = error_screen.ErrorFrame()
+		self.newframe.InitFromOtherFile(Ui_Frame)
+		self.newframe.text = self.error
+		self.newframe.UpdateText()
+		self.newframe.show()
 	def OpenSuccess(self):
-		self.frame = success_screen.SuccessFrame()
-		self.frame.InitFromOtherFile(Ui_Frame)
-		self.frame.text = self.success;
-		self.UpdateText()
-		self.frame.show()
+		self.newframe = success_screen.SuccessFrame()
+		self.newframe.InitFromOtherFile(Ui_Frame)
+		self.newframe.text = self.success;
+		self.newframe.UpdateText()
+		self.newframe.show()
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)

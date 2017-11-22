@@ -16,7 +16,6 @@ class StationDetailFrame(QtWidgets.QFrame, Ui_Frame):
 		self.updateStationButton.clicked.connect(self.UpdateStation)
 	def InitFromOtherFile(self,Ui_Frame):
 		Ui_Frame.__init__(self)
-		
 		self.setupUi(self)
 		self.updateStationButton.clicked.connect(self.UpdateStation)
 	def UpdateValues(self, stationName,stopId,fare,isOpen): 
@@ -30,17 +29,17 @@ class StationDetailFrame(QtWidgets.QFrame, Ui_Frame):
 		self.error = "Update Station Function Not defined yet"
 		self.OpenError()
 	def OpenError(self):
-		self.frame = error_screen.ErrorFrame()
-		self.frame.InitFromOtherFile(Ui_Frame)
-		self.frame.text = self.error
-		self.frame.UpdateText()
-		self.frame.show()
+		self.newframe = error_screen.ErrorFrame()
+		self.newframe.InitFromOtherFile(Ui_Frame)
+		self.newframe.text = self.error
+		self.newframe.UpdateText()
+		self.newframe.show()
 	def OpenSuccess(self):
-		self.frame = success_screen.SuccessFrame()
-		self.frame.InitFromOtherFile(Ui_Frame)
-		self.frame.text = self.success;
-		self.UpdateText()
-		self.frame.show()
+		self.newframe = success_screen.SuccessFrame()
+		self.newframe.InitFromOtherFile(Ui_Frame)
+		self.newframe.text = self.success;
+		self.newframe.UpdateText()
+		self.newframe.show()
 
 
 if __name__ == "__main__":
