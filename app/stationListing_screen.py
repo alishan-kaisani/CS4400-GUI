@@ -26,6 +26,11 @@ class StationListingFrame(QtWidgets.QFrame, Ui_Frame):
 		self.frame.InitFromOtherFile(Ui_Frame)
 		self.frame.show()
 		self.hide()
+	# def CreateModel(self):
+	# 	model = QAbstractItemModel()
+	# 	stations = backend.PrettifyViewStations()
+		
+	# 	model.setData(0,len())
 	def ViewStation(self):
 		self.error = "ViewStation Function not Defined Yet"
 		self.OpenError()

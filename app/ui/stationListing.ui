@@ -28,36 +28,6 @@ QLabel {color: #009fd7; font-weight: bold;}
   <property name="frameShadow">
    <enum>QFrame::Raised</enum>
   </property>
-  <widget class="QTableWidget" name="tableWidget">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>50</y>
-     <width>421</width>
-     <height>231</height>
-    </rect>
-   </property>
-   <column>
-    <property name="text">
-     <string>Station Name</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>StopID</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Fare</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Status</string>
-    </property>
-   </column>
-  </widget>
   <widget class="QPushButton" name="createNewStationButton">
    <property name="geometry">
     <rect>
@@ -150,6 +120,16 @@ QLabel {color: #009fd7; font-weight: bold;}
    </property>
    <property name="text">
     <string>Station Listing</string>
+   </property>
+  </widget>
+  <widget class="QTableView" name="tableView">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>50</y>
+     <width>421</width>
+     <height>231</height>
+    </rect>
    </property>
   </widget>
  </widget>

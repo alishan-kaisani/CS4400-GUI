@@ -27,9 +27,8 @@ class LoginFrame(QtWidgets.QFrame, Ui_Frame):
 		self.loginButton.clicked.connect(self.VerifyLogin)
 		self.registerButton.clicked.connect(self.OpenCreateAccount)
 	def VerifyLogin(self): 
-		username = str(self.usernameTextEdit.text())
-		password = str(self.passwordTextEdit.text())
-		out = backend.VerifyLogin(username,password)
+		#out = backendFunc(username,password)		
+		out = backend.VerifyLogin(str(self.usernameTextEdit.text()),str(self.passwordTextEdit.text()))
 		if out is None:
 			self.error = "backend function failed"
 			self.OpenError()
@@ -38,7 +37,7 @@ class LoginFrame(QtWidgets.QFrame, Ui_Frame):
 				self.error = "Invalid Username/Password"
 				self.OpenError()
 			else:
-				self.success = "Logged In Successfully"
+				self.success = "Logged In Successfully\nUsername: %s" % (backend.username) 
 				self.OpenSuccess()
 				if backend.is_admin:
 					time.sleep(2)
