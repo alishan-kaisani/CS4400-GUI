@@ -1,6 +1,8 @@
 import sys
 import sys
 from PyQt5 import QtCore, QtGui, uic, QtWidgets
+import error_screen
+import success_screen
 
 qtCreatorFile = "ui/manageCards.ui" # Enter file here.
 
@@ -19,9 +21,23 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 		self.addCardButton.clicked.connect(self.AddCard)
 		self.addValueButton.clicked.connect(self.AddValue)
 	def AddCard(self): 
-		print("Adding Card...")
+		self.error = "Add Card Function Not Defined Yet"
+		self.OpenError()
 	def AddValue(self): 
-		print("Adding Value...")
+		self.error = "Add Value Function Not Defined Yet"
+		self.OpenError()
+	def OpenError(self):
+		self.frame = error_screen.ErrorFrame()
+		self.frame.InitFromOtherFile(Ui_Frame)
+		self.frame.text = self.error
+		self.frame.UpdateText()
+		self.frame.show()
+	def OpenSuccess(self):
+		self.frame = success_screen.SuccessFrame()
+		self.frame.InitFromOtherFile(Ui_Frame)
+		self.frame.text = self.success;
+		self.UpdateText()
+		self.frame.show()
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)

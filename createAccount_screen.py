@@ -1,6 +1,8 @@
 import sys
 from PyQt5 import QtCore, QtGui, uic, QtWidgets
 import login_screen
+import error_screen
+import login_screen
 
 qtCreatorFile = "ui/createAMartaAccount.ui" # Enter file here.
 
@@ -12,10 +14,20 @@ class CreateAccountFrame(QtWidgets.QFrame, Ui_Frame):
 		Ui_Frame.__init__(self)
 		self.setupUi(self)
 		self.createAnAccountButton.clicked.connect(self.CreateAccount)
+		self.existingBreezecardButton.toggled.connect(self.ExistingRadioClicked)
+		self.newBreezecardButton.toggled.connect(self.NewRadioClicked)
+	def ExistingRadioClicked(self,enabled):
+		if enabled:
+			self.cardNumberTextEdit.setEnabled(True)
+	def NewRadioClicked(self,enabled):
+		if enabled:
+			self.cardNumberTextEdit.setEnabled(False)
 	def InitFromOtherFile(self,Ui_Frame):
 		Ui_Frame.__init__(self)
 		self.setupUi(self)
 		self.createAnAccountButton.clicked.connect(self.CreateAccount)
+		self.existingBreezecardButton.toggled.connect(self.ExistingRadioClicked)
+		self.newBreezecardButton.toggled.connect(self.NewRadioClicked)
 	def CreateAccount(self):
 		username = self.usernameTextEdit.toPlainText()
 		email = self.emailAddressTextEdit.toPlainText()
@@ -24,21 +36,36 @@ class CreateAccountFrame(QtWidgets.QFrame, Ui_Frame):
 		newCard = self.newBreezecardButton.isChecked()
 		existingCard = self.existingBreezecardButton.isChecked()
 		#Should assert that newCard == ~existingCard
-		print("creating an account...")
 		out = backend.CreateAccount(username,email,password,confrimPassword,newCard,existingCard)
 		if out is None: 
-			print("eror in Backend")
+			self.error = "error in Backend"
+			self.OpenError()
 		else:
 			if out == 1:
-				print("Account created successfully")
+				self.success = "Account created Successfully"
 				self.OpenLogin()
+				self.OpenSuccess()
 			else:
-				print("Error in Account Creation")
+				self.error = "Error in Account Creation"
+				self.OpenError()
 	def OpenLogin(self): 
 		self.frame = login_screen.LoginFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)
 		self.frame.show()
 		self.hide()
+	def OpenError(self):
+		self.frame = error_screen.ErrorFrame()
+		self.frame.InitFromOtherFile(Ui_Frame)
+		self.text = self.error;
+		self.UpdateText()
+		self.frame.show()
+	def OpenSuccess(self):
+		self.frame = success_screen.SuccessFrame()
+		self.frame.InitFromOtherFile(Ui_Frame)
+		self.frame.text = self.success;
+		self.UpdateText()
+		self.frame.show()
+
 
 
 if __name__ == "__main__":

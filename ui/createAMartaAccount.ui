@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>Frame</class>
  <widget class="QFrame" name="Frame">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -86,58 +89,6 @@ QLabel {color: #009fd7; font-weight: bold;}
     <string>Confrim Password</string>
    </property>
   </widget>
-  <widget class="QPlainTextEdit" name="usernameTextEdit">
-   <property name="geometry">
-    <rect>
-     <x>130</x>
-     <y>50</y>
-     <width>161</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="verticalScrollBarPolicy">
-    <enum>Qt::ScrollBarAlwaysOff</enum>
-   </property>
-  </widget>
-  <widget class="QPlainTextEdit" name="emailAddressTextEdit">
-   <property name="geometry">
-    <rect>
-     <x>130</x>
-     <y>80</y>
-     <width>161</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="verticalScrollBarPolicy">
-    <enum>Qt::ScrollBarAlwaysOff</enum>
-   </property>
-  </widget>
-  <widget class="QPlainTextEdit" name="passwordTextEdit">
-   <property name="geometry">
-    <rect>
-     <x>130</x>
-     <y>120</y>
-     <width>161</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="verticalScrollBarPolicy">
-    <enum>Qt::ScrollBarAlwaysOff</enum>
-   </property>
-  </widget>
-  <widget class="QPlainTextEdit" name="confirmPasswordTextEdit">
-   <property name="geometry">
-    <rect>
-     <x>130</x>
-     <y>160</y>
-     <width>161</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="verticalScrollBarPolicy">
-    <enum>Qt::ScrollBarAlwaysOff</enum>
-   </property>
-  </widget>
   <widget class="QGroupBox" name="breezecardBox">
    <property name="geometry">
     <rect>
@@ -164,19 +115,6 @@ QLabel {color: #009fd7; font-weight: bold;}
     </property>
     <property name="text">
      <string>Use My Existing Breeze Card</string>
-    </property>
-   </widget>
-   <widget class="QPlainTextEdit" name="cardNumberTextEdit">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>40</y>
-      <width>161</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="verticalScrollBarPolicy">
-     <enum>Qt::ScrollBarAlwaysOff</enum>
     </property>
    </widget>
    <widget class="QLabel" name="cardNumberLabel">
@@ -285,6 +223,71 @@ QLabel {color: #009fd7; font-weight: bold;}
    </property>
    <property name="text">
     <string>Create An Account</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="usernameTextEdit">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>50</y>
+     <width>161</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>Enter Username</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="emailAddressTextEdit">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>81</y>
+     <width>161</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>myEmail@example.com</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="passwordTextEdit">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>120</y>
+     <width>161</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="confirmPasswordTextEdit">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>160</y>
+     <width>161</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="cardNumberTextEdit">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>230</y>
+     <width>161</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="frame">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>

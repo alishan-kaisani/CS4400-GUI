@@ -5,6 +5,7 @@ import suspendedCards_screen
 import breezeCardManagement_screen
 import passengerFlowReport_screen
 import login_screen
+import success_screen
 
 qtCreatorFile = "ui/administrator.ui" # Enter file here.
 
@@ -32,28 +33,36 @@ class AdministratorFrame(QtWidgets.QFrame, Ui_Frame):
 		self.frame = stationListing_screen.StationListingFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)
 		self.frame.show()
-		print("opening station management...")
+		print("opening station management...\n")
 	def OpenSuspendedCards(self): 
 		self.frame = suspendedCards_screen.SuspendedCardsFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)
 		self.frame.show()
-		print("opening suspended cards...")
+		print("opening suspended cards...\n")
 	def OpenBreezeCardManagement(self): 
 		self.frame = breezeCardManagement_screen.BreezeCardManagementFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)
 		self.frame.show()
-		print("opening breeze card management...")
+		print("opening breeze card management...\n")
 	def OpenPassengerFlowReport(self):
 		self.frame = passengerFlowReport_screen.PassengerFlowReportFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)
 		self.frame.show()
-		print("opening passenger flow report...")
+		print("opening passenger flow report...\n")
 	def LogOut(self):
+		print("Loggining Out...\n")
 		self.frame = login_screen.LoginFrame()
 		self.frame.InitFromOtherFile(Ui_Frame) 
 		self.frame.show()
 		self.hide()
-		print("Loggining Out...")
+		self.success = "Logged Out Successfully"
+		self.OpenSuccess()
+	def OpenSuccess(self):
+		self.frame = success_screen.SuccessFrame()
+		self.frame.InitFromOtherFile(Ui_Frame)
+		self.frame.text = self.success
+		self.frame.UpdateText()
+		self.frame.show()
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)

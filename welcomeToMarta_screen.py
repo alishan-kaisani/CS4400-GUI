@@ -1,6 +1,8 @@
 import sys
 import sys
 from PyQt5 import QtCore, QtGui, uic, QtWidgets
+import error_screen
+import success_screen
 
 qtCreatorFile = "ui/welcomeToMarta.ui" # Enter file here.
 
@@ -23,13 +25,29 @@ class WelcomeToMartaFrame(QtWidgets.QFrame, Ui_Frame):
 		self.viewTripHistoryButton.clicked.connect(self.ViewTripHistory)
 		self.logOutButton.clicked.connect(self.LogOut)
 	def ManageCards(self, event): 
-		print("Managing Cards...")
+		self.error = "ManageCards Function Not Defined Yet"
+		self.OpenError()
 	def EndTrip(self, event): 
-		print("Ending Trip...")
+		self.error = "EndTrip Function Not Defined Yet"
+		self.OpenError()
 	def ViewTripHistory(self):
-		print("Viewing Trip History...")
+		self.error = "ViewTripHistory Function Not Defined Yet"
+		self.OpenError()
 	def LogOut(self): 
-		print("Logging Out")
+		self.error = "LogOut Function Not Defined Yet"
+		self.OpenError()
+	def OpenError(self):
+		self.frame = error_screen.ErrorFrame()
+		self.frame.InitFromOtherFile(Ui_Frame)
+		self.frame.text = self.error
+		self.frame.UpdateText()
+		self.frame.show()
+	def OpenSuccess(self):
+		self.frame = success_screen.SuccessFrame()
+		self.frame.InitFromOtherFile(Ui_Frame)
+		self.text = self.success;
+		self.UpdateText()
+		self.frame.show()
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)

@@ -4,6 +4,9 @@ import backend
 import administrator_screen
 import createAccount_screen
 import welcomeToMarta_screen
+import error_screen
+import success_screen
+import time
 
 #File loads up GUI Frame described below - connects all buttons and clicks & ties functions to backend
 
@@ -24,24 +27,37 @@ class LoginFrame(QtWidgets.QFrame, Ui_Frame):
 		self.loginButton.clicked.connect(self.VerifyLogin)
 		self.registerButton.clicked.connect(self.OpenCreateAccount)
 	def VerifyLogin(self): 
-		username = str(self.usernameTextEdit.toPlainText())
-		password = str(self.passwordTextEdit.toPlainText())
-		#out = backend.VerifyLogin(username,password)
-		# if out is None:
-		# 	print('backend function failed')
-		# else:
-		# 	if -1 == -1:
-		# 		print('Invalid Username/Password')
-		# 		self.frame = errorDialog_screen.ErrorDialogFrame()
-		# 		self.frame.newText= "Invalid Username/Password"
-		# 		self.frame.UpdateText()
-		# 		self.frame.InitFromOtherFile(self,Ui_Frame)
-		# 		self.frame.show()
-		# 	else:
-		# 		if is_admin:
-		# 			self.OpenAdministrator()
-		# 		else:
-		# 			self.OpenWelcomeToMarta()
+		username = str(self.usernameTextEdit.text())
+		password = str(self.passwordTextEdit.text())
+		out = backend.VerifyLogin(username,password)
+		if out is None:
+			self.error = "backend function failed"
+			self.OpenError()
+		else:
+			if out == -1:
+				self.error = "Invalid Username/Password"
+				self.OpenError()
+			else:
+				self.success = "Logged In Successfully"
+				self.OpenSuccess()
+				if backend.is_admin:
+					time.sleep(2)
+					self.OpenAdministrator()
+				else:
+					time.sleep(2)
+					self.OpenWelcomeToMarta()
+	def OpenError(self):
+		self.frame = error_screen.ErrorFrame()
+		self.frame.InitFromOtherFile(Ui_Frame)
+		self.frame.text = self.error
+		self.frame.UpdateText()
+		self.frame.show()
+	def OpenSuccess(self):
+		self.frame = success_screen.SuccessFrame()
+		self.frame.InitFromOtherFile(Ui_Frame)
+		self.frame.text = self.success;
+		self.frame.UpdateText()
+		self.frame.show()
 	def OpenCreateAccount(self):
 		self.frame = createAccount_screen.CreateAccountFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)
@@ -52,7 +68,7 @@ class LoginFrame(QtWidgets.QFrame, Ui_Frame):
 		self.frame.InitFromOtherFile(Ui_Frame)
 		self.frame.show()
 		self.hide()
-	def OpenWelcomeToMarta():
+	def OpenWelcomeToMarta(self):
 		self.frame = welcomeToMarta_screen.WelcomeToMartaFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)
 		self.frame.show()

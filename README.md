@@ -1,6 +1,8 @@
 ﻿# CS4400-GUI
- 
- Useful Links: 
- 
- * http://pythonforengineers.com/your-first-gui-app-with-python-and-pyqt/
- * https://stackoverflow.com/questions/14755305/open-a-gui-file-from-another-file-pyqt
+
+## How to Run application
+1.) clone the repo into your local machine
+2.) From the terminal, run "python login_screen.py"
+
+* Must Be running python 3
+* All dependenices should already be functional

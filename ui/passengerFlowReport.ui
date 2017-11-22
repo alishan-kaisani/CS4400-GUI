@@ -96,19 +96,6 @@ QLabel {color: #009fd7; font-weight: bold;}
     <enum>Qt::Horizontal</enum>
    </property>
   </widget>
-  <widget class="QPlainTextEdit" name="startTimeTextEdit">
-   <property name="geometry">
-    <rect>
-     <x>90</x>
-     <y>60</y>
-     <width>151</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="verticalScrollBarPolicy">
-    <enum>Qt::ScrollBarAlwaysOff</enum>
-   </property>
-  </widget>
   <widget class="QLabel" name="endTimeLabel">
    <property name="geometry">
     <rect>
@@ -183,19 +170,6 @@ QLabel {color: #009fd7; font-weight: bold;}
     <string>Reset</string>
    </property>
   </widget>
-  <widget class="QPlainTextEdit" name="endTimeTextEdit">
-   <property name="geometry">
-    <rect>
-     <x>90</x>
-     <y>90</y>
-     <width>151</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="verticalScrollBarPolicy">
-    <enum>Qt::ScrollBarAlwaysOff</enum>
-   </property>
-  </widget>
   <widget class="QPushButton" name="updateButton">
    <property name="geometry">
     <rect>
@@ -207,6 +181,112 @@ QLabel {color: #009fd7; font-weight: bold;}
    </property>
    <property name="text">
     <string>Update</string>
+   </property>
+  </widget>
+  <widget class="QDateTimeEdit" name="startDateTimeEdit">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>60</y>
+     <width>161</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="wrapping">
+    <bool>false</bool>
+   </property>
+   <property name="accelerated">
+    <bool>true</bool>
+   </property>
+   <property name="date">
+    <date>
+     <year>2017</year>
+     <month>1</month>
+     <day>1</day>
+    </date>
+   </property>
+   <property name="time">
+    <time>
+     <hour>0</hour>
+     <minute>0</minute>
+     <second>0</second>
+    </time>
+   </property>
+   <property name="minimumDateTime">
+    <datetime>
+     <hour>0</hour>
+     <minute>0</minute>
+     <second>0</second>
+     <year>2000</year>
+     <month>1</month>
+     <day>1</day>
+    </datetime>
+   </property>
+   <property name="minimumDate">
+    <date>
+     <year>2000</year>
+     <month>1</month>
+     <day>1</day>
+    </date>
+   </property>
+   <property name="maximumTime">
+    <time>
+     <hour>0</hour>
+     <minute>0</minute>
+     <second>0</second>
+    </time>
+   </property>
+   <property name="currentSection">
+    <enum>QDateTimeEdit::MonthSection</enum>
+   </property>
+   <property name="calendarPopup">
+    <bool>true</bool>
+   </property>
+   <property name="currentSectionIndex">
+    <number>0</number>
+   </property>
+  </widget>
+  <widget class="QDateTimeEdit" name="endDateTimeEdit">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>90</y>
+     <width>161</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="accelerated">
+    <bool>true</bool>
+   </property>
+   <property name="dateTime">
+    <datetime>
+     <hour>0</hour>
+     <minute>0</minute>
+     <second>0</second>
+     <year>2017</year>
+     <month>12</month>
+     <day>31</day>
+    </datetime>
+   </property>
+   <property name="minimumDateTime">
+    <datetime>
+     <hour>0</hour>
+     <minute>0</minute>
+     <second>0</second>
+     <year>2000</year>
+     <month>1</month>
+     <day>1</day>
+    </datetime>
+   </property>
+   <property name="minimumDate">
+    <date>
+     <year>2000</year>
+     <month>1</month>
+     <day>1</day>
+    </date>
+   </property>
+   <property name="calendarPopup">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>

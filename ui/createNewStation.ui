@@ -80,61 +80,6 @@ QLabel {color: #009fd7; font-weight: bold;}
     <string>Station Type</string>
    </property>
   </widget>
-  <widget class="QPlainTextEdit" name="nearestIntersectionTextEdit">
-   <property name="geometry">
-    <rect>
-     <x>110</x>
-     <y>210</y>
-     <width>161</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="verticalScrollBarPolicy">
-    <enum>Qt::ScrollBarAlwaysOff</enum>
-   </property>
-  </widget>
-  <widget class="QPlainTextEdit" name="stationNameTextEdit">
-   <property name="geometry">
-    <rect>
-     <x>100</x>
-     <y>50</y>
-     <width>201</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="verticalScrollBarPolicy">
-    <enum>Qt::ScrollBarAlwaysOff</enum>
-   </property>
-  </widget>
-  <widget class="QPlainTextEdit" name="stopIdTextEdit">
-   <property name="geometry">
-    <rect>
-     <x>100</x>
-     <y>90</y>
-     <width>201</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="verticalScrollBarPolicy">
-    <enum>Qt::ScrollBarAlwaysOff</enum>
-   </property>
-  </widget>
-  <widget class="QPlainTextEdit" name="entryFareTextEdit">
-   <property name="geometry">
-    <rect>
-     <x>100</x>
-     <y>130</y>
-     <width>201</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="verticalScrollBarPolicy">
-    <enum>Qt::ScrollBarAlwaysOff</enum>
-   </property>
-   <property name="plainText">
-    <string>$</string>
-   </property>
-  </widget>
   <widget class="QRadioButton" name="busStationButton">
    <property name="geometry">
     <rect>
@@ -153,7 +98,7 @@ QLabel {color: #009fd7; font-weight: bold;}
     <rect>
      <x>110</x>
      <y>190</y>
-     <width>111</width>
+     <width>121</width>
      <height>16</height>
     </rect>
    </property>
@@ -196,10 +141,10 @@ QLabel {color: #009fd7; font-weight: bold;}
   <widget class="QLabel" name="warningLabel">
    <property name="geometry">
     <rect>
-     <x>60</x>
+     <x>30</x>
      <y>280</y>
-     <width>261</width>
-     <height>21</height>
+     <width>301</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="font">
@@ -297,6 +242,79 @@ QLabel {color: #009fd7; font-weight: bold;}
    </property>
    <property name="text">
     <string>Create New Station</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="stationNameTextEdit">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>50</y>
+     <width>201</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>Enter Station Name</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="stopIdTextEdit">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>89</y>
+     <width>201</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>Enter Stop Id</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="nearestIntersectionTextEdit">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>210</y>
+     <width>161</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>Enter Nearest Intersection</string>
+   </property>
+  </widget>
+  <widget class="QDoubleSpinBox" name="entryFareSpinBox">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>130</y>
+     <width>71</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="wrapping">
+    <bool>false</bool>
+   </property>
+   <property name="buttonSymbols">
+    <enum>QAbstractSpinBox::UpDownArrows</enum>
+   </property>
+   <property name="specialValueText">
+    <string/>
+   </property>
+   <property name="prefix">
+    <string>$</string>
+   </property>
+   <property name="maximum">
+    <double>50.000000000000000</double>
+   </property>
+   <property name="singleStep">
+    <double>0.010000000000000</double>
+   </property>
+   <property name="value">
+    <double>0.000000000000000</double>
    </property>
   </widget>
  </widget>
