@@ -7,7 +7,7 @@ def VerifyLogin(self):
     If the logon attempt is successful, is_admin becomes a global variable for use later on.
     is_admin is either True or False, depending on whether the user is an administrator.
     The function returns 1 if the logon attempt is successful or -1 if unsuccessful."""
-	username = str(self.usernameTextEdit.toPlainText())
+    username = str(self.usernameTextEdit.toPlainText())
     password = str(self.passwordTextEdit.toPlainText())
     connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
     							user = 'cs4400_Group_110',
