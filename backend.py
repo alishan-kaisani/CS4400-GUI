@@ -114,3 +114,63 @@ def PrettifyViewStations():
     for tup in listing:
         newlisting.append((tup[0], tup[1], round(float(tup[2]), 2), tup[3]))
     return newlisting
+
+def CreateTrainStation(stationName, stopID, entryFare, closedStatus):
+    """Creates a new train station by inserting a tuple into the Station table.
+    stationName (str), stopID (str), and entryFare (float) all have fairly obvious meanings.
+    closedStatus is 1 if True or 0 if False (may take int or bool value)
+    Function returns 1 if successful or returns None and prints an error message to the console if an exception is raised."""
+    connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+                                user = 'cs4400_Group_110',
+                                password = 'KAfx5IQr',
+                                db = 'cs4400_Group_110')
+    closedStatus = 'true' if closedStatus in (1, True) else 'false' if closedStatus in (0, False) else None
+    sql = 'INSERT INTO Station VALUES ("{}", "{}", {}, {}, true);'.format(stopID, stationName, entryFare, closedStatus)
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            connection.commit()
+            return 1
+    except:
+        print("Someting went wrong. Blame Joel.")
+    finally:
+        connection.close()
+
+def CreateBusStation(stationName, stopID, entryFare, closedStatus, *args):
+    """Creates a new bus station by inserting a tuple into the Station table and, if appropriate, the BusStationIntersection table.
+    stationName (str), stopID (str), entryFare (float), closedStatus (bool or float) all have fairly obvious meanings.
+    *args creates args (tuple) variable, which will have exactly 0 or 1 elements.
+    If args has one element, then that element will be the nearest intersection (str).
+    Function returns 1 or prints error message to console whilst returning None."""
+    connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+                                user = 'cs4400_Group_110',
+                                password = 'KAfx5IQr',
+                                db = 'cs4400_Group_110')
+    closedStatus = 'true' if closedStatus in (1, True) else 'false' if closedStatus in (0, False) else None
+    sql = 'INSERT INTO Station VALUES ("{}", "{}", {}, {}, false);'.format(stopID, stationName, entryFare, closedStatus)
+    if args:
+        sql2 = 'INSERT INTO BusStationIntersection VALUES ("{}", "{}");'.format(stopID, args[0])
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            connection.commit()
+            if args:
+                cursor.execute(sql2)
+                connection.commit()
+            return 1
+    except:
+        print("Someting went wrong. Blame Joel.")
+    finally:
+        connection.close()
+
+def CreateStationWrapper(isTrain, stationName, stopID, entryFare, closedStatus, *args):
+    """Wrapper function for creating new station.
+    isTrain (bool) determines whether the new station is a train station.
+    *args creates variable args (tuple) with 0 or 1 elements (that element, if it exists, is a string of the nearest intersection for bus stations only).
+    Parameters stationName (str), stopID (str), entryFare (float), and closedStatus (bool or int) have the same meaning as before."""
+    if isTrain:
+        CreateTrainStation(stationName, stopID, entryFare, closedStatus)
+    elif not args:
+        CreateBusStation(stationName, stopID, entryFare, closedStatus)
+    else:
+        CreateBusStation(stationName, stopID, entryFare, closedStatus, args[0])
