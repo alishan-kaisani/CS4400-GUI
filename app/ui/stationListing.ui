@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>502</width>
-    <height>375</height>
+    <height>370</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,7 +31,7 @@ QLabel {color: #009fd7; font-weight: bold;}
   <widget class="QPushButton" name="createNewStationButton">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>10</x>
      <y>340</y>
      <width>111</width>
      <height>23</height>
@@ -44,7 +44,7 @@ QLabel {color: #009fd7; font-weight: bold;}
   <widget class="QPushButton" name="viewStationButton">
    <property name="geometry">
     <rect>
-     <x>400</x>
+     <x>410</x>
      <y>340</y>
      <width>75</width>
      <height>23</height>
@@ -196,6 +196,19 @@ QLabel {color: #009fd7; font-weight: bold;}
      <string>Status</string>
     </property>
    </column>
+  </widget>
+  <widget class="QPushButton" name="updateViewButton">
+   <property name="geometry">
+    <rect>
+     <x>220</x>
+     <y>340</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Update View</string>
+   </property>
   </widget>
  </widget>
  <resources>

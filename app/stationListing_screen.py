@@ -17,18 +17,28 @@ class StationListingFrame(QtWidgets.QFrame, Ui_Frame):
 		self.setupUi(self)
 		self.createNewStationButton.clicked.connect(self.OpenCreateNewStation)
 		self.viewStationButton.clicked.connect(self.ViewStation)
+		self.updateViewButton.clicked.connect(self.UpdateView)
 		self.CreateView()
 	def InitFromOtherFile(self,Ui_Frame):
 		Ui_Frame.__init__(self)
 		self.setupUi(self)
 		self.createNewStationButton.clicked.connect(self.OpenCreateNewStation)
 		self.viewStationButton.clicked.connect(self.ViewStation)
+		self.updateViewButton.clicked.connect(self.UpdateView)
 		self.CreateView()
 	def OpenCreateNewStation(self): 
 		self.frame = createNewStation_screen.CreateNewStationFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)
 		self.frame.show()
 		self.hide()
+	def UpdateView(self): 
+		self.hide()
+		while (self.tableWidget.rowCount() > 0):
+			self.tableWidget.removeRow(0)
+		self.CreateView()
+		self.success = "Updated View!"
+		self.show()
+		self.OpenSuccess()
 	def CreateView(self):
 		data = backend.PrettifyViewStations()
 		self.tableWidget.setRowCount = len(data)
@@ -61,17 +71,28 @@ class StationListingFrame(QtWidgets.QFrame, Ui_Frame):
 		row = self.tableWidget.selectedItems()[0].row()
 
 		#Get the StopID of the selected Station for backend
-		self.tableWidget.item(row,1)
-		
-
-	def OpenStationDetail(self): 
+		stopId = self.tableWidget.item(row,1)
+		data = viewSingleStation(stopId)
+		data_dict = {}
+		data_dict["Station Name"].append(data[0])
+		data_dict["Stop ID"].append(data[1])
+		data_dict["Entry Fare"].append(data[2])
+		data_dict["Status"].append(data[3])
+		if (data[4]):
+			#if isTrain:
+			data_dict["Nearest Intersection"].append("Not available for Train Stations")
+		else:
+			data_dict["Nearest Intersection"].append(data[5])
+		self.OpenStationDetail(data_dict)
+	def OpenStationDetail(self, data_dict): 
 		self.frame = stationDetail_screen.StationDetailFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)
-		stationName = "NAME"
-		stopId = "STOPID"
-		fare = 100.00
-		isOpen = True
-		self.frame.UpdateValues(stationName,stopId,fare,isOpen)
+		stationName = data_dict["Station Name"]
+		stopId = data_dict["Stop ID"]
+		fare = data_dict["Entry Fare"]
+		isOpen = data_dict["Status"]
+		nearestIntersection = data_dict["Nearest Intersection"]
+		self.frame.UpdateValues(stationName,stopId,fare,isOpen,nearestIntersection)
 		self.frame.show()
 	def OpenError(self):
 		self.newframe = error_screen.ErrorFrame()

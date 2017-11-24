@@ -27,6 +27,24 @@ class WelcomeToMartaFrame(QtWidgets.QFrame, Ui_Frame):
 		self.endTripLabel.mousePressEvent= self.EndTrip
 		self.viewTripHistoryButton.clicked.connect(self.ViewTripHistory)
 		self.logOutButton.clicked.connect(self.LogOut)
+	def PopulateBreezeCards(self): 
+		cardList = backend.getBreezeCards()
+		#backend function that returns a list of breezecard numbers
+		newList = []
+		for card in cardlist: 
+			card = str(card)
+			newList.append(card)
+		self.breezeCardBox.addItems(newList)
+	def UpdateBreezeCard(self): 
+		cur_breezeCard = int(self.breezeCardBox.currentText())
+		details = breezeCard.GetBreezeCardInfo(cur_brezecard)
+		self.balanceAmount.setText("$" + details["Money"])
+
+		#Fill in Start at Values
+
+		#Fill in Trip Progress Label
+
+		#Fill in End at Values
 	def ManageCards(self, event): 
 		self.frame = manageCards_screen.ManageCardsFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)

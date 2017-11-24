@@ -18,6 +18,7 @@ class CreateNewStationFrame(QtWidgets.QFrame, Ui_Frame):
 		self.createStationButton.clicked.connect(self.CreateStation)
 		self.busStationButton.toggled.connect(self.BusButtonClicked)
 		self.trainStationButton.toggled.connect(self.TrainButtonClicked)
+		self.returnStationButton.clicked.connect(self.OpenStationListing)
 	def BusButtonClicked(self,enabled):
 		if enabled:
 			self.nearestIntersectionTextEdit.setEnabled(True)
@@ -30,16 +31,52 @@ class CreateNewStationFrame(QtWidgets.QFrame, Ui_Frame):
 		self.createStationButton.clicked.connect(self.CreateStation)
 		self.busStationButton.toggled.connect(self.BusButtonClicked)
 		self.trainStationButton.toggled.connect(self.TrainButtonClicked)
+		self.returnStationButton.clicked.connect(self.OpenStationListing)
 	def CreateStation(self): 
+		#Read out data into vars
 		stationName = str(self.stationNameTextEdit.text())
+		print(stationName)
 		stopId = str(self.stopIdTextEdit.text())
-		entryFare = self.entryFareSpinBox.value
-		busStation = self.busStationButton.isChecked()
+		print(stopId)
+		entryFare = self.entryFareSpinBox.value()
+		print(entryFare)
 		trainStation = self.trainStationButton.isChecked()
-		openStation = self.openStationBox.isChecked()
-		self.error = "Create new station function not defined yet"
-		self.OpenStationListing()
-		self.OpenError()
+		print(trainStation)
+		isClosed = not self.openStationBox.isChecked()
+		print(isClosed)
+		nearestIntersection = str(self.nearestIntersectionTextEdit.text())
+		print(nearestIntersection)
+
+		#Perform error handling
+		if (stationName == "" or stopId == ''):
+			self.error = "All fields must be filled"
+			self.OpenError()
+			return
+
+		#entryFare will always have some sort of value in it
+
+		if ((not (self.trainStationButton.isChecked())) and (not (self.busStationButton.isChecked()))):
+			#Condition checks if neither radiobutton is checked
+			self.error = "A staton must be assigned a type"
+			self.OpenError()
+			return
+
+		#isClosed will always have a value
+
+		res = -1
+		res = backend.CreateStationWrapper(trainStation, stationName, stopId, entryFare, isClosed, nearestIntersection)
+		if res == 1: 
+			self.success = "Station created Successfully"
+			self.OpenStationListing()
+			self.OpenSuccess()
+		elif res == -1:
+			self.error = "Error in Station Creation"
+			self.OpenError()
+			return
+		else:
+			self.error = "Unknown Error:\n" + str(res)
+			self.OpenError()
+			return
 	def OpenStationListing(self):
 		self.frame = stationListing_screen.StationListingFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)

@@ -32,10 +32,12 @@ class LoginFrame(QtWidgets.QFrame, Ui_Frame):
 		if out is None:
 			self.error = "backend function failed"
 			self.OpenError()
+			return
 		else:
 			if out == -1:
 				self.error = "Invalid Username/Password"
 				self.OpenError()
+				return
 			else:
 				self.success = "Logged In Successfully\nUsername: %s" % (backend.username) 
 				if backend.is_admin:

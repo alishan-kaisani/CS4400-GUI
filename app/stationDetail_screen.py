@@ -18,11 +18,12 @@ class StationDetailFrame(QtWidgets.QFrame, Ui_Frame):
 		Ui_Frame.__init__(self)
 		self.setupUi(self)
 		self.updateStationButton.clicked.connect(self.UpdateStation)
-	def UpdateValues(self, stationName,stopId,fare,isOpen): 
+	def UpdateValues(self, stationName,stopId,fare,isOpen, nearestIntersection): 
 		self.stationNameLabel.setText(stationName)
 		self.stopIdLabel.setText(stopId)
 		self.entryFareSpinBox.setValue(fare)
 		self.openStationBox.setChecked(isOpen)
+		self.nearestIntersectionTextLabel.setText(nearestIntersection)
 		#self.error = "Update Fare Function Not defined yet"
 		#self.OpenError()
 	def UpdateStation(self):

@@ -33,22 +33,18 @@ class AdministratorFrame(QtWidgets.QFrame, Ui_Frame):
 		self.frame = stationListing_screen.StationListingFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)
 		self.frame.show()
-		print("opening station management...\n")
 	def OpenSuspendedCards(self): 
 		self.frame = suspendedCards_screen.SuspendedCardsFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)
 		self.frame.show()
-		print("opening suspended cards...\n")
 	def OpenBreezeCardManagement(self): 
 		self.frame = breezeCardManagement_screen.BreezeCardManagementFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)
 		self.frame.show()
-		print("opening breeze card management...\n")
 	def OpenPassengerFlowReport(self):
 		self.frame = passengerFlowReport_screen.PassengerFlowReportFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)
 		self.frame.show()
-		print("opening passenger flow report...\n")
 	def LogOut(self):
 		self.frame = login_screen.LoginFrame()
 		self.frame.InitFromOtherFile(Ui_Frame) 

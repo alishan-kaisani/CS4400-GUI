@@ -2,6 +2,7 @@ import sys
 from PyQt5 import QtCore, QtGui, uic, QtWidgets
 import login_screen
 import error_screen
+import success_screen
 import login_screen
 import backend
 
@@ -17,6 +18,7 @@ class CreateAccountFrame(QtWidgets.QFrame, Ui_Frame):
 		self.createAnAccountButton.clicked.connect(self.CreateAccount)
 		self.existingBreezecardButton.toggled.connect(self.ExistingRadioClicked)
 		self.newBreezecardButton.toggled.connect(self.NewRadioClicked)
+		self.returnToLoginButton.clicked.connect(self.OpenLogin)
 	def ExistingRadioClicked(self,enabled):
 		if enabled:
 			self.cardNumberTextEdit.setEnabled(True)
@@ -29,6 +31,7 @@ class CreateAccountFrame(QtWidgets.QFrame, Ui_Frame):
 		self.createAnAccountButton.clicked.connect(self.CreateAccount)
 		self.existingBreezecardButton.toggled.connect(self.ExistingRadioClicked)
 		self.newBreezecardButton.toggled.connect(self.NewRadioClicked)
+		self.returnToLoginButton.clicked.connect(self.OpenLogin)
 	def CreateAccount(self):
 		#Read out data into vars
 		username = self.usernameTextEdit.text()
@@ -54,6 +57,7 @@ class CreateAccountFrame(QtWidgets.QFrame, Ui_Frame):
 			#password must be atleast 8 characters long
 			self.error = "Pasword must be atleast 8 characters"
 			self.OpenError()
+			return
 
 		if ((not (self.newBreezecardButton.isChecked())) and (not (self.existingBreezecardButton.isChecked()))):
 			#Condition checks if neither radiobutton is checked
@@ -61,6 +65,7 @@ class CreateAccountFrame(QtWidgets.QFrame, Ui_Frame):
 			self.OpenError()
 			return
 
+		#Call backend function to actually create Account based on type of cardNumber chosen
 		res = -1;
 		if self.newBreezecardButton.isChecked():
 			#Condition checks if new breezecard is being used
@@ -88,8 +93,8 @@ class CreateAccountFrame(QtWidgets.QFrame, Ui_Frame):
 			self.OpenError()
 			return
 		else:
-			self.error = "Unknown Error"
-			self.openError()
+			self.error = "Unknown Error:\n" + str(res)
+			self.OpenError()
 	def OpenLogin(self): 
 		self.frame = login_screen.LoginFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)
