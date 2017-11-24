@@ -1,6 +1,7 @@
 import pymysql
 import hashlib
 from random import randrange
+import sys
 
 #EDIT: This function was edited to store the username as a global var & updated query execution to actually work
 def VerifyLogin(gui_username, gui_password):
@@ -55,6 +56,8 @@ def CreateNewUser(username, email, password, cardnumber=None):
 	Returns 1 if the operation is successful, otherwise an exception is raised."""
 	if cardnumber is None:
 		cardnumber = GenerateNewCardNumber()
+
+	#EDIT: This check is now done in the GUI but can be maintained here as a backup
 	assert len(str(cardnumber)) == 16, "Card number must be 16 digits"
 	sql = 'INSERT INTO User VALUES ("{}", "{}", false);'.format(username, hashlib.md5(password.encode('utf-8')).hexdigest()) #New users are always passengers, not admins
 	sql2 = 'INSERT INTO Passenger VALUES ("{}", "{}");'.format(username, email)
@@ -74,7 +77,7 @@ def CreateNewUser(username, email, password, cardnumber=None):
 			# Tell the GUI to do something (if necessary)
 			return 1
 	except:
-	    print("Something went wrong. Blame Joel")
+		return sys.exc_info()[0]
 	finally:
 		connection.close()
 		# print("Finished creating new user") #For testing purposes only
@@ -108,7 +111,7 @@ def ViewStations():
 			m = cursor.fetchall()
 			return m
 	except:
-		print("Something went wrong. Blame Joel.")
+		return sys.exc_info()[0]
 	finally:
 		connection.close()
 
@@ -144,7 +147,7 @@ def CreateTrainStation(stationName, stopID, entryFare, closedStatus):
 			connection.commit()
 			return 1
 	except:
-		print("Someting went wrong. Blame Joel.")
+		return sys.exc_info()[0]
 	finally:
 		connection.close()
 
@@ -171,18 +174,21 @@ def CreateBusStation(stationName, stopID, entryFare, closedStatus, *args):
 				connection.commit()
 			return 1
 	except:
-		print("Someting went wrong. Blame Joel.")
+		return sys.exc_info()[0]
 	finally:
 		connection.close()
 
+#EDIT: returning inside the inner function is insufficient to return out here
+#Adjusted return call to fix this and cause a clean exit
 def CreateStationWrapper(isTrain, stationName, stopID, entryFare, closedStatus, *args):
 	"""Wrapper function for creating new station.
 	isTrain (bool) determines whether the new station is a train station.
 	*args creates variable args (tuple) with 0 or 1 elements (that element, if it exists, is a string of the nearest intersection for bus stations only).
 	Parameters stationName (str), stopID (str), entryFare (float), and closedStatus (bool or int) have the same meaning as before."""
 	if isTrain:
-		CreateTrainStation(stationName, stopID, entryFare, closedStatus)
+		return CreateTrainStation(stationName, stopID, entryFare, closedStatus)
 	elif not args:
-		CreateBusStation(stationName, stopID, entryFare, closedStatus)
+		return CreateBusStation(stationName, stopID, entryFare, closedStatus)
 	else:
-		CreateBusStation(stationName, stopID, entryFare, closedStatus, args[0])
+		return CreateBusStation(stationName, stopID, entryFare, closedStatus, args[0])
+
