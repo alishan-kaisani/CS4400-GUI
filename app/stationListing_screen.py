@@ -32,28 +32,38 @@ class StationListingFrame(QtWidgets.QFrame, Ui_Frame):
 	def CreateView(self):
 		data = backend.PrettifyViewStations()
 		self.tableWidget.setRowCount = len(data)
+		font = QtGui.QFont()
+		font.setBold(True)
 		for i in range(0,len(data)):
-			rowInd = i
 			self.tableWidget.insertRow(i)
+			closed = False;
 			if data[i][3] == "Closed":
 				closed = True;
-			else:
-				closed = False;
 			for j in range(0,self.tableWidget.columnCount()):
 				if j != 2:
 					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(str(data[i][j])))
 				else:
 					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem("$"+"{0:.2f}".format(data[i][j])))
 				if closed:
-					self.tableWidget.item(i,j).setBackground(QtGui.QBrush(QtGui.QColor(242, 194, 0)))
+					self.tableWidget.item(i,j).setFont(font)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(0,QtWidgets.QHeaderView.ResizeToContents)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(1,QtWidgets.QHeaderView.ResizeToContents)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(2,QtWidgets.QHeaderView.ResizeToContents)
 	def ViewStation(self):
-		cur_stopId = cur_station.data("Stop Id")
+		# cur_stopId = cur_station.data("Stop Id")
+		if (len(self.tableWidget.selectedItems()) == 0):
+			self.error = "No Station Selcted"
+			self.OpenError()
+			return
+
+		#Get a list of pointers to all the selected Items (all items in the row) 
+		#& use the first one arbitrarily to get the row index
+		row = self.tableWidget.selectedItems()[0].row()
+
+		#Get the StopID of the selected Station for backend
+		self.tableWidget.item(row,1)
 		
-		self.error = "ViewStation Function not Defined Yet"
-		self.OpenError()
+
 	def OpenStationDetail(self): 
 		self.frame = stationDetail_screen.StationDetailFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)

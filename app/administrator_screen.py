@@ -58,8 +58,8 @@ class AdministratorFrame(QtWidgets.QFrame, Ui_Frame):
 		self.OpenSuccess()
 	def OpenSuccess(self):
 		self.newframe = success_screen.SuccessFrame()
-		self.newframe.InitFromOtherFile(Ui_Frame)
-		self.newframe.text = self.success
+		self.newframe.InitFromOtherFile(Ui_Fram)
+		self.newframe.text = self.successe
 		self.newframe.UpdateText()
 		self.newframe.show()
 

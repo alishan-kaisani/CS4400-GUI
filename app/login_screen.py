@@ -63,11 +63,17 @@ class LoginFrame(QtWidgets.QFrame, Ui_Frame):
 	def OpenAdministrator(self): 
 		self.frame = administrator_screen.AdministratorFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)
+		geometry = self.frame.geometry() #Returns a QRect object that containins window details
+		geometry.moveTo(175,225)
+		self.frame.setGeometry(geometry)
 		self.frame.show()
 		self.hide()
 	def OpenWelcomeToMarta(self):
 		self.frame = welcomeToMarta_screen.WelcomeToMartaFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)
+		geometry = self.frame.geometry() #Returns a QRect object that containins window details
+		geometry.moveTo(175,225)
+		self.frame.setGeometry(geometry)
 		self.frame.show()
 		self.hide()
 

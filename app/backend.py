@@ -79,6 +79,8 @@ def CreateNewUser(username, email, password, cardnumber=None):
 		connection.close()
 		# print("Finished creating new user") #For testing purposes only
 
+#Edit: This wrapper is no longer neccessary. In the GUI, you have to choose either a new card or an existing card or I error. 
+#If an existing card option is chosen, I provide you the existing card as an int
 def CreateNewUserWrapper(existing_card, username, email, password, *args):
 	"""Calls the CreateNewUser function depending on whether the new user is using an existing Breeze Card or wishes to generae a new one.
 	existing_card is a boolean parameter that determines whether the new user already has a breezecard.
