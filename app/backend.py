@@ -2,11 +2,13 @@ import pymysql
 import hashlib
 from random import randrange
 from datetime import datetime
+import string
 
 def VerifyLogin(self):
     """Determine whether a logon attempt is valid by querying the database.
     If the logon attempt is successful, is_admin becomes a global variable for use later on.
-    is_admin is either True or False, depending on whether the user is an administrator.
+    is_admin (bool; global) is either True or False, depending on whether the user is an administrator.
+    passenger_username (str; global) is the user's username; the variable is long and clunky to avoid confusion with other variables throughout the code.
     The function returns 1 if the logon attempt is successful or -1 if unsuccessful."""
 	username = str(self.usernameTextEdit.toPlainText())
     password = str(self.passwordTextEdit.toPlainText())
@@ -22,12 +24,20 @@ def VerifyLogin(self):
             m = cursor.fetchall()
             global is_admin
             is_admin = bool(m[0][2]) if m else None
+            global passenger_username
+            passenger_username = m[0][0] if m else None
             return 1 if m else -1 # 1 if successful, -1 if unsuccessful
     except:
     	print("This should have worked. Blame Joel")
     finally:
     	connection.close()
-    	# print("Finished login query") #For testing purposes only
+
+def Logout():
+    """Logs the user out of the system.
+    The user's is_admin and passenger_username global variables are set to None so that the memory of the user is gone from the system."""
+    is_admin = None
+    passenger_username = None
+    # Open login screen in GUI
 
 def GenerateNewCardNumber():
     """Randomly generates new breezecard values for use in CreateNewUser function, when necessary.
@@ -46,12 +56,29 @@ def GenerateNewCardNumber():
         if len(result) == 0:
             return newnum
 
+def EnsureIsEmail(string):
+    mylist = string.split("@")
+    if len(mylist) != 2:
+        return False
+    for char in mylist[0]:
+        if char not in (string.ascii_letters + string.digits):
+            return False
+    for char in mylist[1]:
+        if char not in (string.ascii_letters + string.digits + '.'):
+            return False
+    return mylist[1][-1] != '.' and mylist[1][0] != '.'
+
 def CreateNewUser(username, email, password, cardnumber=None):
     """Adds a new user to the database; inserts tuples into User, Passenger, and Breezecard tables.
     Returns 1 if the operation is successful, otherwise an exception is raised."""
     if cardnumber is None:
         cardnumber = GenerateNewCardNumber()
-    assert len(str(cardnumber)) == 16, "Card number must be 16 digits"
+    if len(str(cardnumber)) != 16:
+        # GUI error because breeze card is not 16 digits long
+        pass
+    if not EnsureIsEmail(email):
+        # GUI error because the email address as entered is not of a valid email format
+        pass
     sql = 'INSERT INTO User VALUES ("{}", "{}", false);'.format(username, hashlib.md5(password.encode('utf-8')).hexdigest()) #New users are always passengers, not admins
     sql2 = 'INSERT INTO Passenger VALUES ("{}", "{}");'.format(username, email)
     sql3 = 'INSERT INTO Breezecard VALUES ("{}", 0.00, "{}");'.format(cardnumber, username)
@@ -230,6 +257,44 @@ def PrettifyViewSuspendedCards():
         newlisting.append((tup[0], tup[1], str(tup[2]), tup[3]))
     return newlisting
 
+def ChangeStationClosedStatus(stopID):
+    """Change whether a station is open or closed.
+    stopIDID (str) is self-explanatory.
+    Function returns 1 to indicate success."""
+    connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+                                user = 'cs4400_Group_110',
+                                password = 'KAfx5IQr',
+                                db = 'cs4400_Group_110')
+    sql = 'UPDATE Station SET ClosedStatus=(NOT ClosedStatus) WHERE StopID="{}";'.format(stopID)
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            connection.commit()
+            return 1
+    except:
+        print("Something went wrong. Blame Joel.")
+    finally:
+        connection.close()
+
+def ChangeStationFare(stopID, newFare):
+    """Change the fare of a station.
+    stationID (str) and newFare (float) are pretty self-explanatory.
+    newFare will always be rounded to two decimal places to avoid against poorly or maliciously constructed input.
+    Function returns 1 to indicate success."""
+    newFare = round(newFare, 2)
+    connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+                                user = 'cs4400_Group_110',
+                                password = 'KAfx5IQr',
+                                db = 'cs4400_Group_110')
+    sql = 'UPDATE Station SET EnterFare={} WHERE StopID="{}";'.format(newFare, stopID)
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            connection.commit()
+            return 1
+    finally:
+        connection.close()
+
 def SetCardValue(cardNumber, newValue):
     """Updates the Breezecard table with new value of selected Breezecard.
     cardNumber (str) and newValue (float) are the inputs with fairly obvious meanings.
@@ -268,6 +333,46 @@ def AssignCardToOwner(cardNumber, newOwner):
             return 1
     except:
         print("Something went wrong. Blame Joel.")
+    finally:
+        connection.close()
+
+def GetAllBreezeCardsOfPassenger():
+    """Return a list of tuples of all a user's breezecards (except those that are suspended).
+    There are no parameters because passenger_username is always the username of the individual using the GUI at a given time."""
+    sql = 'SELECT BreezecardNum FROM Breezecard WHERE BelongsTo = "{}" AND BreezecardNum NOT IN (SELECT BreezecardNum FROM Conflict);'.format(passenger_username)
+    connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+                                user = 'cs4400_Group_110',
+                                password = 'KAfx5IQr',
+                                db = 'cs4400_Group_110')
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            m = cursor.fetchall()
+            return [x[0] for x in m]
+    except:
+        print("Something went wrong. Blame Joel.")
+    finally:
+        connection.close()
+
+def DTTUS(dt):
+    """Heper function to take a datetime.datetime object and convert it into a string (return type) that SQL can deal with.
+    dt (datetime.datetime) is the input and it is the datetime object that needs converting.
+    DTTUS stands for DateTime To Usable String."""
+    return str(dt).replace('-', '/')[:19]
+
+def TripHistory(startTime, endTime):
+    """Return a tuple of tuples of trips of a user during a specified time interval.
+    startTime (datetime.datetime), and endTime (datetime.datetime) are self-explanatory input parameters.
+    The user will always be passenger_username (the global variable), so we do not need an input parameter for user."""
+    connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+                                user = 'cs4400_Group_110',
+                                password = 'KAfx5IQr',
+                                db = 'cs4400_Group_110')
+    try:
+        with connection.cursor() as cursor:
+            for card in GetAllBreezeCardsOfPassenger():
+                # Enter and execute some SQL here
+                pass
     finally:
         connection.close()
 
