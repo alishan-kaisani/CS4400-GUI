@@ -61,16 +61,16 @@ def GenerateNewCardNumber():
 			return newnum
 
 def EnsureIsEmail(string):
-    mylist = string.split("@")
-    if len(mylist) != 2:
-        return False
-    for char in mylist[0]:
-        if char not in (string.ascii_letters + string.digits):
-            return False
-    for char in mylist[1]:
-        if char not in (string.ascii_letters + string.digits + '.'):
-            return False
-    return (mylist[1][-1] != '.' and mylist[1][0] != '.' and '.' in mylist[1])
+	mylist = string.split("@")
+	if len(mylist) != 2:
+		return False
+	for char in mylist[0]:
+		if char not in (string.ascii_letters + string.digits):
+			return False
+	for char in mylist[1]:
+		if char not in (string.ascii_letters + string.digits + '.'):
+			return False
+	return (mylist[1][-1] != '.' and mylist[1][0] != '.' and '.' in mylist[1])
 
 def CreateNewUser(username, email, password, cardnumber=None):
 	"""Adds a new user to the database; inserts tuples into User, Passenger, and Breezecard tables.
@@ -267,15 +267,18 @@ def PrettifyViewSuspendedCards():
 		newlisting.append((tup[1], tup[0], str(tup[2]), tup[3]))
 	return newlisting
 
-def ChangeStationClosedStatus(stopID):
+def ChangeStationClosedStatus(stopID, status):
 	"""Change whether a station is open or closed.
 	stopID (str) is self-explanatory.
 	Function returns 1 to indicate success."""
+	staus = 0
+	if status:
+		status = 1
 	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',
 								db = 'cs4400_Group_110')
-	sql = 'UPDATE Station SET ClosedStatus=(NOT ClosedStatus) WHERE StopID="{}";'.format(stopID)
+	sql = 'UPDATE Station SET ClosedStatus="{}" WHERE StopID="{}";'.format(status,stopID)
 	try:
 		with connection.cursor() as cursor:
 			cursor.execute(sql)
@@ -302,19 +305,24 @@ def ChangeStationFare(stopID, newFare):
 			cursor.execute(sql)
 			connection.commit()
 			return 1
+	except:
+		return sys.exc_info()[0]
 	finally:
 		connection.close()
 
-def ChangeStation(stopID, closedStatusChange=False, newFare=False):
-    """Wrapper function for updating stations.
-    closedStatusChange (bool) determines whether to change the closedStatus of a station.
-    newFare (bool or float) determines whether to change the fare at a station and if so, to what value.
-    Returns 1 to indicate success."""
-    if closedStatusChange:
-        ChangeStationClosedStatus(stopID)
-    if type(newFare) == float:
-        ChangeStationFare(stopID, newFare)
-    return 1
+def ChangeStation(stopID, closedStatus, newFare):
+	"""Wrapper function for updating stations.
+	closedStatusChange (bool) determines whether to change the closedStatus of a station.
+	newFare (bool or float) determines whether to change the fare at a station and if so, to what value.
+	Returns 1 to indicate success."""
+	check1 = ChangeStationClosedStatus(stopID, closedStatus)
+	check2 = ChangeStationFare(stopID, newFare)
+	if check1 != 1:
+		return check1
+	if check2 != 1:
+		return check2
+	else:
+		return 1
 
 def SetCardValue(cardNumber, newValue):
 	"""Updates the Breezecard table with new value of selected Breezecard.
@@ -360,9 +368,7 @@ def AssignCardToOwner(cardNumber, newOwner):
 def GetAllBreezeCardsOfPassenger():
 	"""Return a list of tuples of all a user's breezecards (except those that are suspended).
 	There are no parameters because passenger_username is always the username of the individual using the GUI at a given time."""
-	global passenger_username
-	username = passenger_username
-	sql = 'SELECT BreezecardNum FROM Breezecard WHERE BelongsTo = "{}" AND BreezecardNum NOT IN (SELECT BreezecardNum FROM Conflict);'.format(username)
+	sql = 'SELECT BreezecardNum FROM Breezecard WHERE BelongsTo = "{}" AND BreezecardNum NOT IN (SELECT BreezecardNum FROM Conflict);'.format(passenger_username)
 	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',
@@ -384,68 +390,72 @@ def DTTUS(dt):
 	return str(dt).replace('-', '/')[:19]
 
 def TripHistoryOfUser(startTime, endTime):
-    """Return a list of tuples of trips of a user during a specified time interval (among all their Breezecards).
-    startTime (datetime.datetime), and endTime (datetime.datetime) are self-explanatory input parameters.
-    The user will always be passenger_username (the global variable), so we do not need an input parameter for user.
-    The tuples in the list are of the form (BreezecardNum, Value, Username, Fare, StartTime, StartsAt, EndsAt)."""
-    connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
-                                user = 'cs4400_Group_110',
-                                password = 'KAfx5IQr',
-                                db = 'cs4400_Group_110')
-    sql = 'SELECT * FROM Breezecard NATURAL JOIN Trip WHERE BreezecardNum in (SELECT BreezecardNum FROM Breezecard WHERE BelongsTo="{}") AND ("{}" <= StartTime) AND (StartTime <= "{}");'.format(passenger_username, DTTUS(startTime), DTTUS(endTime))
-    try:
-        with connection.cursor() as cursor:
-            main_list = []
-            cursor.execute(sql)
-            m = list(cursor.fetchall())
-            return m
-    except:
+	"""Return a list of tuples of trips of a user during a specified time interval (among all their Breezecards).
+	startTime (datetime.datetime), and endTime (datetime.datetime) are self-explanatory input parameters.
+	The user will always be passenger_username (the global variable), so we do not need an input parameter for user.
+	The tuples in the list are of the form (BreezecardNum, Value, Username, Fare, StartTime, StartsAt, EndsAt)."""
+	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+								user = 'cs4400_Group_110',
+								password = 'KAfx5IQr',
+								db = 'cs4400_Group_110')
+	sql = 'SELECT * FROM Breezecard NATURAL JOIN Trip WHERE BreezecardNum in (SELECT BreezecardNum FROM Breezecard WHERE BelongsTo="{}") AND ("{}" <= StartTime) AND (StartTime <= "{}");'.format(passenger_username, DTTUS(startTime), DTTUS(endTime))
+	try:
+		with connection.cursor() as cursor:
+			main_list = []
+			cursor.execute(sql)
+			m = list(cursor.fetchall())
+			return m
+	except:
 		return sys.exc_info()[0]
-    finally:
-        connection.close()
+	finally:
+		connection.close()
 
-def TripHistorySingleBreezecard(bnum, startTime, endTime):
-    """Return a list of tuples of all trips associated with a specific Breezecard.
-    bnum (stra) is Breezecard number, startTime (datetime.datetime) and endTime (datetime.datetime) are self-explanatory
-    The tuples in the list are of the form (BreezecardNum, Value, Username, Fare, StartTime, StartsAt, EndsAt)."""
-    connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
-                                user = 'cs4400_Group_110',
-                                password = 'KAfx5IQr',
-                                db = 'cs4400_Group_110')
-    sql = 'SELECT * FROM Breezecard NATURAL JOIN Trip WHERE (BreezecardNum="{}" AND ("{}" <= StartTime) AND (StartTime <= "{}"));'.format(bnum, DTTUS(startTime), DTTUS(endTime))
-    try:
-        with connection.cursor() as cursor:
-            cursor.execute(sql)
-            m = list(cursor.fetchall())
-            return m
-    except:
+#EDIT: I need startTime and endTime as well, I'm not filtering anything
+#Removed those two inputs and from use in function
+def TripHistorySingleBreezecard(bnum):
+	"""Return a list of tuples of all trips associated with a specific Breezecard.
+	bnum (stra) is Breezecard number, startTime (datetime.datetime) and endTime (datetime.datetime) are self-explanatory
+	The tuples in the list are of the form (BreezecardNum, Value, Username, Fare, StartTime, StartsAt, EndsAt)."""
+	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+								user = 'cs4400_Group_110',
+								password = 'KAfx5IQr',
+								db = 'cs4400_Group_110')
+	sql = 'SELECT * FROM Breezecard NATURAL JOIN Trip WHERE (BreezecardNum="{}");'.format(bnum)
+	try:
+		with connection.cursor() as cursor:
+			cursor.execute(sql)
+			m = list(cursor.fetchall())
+			return m
+	except:
 		return sys.exc_info()[0]
-    finally:
-        connection.close()
+	finally:
+		connection.close()
 
-def BreezecardSearch(username, cardNumber, minValue=0, maxValue=9999.99, showSuspended=False):
-    """Return a list of tuples breezecards where tuples are of the form (BreezecardNum, Value, Owner)
-    username (str) cardNumber (str) must be included but may be empty strings.
-    minValue (float or str) maxValue (float or str) are both optional since their defaults are the min and max allowable values of Breezecards.
-    showSuspended (bool) determines wheter the query will show suspended Breezecards; default value False."""
-    connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
-                                user = 'cs4400_Group_110',
-                                password = 'KAfx5IQr',
-                                db = 'cs4400_Group_110')
-    if not showSuspended:
-        sql = 'SELECT * FROM Breezecard WHERE (BreezecardNum NOT IN (SELECT BreezecardNum FROM Conflict)) AND ({} <= Value) AND (Value <= {});'.format(minValue, maxValue)
-    else:
-        sql = 'SELECT * FROM Breezecard WHERE ({} <= Value) AND (Value <= {});'.format(minValue, maxValue)
-    if username != '':
-        sql = sql[:-1] + 'AND (BelongsTo = "{}");'.format(username)
-    if cardNumber != '':
-        sql = sql[:-1] + 'AND (BreezecardNum = "{}");'.format(cardNumber)
-    try:
-        with connection.cursor() as cursor:
-            cursor.execute(sql)
-            m = cursor.fetchall()
-            return [(x[0], x[1], 'SUSPENDED' if x[2]==None else x[2]) for x in m]
-    except:
+#EDIT: Changed defulat maxValue to 1000.00 bc that's what front end is doing anyway
+#Cards Can be unassigned v. Suspended; a None value doesn't automatically imply suspension
+def BreezecardSearch(username, cardNumber, minValue=0, maxValue=1000.00, showSuspended=False):
+	"""Return a list of tuples breezecards where tuples are of the form (BreezecardNum, Value, Owner)
+	username (str) cardNumber (str) must be included but may be empty strings.
+	minValue (float or str) maxValue (float or str) are both optional since their defaults are the min and max allowable values of Breezecards.
+	showSuspended (bool) determines wheter the query will show suspended Breezecards; default value False."""
+	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+								user = 'cs4400_Group_110',
+								password = 'KAfx5IQr',
+								db = 'cs4400_Group_110')
+	if not showSuspended:
+		sql = 'SELECT * FROM Breezecard WHERE (BreezecardNum NOT IN (SELECT BreezecardNum FROM Conflict)) AND ({} <= Value) AND (Value <= {});'.format(minValue, maxValue)
+	else:
+		sql = 'SELECT * FROM Breezecard WHERE ({} <= Value) AND (Value <= {});'.format(minValue, maxValue)
+	if username != '':
+		sql = sql[:-1] + 'AND (BelongsTo = "{}");'.format(username)
+	if cardNumber != '':
+		sql = sql[:-1] + 'AND (BreezecardNum = "{}");'.format(cardNumber)
+	try:
+		with connection.cursor() as cursor:
+			cursor.execute(sql)
+			m = cursor.fetchall()
+			return [(x[0], round(float(x[1]), 2), 'Suspended' if x[2]==None else x[2]) for x in m]
+	except:
 		return sys.exc_info()[0]
-    finally:
-        connection.close()
+	finally:
+		connection.close()
