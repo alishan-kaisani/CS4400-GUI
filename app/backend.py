@@ -60,17 +60,17 @@ def GenerateNewCardNumber():
 		if len(result) == 0:
 			return newnum
 
-def EnsureIsEmail(email):
-	mylist = email.split("@")
-	if len(mylist) != 2:
-		return False
-	for char in mylist[0]:
-		if char not in (string.ascii_letters + string.digits):
-			return False
-	for char in mylist[1]:
-		if char not in (string.ascii_letters + string.digits + '.'):
-			return False
-	return (mylist[1][-1] != '.' and mylist[1][0] != '.')
+def EnsureIsEmail(string):
+    mylist = string.split("@")
+    if len(mylist) != 2:
+        return False
+    for char in mylist[0]:
+        if char not in (string.ascii_letters + string.digits):
+            return False
+    for char in mylist[1]:
+        if char not in (string.ascii_letters + string.digits + '.'):
+            return False
+    return (mylist[1][-1] != '.' and mylist[1][0] != '.' and '.' in mylist[1])
 
 def CreateNewUser(username, email, password, cardnumber=None):
 	"""Adds a new user to the database; inserts tuples into User, Passenger, and Breezecard tables.
@@ -305,6 +305,17 @@ def ChangeStationFare(stopID, newFare):
 	finally:
 		connection.close()
 
+def ChangeStation(stopID, closedStatusChange=False, newFare=False):
+    """Wrapper function for updating stations.
+    closedStatusChange (bool) determines whether to change the closedStatus of a station.
+    newFare (bool or float) determines whether to change the fare at a station and if so, to what value.
+    Returns 1 to indicate success."""
+    if closedStatusChange:
+        ChangeStationClosedStatus(stopID)
+    if type(newFare) == float:
+        ChangeStationFare(stopID, newFare)
+    return 1
+
 def SetCardValue(cardNumber, newValue):
 	"""Updates the Breezecard table with new value of selected Breezecard.
 	cardNumber (str) and newValue (float) are the inputs with fairly obvious meanings.
@@ -372,19 +383,69 @@ def DTTUS(dt):
 	DTTUS stands for DateTime To Usable String."""
 	return str(dt).replace('-', '/')[:19]
 
-def TripHistory(startTime, endTime):
-	"""Return a tuple of tuples of trips of a user during a specified time interval.
-	startTime (datetime.datetime), and endTime (datetime.datetime) are self-explanatory input parameters.
-	The user will always be passenger_username (the global variable), so we do not need an input parameter for user."""
-	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
-								user = 'cs4400_Group_110',
-								password = 'KAfx5IQr',
-								db = 'cs4400_Group_110')
-	try:
-		with connection.cursor() as cursor:
-			for card in GetAllBreezeCardsOfPassenger():
-				# Enter and execute some SQL here
-				pass
-	finally:
-		connection.close()
+def TripHistoryOfUser(startTime, endTime):
+    """Return a list of tuples of trips of a user during a specified time interval (among all their Breezecards).
+    startTime (datetime.datetime), and endTime (datetime.datetime) are self-explanatory input parameters.
+    The user will always be passenger_username (the global variable), so we do not need an input parameter for user.
+    The tuples in the list are of the form (BreezecardNum, Value, Username, Fare, StartTime, StartsAt, EndsAt)."""
+    connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+                                user = 'cs4400_Group_110',
+                                password = 'KAfx5IQr',
+                                db = 'cs4400_Group_110')
+    sql = 'SELECT * FROM Breezecard NATURAL JOIN Trip WHERE BreezecardNum in (SELECT BreezecardNum FROM Breezecard WHERE BelongsTo="{}") AND ("{}" <= StartTime) AND (StartTime <= "{}");'.format(passenger_username, DTTUS(startTime), DTTUS(endTime))
+    try:
+        with connection.cursor() as cursor:
+            main_list = []
+            cursor.execute(sql)
+            m = list(cursor.fetchall())
+            return m
+    except:
+		return sys.exc_info()[0]
+    finally:
+        connection.close()
 
+def TripHistorySingleBreezecard(bnum, startTime, endTime):
+    """Return a list of tuples of all trips associated with a specific Breezecard.
+    bnum (stra) is Breezecard number, startTime (datetime.datetime) and endTime (datetime.datetime) are self-explanatory
+    The tuples in the list are of the form (BreezecardNum, Value, Username, Fare, StartTime, StartsAt, EndsAt)."""
+    connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+                                user = 'cs4400_Group_110',
+                                password = 'KAfx5IQr',
+                                db = 'cs4400_Group_110')
+    sql = 'SELECT * FROM Breezecard NATURAL JOIN Trip WHERE (BreezecardNum="{}" AND ("{}" <= StartTime) AND (StartTime <= "{}"));'.format(bnum, DTTUS(startTime), DTTUS(endTime))
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            m = list(cursor.fetchall())
+            return m
+    except:
+		return sys.exc_info()[0]
+    finally:
+        connection.close()
+
+def BreezecardSearch(username, cardNumber, minValue=0, maxValue=9999.99, showSuspended=False):
+    """Return a list of tuples breezecards where tuples are of the form (BreezecardNum, Value, Owner)
+    username (str) cardNumber (str) must be included but may be empty strings.
+    minValue (float or str) maxValue (float or str) are both optional since their defaults are the min and max allowable values of Breezecards.
+    showSuspended (bool) determines wheter the query will show suspended Breezecards; default value False."""
+    connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+                                user = 'cs4400_Group_110',
+                                password = 'KAfx5IQr',
+                                db = 'cs4400_Group_110')
+    if not showSuspended:
+        sql = 'SELECT * FROM Breezecard WHERE (BreezecardNum NOT IN (SELECT BreezecardNum FROM Conflict)) AND ({} <= Value) AND (Value <= {});'.format(minValue, maxValue)
+    else:
+        sql = 'SELECT * FROM Breezecard WHERE ({} <= Value) AND (Value <= {});'.format(minValue, maxValue)
+    if username != '':
+        sql = sql[:-1] + 'AND (BelongsTo = "{}");'.format(username)
+    if cardNumber != '':
+        sql = sql[:-1] + 'AND (BreezecardNum = "{}");'.format(cardNumber)
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            m = cursor.fetchall()
+            return [(x[0], x[1], 'SUSPENDED' if x[2]==None else x[2]) for x in m]
+    except:
+		return sys.exc_info()[0]
+    finally:
+        connection.close()
