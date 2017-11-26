@@ -62,7 +62,7 @@ class StationListingFrame(QtWidgets.QFrame, Ui_Frame):
 	def ViewStation(self):
 		# cur_stopId = cur_station.data("Stop Id")
 		if (len(self.tableWidget.selectedItems()) == 0):
-			self.error = "No Station Selcted"
+			self.error = "No Station Selected"
 			self.OpenError()
 			return
 
@@ -71,18 +71,18 @@ class StationListingFrame(QtWidgets.QFrame, Ui_Frame):
 		row = self.tableWidget.selectedItems()[0].row()
 
 		#Get the StopID of the selected Station for backend
-		stopId = self.tableWidget.item(row,1)
-		data = viewSingleStation(stopId)
+		stopId = self.tableWidget.item(row,1).data(0) #stopId is in the index=1 column
+		data = backend.ViewSingleStation(stopId)
 		data_dict = {}
-		data_dict["Station Name"].append(data[0])
-		data_dict["Stop ID"].append(data[1])
-		data_dict["Entry Fare"].append(data[2])
-		data_dict["Status"].append(data[3])
+		data_dict["Station Name"] = data[0]
+		data_dict["Stop ID"] = data[1]
+		data_dict["Entry Fare"] = data[2]
+		data_dict["Status"] = not data[3]
 		if (data[4]):
 			#if isTrain:
-			data_dict["Nearest Intersection"].append("Not available for Train Stations")
+			data_dict["Nearest Intersection"] = "I AM NOT DONE YET!"
 		else:
-			data_dict["Nearest Intersection"].append(data[5])
+			data_dict["Nearest Intersection"] = "I AM NOT DONE YET!"
 		self.OpenStationDetail(data_dict)
 	def OpenStationDetail(self, data_dict): 
 		self.frame = stationDetail_screen.StationDetailFrame()

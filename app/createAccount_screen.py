@@ -38,9 +38,10 @@ class CreateAccountFrame(QtWidgets.QFrame, Ui_Frame):
 		email = self.emailAddressTextEdit.text()
 		password = self.passwordTextEdit.text()
 		confirmPassword = self.confirmPasswordTextEdit.text()
+		existingCard = self.existingBreezecardButton.isChecked()
 
-		#Create QIntValidator to check carndumber is 16 digits later in code
-		validator = QtGui.QIntValidator(1e15,1e16)
+		#Create QDoubleValidator to check carndumber is 16 digits later in code
+		validator = QtGui.QDoubleValidator(1000000000000000,10000000000000000,0)
 
 		#Check all possible Error conditions
 		if (username == "" or email == "" or password == "" or confirmPassword == ""):
@@ -64,13 +65,15 @@ class CreateAccountFrame(QtWidgets.QFrame, Ui_Frame):
 			self.error = "All Passengers need atleast 1 breezecard"
 			self.OpenError()
 			return
+		
 
 		#Call backend function to actually create Account based on type of cardNumber chosen
 		res = -1;
-		if self.newBreezecardButton.isChecked():
-			#Condition checks if new breezecard is being used
-			res = backend.CreateNewUser(username,email,password)
-		elif self.existingBreezecardButton.isChecked():
+
+		#Perfrom errochecking if using an existing card - card must be specified & valid before giving to backend
+		#If not using, None is passed to backend & wrapper interprets accordingly
+		cardnumber = None
+		if (existingCard):
 			cardnumber = self.cardNumberTextEdit.text()
 			if (cardnumber == ""):
 				self.error = "Card Number Field Empty"
@@ -82,7 +85,7 @@ class CreateAccountFrame(QtWidgets.QFrame, Ui_Frame):
 				self.error = "Cardnumber is not valid - Must be 16 digits no spaces"
 				self.OpenError()
 				return
-			res = backend.CreateNewUser(username,email,password,cardnumber)
+		res = backend.CreateNewUserWrapper(existingCard, username,email,password,cardnumber)
 
 		if res == 1: 
 			self.success = "Account created Successfully"

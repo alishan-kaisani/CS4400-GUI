@@ -39,7 +39,7 @@ class LoginFrame(QtWidgets.QFrame, Ui_Frame):
 				self.OpenError()
 				return
 			else:
-				self.success = "Logged In Successfully\nUsername: %s" % (backend.username) 
+				self.success = "Logged In Successfully\nUsername: %s" % (backend.passenger_username) 
 				if backend.is_admin:
 					self.OpenAdministrator()
 				else:

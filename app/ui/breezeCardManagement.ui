@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>458</width>
-    <height>394</height>
+    <height>444</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -57,37 +57,12 @@ QLabel {color: #009fd7; font-weight: bold;}
     <string>Show Suspended Cards</string>
    </property>
   </widget>
-  <widget class="QTableWidget" name="tableWidget">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>170</y>
-     <width>421</width>
-     <height>141</height>
-    </rect>
-   </property>
-   <column>
-    <property name="text">
-     <string>Card #</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Value</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Owner</string>
-    </property>
-   </column>
-  </widget>
   <widget class="QLabel" name="frameLabelTop">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>0</y>
-     <width>191</width>
+     <width>201</width>
      <height>31</height>
     </rect>
    </property>
@@ -105,7 +80,7 @@ QLabel {color: #009fd7; font-weight: bold;}
     <string notr="true">#frameLabelTop {background-color: transparent}</string>
    </property>
    <property name="text">
-    <string>BreezeCards</string>
+    <string>Breeze Cards</string>
    </property>
   </widget>
   <widget class="QPushButton" name="resetButton">
@@ -193,7 +168,7 @@ QLabel {color: #009fd7; font-weight: bold;}
    <property name="geometry">
     <rect>
      <x>150</x>
-     <y>320</y>
+     <y>380</y>
      <width>151</width>
      <height>23</height>
     </rect>
@@ -206,7 +181,7 @@ QLabel {color: #009fd7; font-weight: bold;}
    <property name="geometry">
     <rect>
      <x>150</x>
-     <y>350</y>
+     <y>410</y>
      <width>151</width>
      <height>23</height>
     </rect>
@@ -293,7 +268,7 @@ QLabel {color: #009fd7; font-weight: bold;}
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>350</y>
+     <y>410</y>
      <width>121</width>
      <height>21</height>
     </rect>
@@ -306,7 +281,7 @@ QLabel {color: #009fd7; font-weight: bold;}
    <property name="geometry">
     <rect>
      <x>50</x>
-     <y>320</y>
+     <y>380</y>
      <width>71</width>
      <height>22</height>
     </rect>
@@ -376,6 +351,76 @@ QLabel {color: #009fd7; font-weight: bold;}
    <property name="value">
     <double>1000.000000000000000</double>
    </property>
+  </widget>
+  <widget class="QTableWidget" name="tableWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>170</y>
+     <width>441</width>
+     <height>201</height>
+    </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::StrongFocus</enum>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#tableWidget {background-color: #c8cbd1;}</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::WinPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Plain</enum>
+   </property>
+   <property name="sizeAdjustPolicy">
+    <enum>QAbstractScrollArea::AdjustToContents</enum>
+   </property>
+   <property name="editTriggers">
+    <set>QAbstractItemView::NoEditTriggers</set>
+   </property>
+   <property name="alternatingRowColors">
+    <bool>true</bool>
+   </property>
+   <property name="selectionMode">
+    <enum>QAbstractItemView::SingleSelection</enum>
+   </property>
+   <property name="selectionBehavior">
+    <enum>QAbstractItemView::SelectRows</enum>
+   </property>
+   <property name="sortingEnabled">
+    <bool>true</bool>
+   </property>
+   <property name="columnCount">
+    <number>3</number>
+   </property>
+   <attribute name="horizontalHeaderCascadingSectionResizes">
+    <bool>false</bool>
+   </attribute>
+   <attribute name="horizontalHeaderStretchLastSection">
+    <bool>false</bool>
+   </attribute>
+   <attribute name="verticalHeaderVisible">
+    <bool>false</bool>
+   </attribute>
+   <column>
+    <property name="text">
+     <string>Card Number</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Value</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Owner</string>
+    </property>
+   </column>
   </widget>
  </widget>
  <resources>

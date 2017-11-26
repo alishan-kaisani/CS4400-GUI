@@ -35,17 +35,11 @@ class CreateNewStationFrame(QtWidgets.QFrame, Ui_Frame):
 	def CreateStation(self): 
 		#Read out data into vars
 		stationName = str(self.stationNameTextEdit.text())
-		print(stationName)
 		stopId = str(self.stopIdTextEdit.text())
-		print(stopId)
 		entryFare = self.entryFareSpinBox.value()
-		print(entryFare)
 		trainStation = self.trainStationButton.isChecked()
-		print(trainStation)
 		isClosed = not self.openStationBox.isChecked()
-		print(isClosed)
 		nearestIntersection = str(self.nearestIntersectionTextEdit.text())
-		print(nearestIntersection)
 
 		#Perform error handling
 		if (stationName == "" or stopId == ''):

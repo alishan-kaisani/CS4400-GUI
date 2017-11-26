@@ -144,7 +144,7 @@ QLabel {color: #009fd7; font-weight: bold;}
     </property>
    </widget>
   </widget>
-  <widget class="Line" name="line">
+  <widget class="Line" name="Line">
    <property name="windowModality">
     <enum>Qt::ApplicationModal</enum>
    </property>
@@ -174,7 +174,7 @@ QLabel {color: #009fd7; font-weight: bold;}
     <bool>false</bool>
    </property>
    <property name="styleSheet">
-    <string notr="true">Line {backgournd-color: none;}</string>
+    <string notr="true">Line {backgournd-color: transparent;}</string>
    </property>
    <property name="frameShadow">
     <enum>QFrame::Plain</enum>

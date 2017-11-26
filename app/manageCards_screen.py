@@ -49,6 +49,11 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 			self.error = "Unknown Error:\n" + str(res)
 			self.OpenError()
 	def AddValue(self): 
+		if (len(self.tableWidget.selectedItems()) == 0):
+			self.error = "No Card Selected"
+			self.OpenError()
+			return
+
 		cardNum = str(self.creditCardNumberTextEdit.text())
 		value = cardValueSpinBox.value
 		validator = QtGui.QIntValidator(1e15,1e16)

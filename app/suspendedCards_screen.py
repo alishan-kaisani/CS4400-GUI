@@ -23,14 +23,46 @@ class SuspendedCardsFrame(QtWidgets.QFrame, Ui_Frame):
 		self.newOwnerButton.clicked.connect(self.TransferNewOwner)
 		self.prevOwnerButton.clicked.connect(self.TransferPrevOwner)
 		self.CreateView()
-	def TransferNewOwner(self): 
-		self.error = "Transfer New Owner Function Not Defined yet"
-		self.OpenError()
+	def UpdateView(self):
+		self.hide()
+		while (self.tableWidget.rowCount() > 0):
+			self.tableWidget.removeRow(0)
+		self.CreateView()
+		self.show()
+	def TransferNewOwner(self):
+		self.Transfer(1)
 	def TransferPrevOwner(self): 
-		self.error = "Transfer Prev Owner Function Not Defined yet"
-		self.OpenError()
+		self.Transfer(3)
+	def Transfer(self, index):
+		#Make sure a card is selected
+		if (len(self.tableWidget.selectedItems()) == 0):
+			self.error = "No Card Selected"
+			self.OpenError()
+			return
+
+		#Figure out which item is selected
+		row = self.tableWidget.selectedItems()[0].row()
+		cardNum = self.tableWidget.item(row,0).data(0)
+		cardNum = s.replace(" ", "") #remove spaces from table-formatted string
+		newOwner = self.tableWidget.item(row, index).data(0)
+
+		res = -1
+		res = backend.AssignCardToOwner(cardNum,newOwner)
+
+		#Error Handling
+		if res == 1: 
+			self.UpdateView()
+			self.success = "Card Transfered Successfully"
+			self.OpenSuccess()
+		elif res == -1:
+			self.error = "Error in Card Transfer"
+			self.OpenError()
+			return
+		else:
+			self.error = "Unknown Error:\n" + str(res)
+			self.OpenError()
 	def CreateView(self): 
-		data = backend.ViewSuspendedCards()
+		data = backend.PrettifyViewSuspendedCards()
 		self.tableWidget.setRowCount = len(data)
 		for i in range(0,len(data)):
 			self.tableWidget.insertRow(i)
@@ -38,7 +70,7 @@ class SuspendedCardsFrame(QtWidgets.QFrame, Ui_Frame):
 				if j == 0: 
 					#if dealing with breezecard #.. insert spaces
 					cardNum = str(data[i][j])
-					cardNum = str[0:4] + " " + str[4:8] + " " + str[8:12] + " " + str[12:16]
+					cardNum = cardNum[0:4] + " " + cardNum[4:8] + " " + cardNum[8:12] + " " + cardNum[12:16]
 					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(cardNum))
 				else: 
 					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(str(data[i][j])))

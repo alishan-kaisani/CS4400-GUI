@@ -3,6 +3,7 @@ import sys
 from PyQt5 import QtCore, QtGui, uic, QtWidgets
 import error_screen
 import success_screen
+import backend
 
 qtCreatorFile = "ui/stationDetail.ui" # Enter file here.
 
@@ -19,16 +20,31 @@ class StationDetailFrame(QtWidgets.QFrame, Ui_Frame):
 		self.setupUi(self)
 		self.updateStationButton.clicked.connect(self.UpdateStation)
 	def UpdateValues(self, stationName,stopId,fare,isOpen, nearestIntersection): 
+		"""Fill in values for the specified station when coming in from station Listing page"""
 		self.stationNameLabel.setText(stationName)
 		self.stopIdLabel.setText(stopId)
 		self.entryFareSpinBox.setValue(fare)
 		self.openStationBox.setChecked(isOpen)
 		self.nearestIntersectionTextLabel.setText(nearestIntersection)
-		#self.error = "Update Fare Function Not defined yet"
-		#self.OpenError()
 	def UpdateStation(self):
-		self.error = "Update Station Function Not defined yet"
-		self.OpenError()
+		stopId = str(self.stopIdLabel.text())
+		fare = self.entryFareSpinBox.value()
+		status = not self.openStationBox.isChecked()
+		#DB tracks isClosed not isOpen so passing on isClosed
+		
+		res = -1
+		res = backend.ChangeStation(stopId,status,fare)
+
+		if res == 1: 
+			self.success = "Station updated!\n***Update StationListing view to see changes***"
+			self.OpenSuccess()
+		elif res == -1:
+			self.error = "Error in Station update"
+			self.OpenError()
+			return
+		else:
+			self.error = "Unkown Error:\n" + str(res)
+			self.OpenError()
 	def OpenError(self):
 		self.newframe = error_screen.ErrorFrame()
 		self.newframe.InitFromOtherFile(Ui_Frame)

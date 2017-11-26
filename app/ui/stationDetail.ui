@@ -37,14 +37,14 @@ QLabel {color: #009fd7; font-weight: bold;}
      <x>260</x>
      <y>40</y>
      <width>81</width>
-     <height>41</height>
+     <height>51</height>
     </rect>
    </property>
    <property name="autoFillBackground">
     <bool>false</bool>
    </property>
    <property name="styleSheet">
-    <string notr="true">#stopIdLabel {color: #eecb06; font-size: 12pt; font-weight: normal; background-color: transparent}</string>
+    <string notr="true">#stopIdLabel {color: #eecb06; font-size: 15px; font-weight: bold; background-color: transparent}</string>
    </property>
    <property name="text">
     <string/>
@@ -180,7 +180,7 @@ QLabel {color: #009fd7; font-weight: bold;}
      <x>20</x>
      <y>140</y>
      <width>121</width>
-     <height>31</height>
+     <height>41</height>
     </rect>
    </property>
    <property name="text">
@@ -206,7 +206,7 @@ QLabel {color: #009fd7; font-weight: bold;}
     <bool>false</bool>
    </property>
    <property name="styleSheet">
-    <string notr="true">#stationNameLabel{color:#ee5706; font-size: 10pt; background-color: transparent; font-weight: normal;}</string>
+    <string notr="true">#stationNameLabel{color:#ee5706; font-size: 10pt; background-color: transparent; font-weight: bold;}</string>
    </property>
    <property name="lineWidth">
     <number>2</number>

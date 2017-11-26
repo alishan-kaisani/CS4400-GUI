@@ -6,6 +6,7 @@ import breezeCardManagement_screen
 import passengerFlowReport_screen
 import login_screen
 import success_screen
+import backend
 
 qtCreatorFile = "ui/administrator.ui" # Enter file here.
 
@@ -46,6 +47,7 @@ class AdministratorFrame(QtWidgets.QFrame, Ui_Frame):
 		self.frame.InitFromOtherFile(Ui_Frame)
 		self.frame.show()
 	def LogOut(self):
+		backend.Logout()
 		self.frame = login_screen.LoginFrame()
 		self.frame.InitFromOtherFile(Ui_Frame) 
 		self.frame.show()
@@ -54,7 +56,7 @@ class AdministratorFrame(QtWidgets.QFrame, Ui_Frame):
 		self.OpenSuccess()
 	def OpenSuccess(self):
 		self.newframe = success_screen.SuccessFrame()
-		self.newframe.InitFromOtherFile(Ui_Fram)
+		self.newframe.InitFromOtherFile(Ui_Frame)
 		self.newframe.text = self.successe
 		self.newframe.UpdateText()
 		self.newframe.show()

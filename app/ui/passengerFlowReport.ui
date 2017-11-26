@@ -109,41 +109,6 @@ QLabel {color: #009fd7; font-weight: bold;}
     <string>End Time</string>
    </property>
   </widget>
-  <widget class="QTableWidget" name="tableWidget">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>120</y>
-     <width>501</width>
-     <height>171</height>
-    </rect>
-   </property>
-   <column>
-    <property name="text">
-     <string>Station Name</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string># Passengers In</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string># Passengers Out</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Flow</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Revenue</string>
-    </property>
-   </column>
-  </widget>
   <widget class="QLabel" name="startTimeLabel">
    <property name="geometry">
     <rect>
@@ -288,6 +253,86 @@ QLabel {color: #009fd7; font-weight: bold;}
    <property name="calendarPopup">
     <bool>true</bool>
    </property>
+  </widget>
+  <widget class="QTableWidget" name="tableWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>120</y>
+     <width>501</width>
+     <height>201</height>
+    </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::StrongFocus</enum>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#tableWidget {background-color: #c8cbd1;}</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::WinPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Plain</enum>
+   </property>
+   <property name="sizeAdjustPolicy">
+    <enum>QAbstractScrollArea::AdjustToContents</enum>
+   </property>
+   <property name="editTriggers">
+    <set>QAbstractItemView::NoEditTriggers</set>
+   </property>
+   <property name="alternatingRowColors">
+    <bool>true</bool>
+   </property>
+   <property name="selectionMode">
+    <enum>QAbstractItemView::SingleSelection</enum>
+   </property>
+   <property name="selectionBehavior">
+    <enum>QAbstractItemView::SelectRows</enum>
+   </property>
+   <property name="sortingEnabled">
+    <bool>true</bool>
+   </property>
+   <property name="columnCount">
+    <number>5</number>
+   </property>
+   <attribute name="horizontalHeaderCascadingSectionResizes">
+    <bool>false</bool>
+   </attribute>
+   <attribute name="horizontalHeaderStretchLastSection">
+    <bool>false</bool>
+   </attribute>
+   <attribute name="verticalHeaderVisible">
+    <bool>false</bool>
+   </attribute>
+   <column>
+    <property name="text">
+     <string>Station Name</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string># Passengers In</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string># Passengers Out</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Flow</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Revenue</string>
+    </property>
+   </column>
   </widget>
  </widget>
  <resources>
