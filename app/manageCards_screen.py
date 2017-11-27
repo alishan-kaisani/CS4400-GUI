@@ -97,7 +97,7 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 				if j == 0: 
 					#if dealing with breezecard #.. insert spaces
 					cardNum = str(data[i][j])
-					cardNum = str[0:4] + " " + str[4:8] + " " + str[8:12] + " " + str[12:16]
+					cardNum = cardNum[0:4] + " " + cardNum[4:8] + " " + cardNum[8:12] + " " + cardNum[12:16]
 					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(cardNum))
 				elif j == 1:
 					#if dealing with card values.. adjust formating 
