@@ -123,26 +123,6 @@ def CreateNewUserWrapper(existing_card, username, email, password, *args):
 		return CreateNewUser(username, email, password, args[0])
 	# The CreateNewUser function will return 1, so we do not need to include a return statement in this function
 
-def ViewStations(orderBy='Name'):
-	"""Returns a tuple of tuples, where each nested tuple is of the form (Station name, StopID, Decimal('fare amount'), ClosedStatus).
-	orderBy (str) is a string that is one of 'Name', 'StopID', 'EnterFare', 'ClosedStatus'; orderBy is assigned 'Name' by default
-	If tuple not returned, then exception would have been raised.
-	Use the PrettifyViewStations() function to get rid of annoying """
-	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
-								user = 'cs4400_Group_110',
-								password = 'KAfx5IQr',
-								db = 'cs4400_Group_110')
-	sql = 'SELECT Name, StopID, EnterFare, ClosedStatus FROM Station ORDER BY {} ASC;'.format(orderBy)
-	try:
-		with connection.cursor() as cursor:
-			cursor.execute(sql)
-			m = cursor.fetchall()
-			return m
-	except:
-		return sys.exc_info()[0]
-	finally:
-		connection.close()
-
 def AddBreezeCard(cardnum):
 	"""A user inputs a Breeze card number and makes it theirs. The card must exist somewhere in the database.
 	Returns 1 to indicate success.
@@ -174,6 +154,26 @@ def RemoveCard(cardnum):
 		with connection.cursor() as cursor:
 			cursor.execute(sql)
 			connection.commit()
+	except:
+		return sys.exc_info()[0]
+	finally:
+		connection.close()
+
+def ViewStations(orderBy='Name'):
+	"""Returns a tuple of tuples, where each nested tuple is of the form (Station name, StopID, Decimal('fare amount'), ClosedStatus).
+	orderBy (str) is a string that is one of 'Name', 'StopID', 'EnterFare', 'ClosedStatus'; orderBy is assigned 'Name' by default
+	If tuple not returned, then exception would have been raised.
+	Use the PrettifyViewStations() function to get rid of annoying """
+	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+								user = 'cs4400_Group_110',
+								password = 'KAfx5IQr',
+								db = 'cs4400_Group_110')
+	sql = 'SELECT Name, StopID, EnterFare, ClosedStatus FROM Station ORDER BY {} ASC;'.format(orderBy)
+	try:
+		with connection.cursor() as cursor:
+			cursor.execute(sql)
+			m = cursor.fetchall()
+			return m
 	except:
 		return sys.exc_info()[0]
 	finally:
