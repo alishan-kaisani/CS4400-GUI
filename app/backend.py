@@ -568,7 +568,7 @@ def ViewPassengerCards():
 	finally:
 		connection.close()
 
-def ViewPassengerFlowReport(startTime, endTime):
+def ViewPassengerFlowReport(startTime=datetime(2017, 10, 10, 11, 0, 0, 0), endTime=datetime.now()):
 	"""View the passenger flow report for all stations.
 	Returns a list of tuples of the form (StationName, # In, # Out, Flow, Revenue)
 	startTime (datetime.datetime) and endTime (datetime.datetime) are self-explanatory."""
