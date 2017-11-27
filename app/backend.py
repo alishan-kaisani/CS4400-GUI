@@ -572,7 +572,25 @@ def ViewPassengerFlowReport(startTime=datetime(2017, 10, 10, 11, 0, 0, 0), endTi
 	"""View the passenger flow report for all stations.
 	Returns a list of tuples of the form (StationName, # In, # Out, Flow, Revenue)
 	startTime (datetime.datetime) and endTime (datetime.datetime) are self-explanatory."""
-	sql = 'SELECT * FROM PassengerFlowReport WHERE StartTime BETWEEN "{}" AND "{}";'.format(DTTUS(startTime), DTTUS(endTime))
+	sql = """SELECT (
+
+SELECT Name
+FROM Station
+WHERE Station.StopID = StartsAt
+), COUNT( StartsAt ) , (
+
+SELECT COUNT( * ) 
+FROM Trip AS T2
+WHERE T1.StartsAt = T2.EndsAt
+), COUNT( StartsAt ) - ( 
+SELECT COUNT( * ) 
+FROM Trip AS T2
+WHERE T1.StartsAt = T2.EndsAt ) , SUM( TripFare ) 
+FROM Trip AS T1
+WHERE T1.StartTime
+BETWEEN  "2017/1/1 10:01:02"
+AND  "2017/12/12 11:59:59"
+GROUP BY StartsAt;""".format(DTTUS(startTime), DTTUS(endTime)).replace("\n", " ")
 	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',
@@ -581,7 +599,8 @@ def ViewPassengerFlowReport(startTime=datetime(2017, 10, 10, 11, 0, 0, 0), endTi
 		with connection.cursor() as cursor:
 			cursor.execute(sql)
 			m = cursor.fetchall()
-			return m
+			print(m)
+			return [(x[0], x[1], x[2], x[3], float(x[4])) for x in m]
 	except:
 		return sys.exc_info()[0]
 	finally:

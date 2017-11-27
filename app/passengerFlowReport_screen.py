@@ -4,6 +4,7 @@ from PyQt5 import QtCore, QtGui, uic, QtWidgets
 import error_screen
 import success_screen
 from datetime import datetime
+import backend
 
 qtCreatorFile = "ui/passengerFlowReport.ui" # Enter file here.
 
@@ -56,7 +57,7 @@ class PassengerFlowReportFrame(QtWidgets.QFrame, Ui_Frame):
 		startTime = self.startDateTimeEdit.dateTime().toPyDateTime()
 		endTime = self.endDateTimeEdit.dateTime().toPyDateTime()
 		self.hide()
-		self.createView(startTime,endTime)
+		self.CreateView(startTime,endTime)
 		self.show()
 		self.success = "Updated View!"
 		self.OpenSuccess()
