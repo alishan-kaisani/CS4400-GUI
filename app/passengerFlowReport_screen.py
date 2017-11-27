@@ -25,6 +25,12 @@ class PassengerFlowReportFrame(QtWidgets.QFrame, Ui_Frame):
 	def CreateView(self, startTime, endTime):
 		startTime = self.startDateTimeEdit.dateTime().toPyDateTime()
 		endTime = self.endDateTimeEdit.dateTime().toPyDateTime()	
+
+		if not (endTime > startTime):
+			self.error = "Endtime must be greater than startTime"
+			self.OpenError()
+			return
+
 		data = backend.ViewPassengerFlowReport(startTime,endTime)
 
 		if type(data) != list:
