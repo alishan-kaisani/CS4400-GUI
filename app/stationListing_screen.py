@@ -80,9 +80,12 @@ class StationListingFrame(QtWidgets.QFrame, Ui_Frame):
 		data_dict["Status"] = not data[3]
 		if (data[4]):
 			#if isTrain:
-			data_dict["Nearest Intersection"] = "I AM NOT DONE YET!"
+			data_dict["Nearest Intersection"] = "Not Available for Trains"
 		else:
-			data_dict["Nearest Intersection"] = "I AM NOT DONE YET!"
+			if (backend.ViewIntersection(data_dict["Stop ID"]) == None):
+				data_dict["Nearest Intersection"] = "Null"
+			else: 
+				data_dict["Nearest Intersection"] = backend.ViewIntersection(data_dict["Stop ID"])
 		self.OpenStationDetail(data_dict)
 	def OpenStationDetail(self, data_dict): 
 		self.frame = stationDetail_screen.StationDetailFrame()
