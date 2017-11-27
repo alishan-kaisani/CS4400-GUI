@@ -521,8 +521,6 @@ def BreezecardSearch(username='', cardNumber='', minValue=0, maxValue=1000.00, s
 			m = cursor.fetchall()
 			cursor.execute(sql2)
 			n = cursor.fetchall()
-			print(n)
-			print(n+m)
 			if not showSuspended:
 				return [(x[0], round(float(x[1]), 2), 'Unassigned' if x[2]==None else x[2]) for x in m]
 			elif username != '' and showSuspended:

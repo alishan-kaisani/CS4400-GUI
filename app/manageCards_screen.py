@@ -17,13 +17,20 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 		self.addCardButton.clicked.connect(self.AddCard)
 		self.addValueButton.clicked.connect(self.AddValue)
 		self.tableWidget.cellClicked.connect(self.RemoveCard)
-		#self.CreateView()
+		self.CreateView()
 	def InitFromOtherFile(self,Ui_Frame):
 		Ui_Frame.__init__(self)
 		self.setupUi(self)
 		self.addCardButton.clicked.connect(self.AddCard)
 		self.addValueButton.clicked.connect(self.AddValue)
+		self.tableWidget.cellClicked.connect(self.RemoveCard)
 		self.CreateView()
+	def UpdateView(self):
+		self.hide()
+		while (self.tableWidget.rowCount() > 0):
+			self.tableWidget.removeRow(0)
+		self.CreateView()
+		self.show()
 	def RemoveCard(self,row,col):
 		if col != 2:
 			#wrong area to click
@@ -40,10 +47,9 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 		res = backend.RemoveCard(cardNum)
 
 		if res == 1: 
+			self.UpdateView()
 			self.success = "Card Removed Successfully"
-			self.hide()
 			self.OpenSuccess()
-			self.show()
 		elif res == -1:
 			self.error = "Error in Adding BreezeCard"
 			self.OpenError()
@@ -70,10 +76,9 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 		res = backend.AddBreezeCard(cardNum)
 
 		if res == 1: 
+			self.UpdateView()
 			self.success = "Card Added Successfully"
-			self.hide()
 			self.OpenSuccess()
-			self.show()
 		elif res == -1:
 			self.error = "Error in Adding BreezeCard"
 			self.OpenError()
@@ -102,16 +107,15 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 			return
 
 		row_ndx = self.tableWidget.selectedItems()[0].row()
-		breezeCardNum = str(self.tableWdiget.item(row_ndx,0).data(0))
+		breezeCardNum = str(self.tableWidget.item(row_ndx,0).data(0)).replace(" ", "")
 
 		res = -1
 		res = backend.AddValue(breezeCardNum, value)
 
 		if res == 1: 
+			self.UpdateView()
 			self.success = "Value Added Successfully"
-			self.hide()
 			self.OpenSuccess()
-			self.show()
 		elif res == -1:
 			self.error = "Error in Adding Value"
 			self.OpenError()
