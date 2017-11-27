@@ -154,6 +154,7 @@ def AddBreezeCard(cardnum):
 		with connection.cursor() as cursor:
 			cursor.execute(sql)
 			cursor.commit()
+			return 1
 	except:
 		return sys.exc_info()[0]
 	finally:
