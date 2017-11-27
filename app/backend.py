@@ -588,8 +588,8 @@ FROM Trip AS T2
 WHERE T1.StartsAt = T2.EndsAt ) , SUM( TripFare ) 
 FROM Trip AS T1
 WHERE T1.StartTime
-BETWEEN  "2017/1/1 10:01:02"
-AND  "2017/12/12 11:59:59"
+BETWEEN  "{}"
+AND  "{}"
 GROUP BY StartsAt;""".format(DTTUS(startTime), DTTUS(endTime)).replace("\n", " ")
 	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
 								user = 'cs4400_Group_110',
