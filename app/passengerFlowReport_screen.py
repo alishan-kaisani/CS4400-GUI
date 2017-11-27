@@ -25,16 +25,14 @@ class PassengerFlowReportFrame(QtWidgets.QFrame, Ui_Frame):
 		self.resetButton.clicked.connect(self.ResetFilter)
 		self.CreateView(datetime(2017,1,1,1,0,0,0),datetime(2017,12,31,11,59,0,0))
 	def CreateView(self, startTime, endTime):
-		startTime = self.startDateTimeEdit.dateTime().toPyDateTime()
-		endTime = self.endDateTimeEdit.dateTime().toPyDateTime()	
-
 		if not (endTime > startTime):
-			self.error = "Endtime must be greater than startTime"
+			self.error = "End Time must be greater than Start Time"
 			self.OpenError()
 			return
 
 		data = backend.ViewPassengerFlowReport(startTime,endTime)
-
+		print(data)
+		
 		if type(data) != list:
 			self.error = "Unkown Error\n" + str(data)
 			self.OpenError()
