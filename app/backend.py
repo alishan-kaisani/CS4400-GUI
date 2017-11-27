@@ -432,7 +432,7 @@ def TripHistorySingleBreezecard(bnum):
 		connection.close()
 
 #EDIT: Changed defulat maxValue to 1000.00 bc that's what front end is doing anyway
-#Cards Can be unassigned v. Suspended; a None value doesn't automatically imply suspension
+
 def BreezecardSearch(username='', cardNumber='', minValue=0, maxValue=1000.00, showSuspended=False):
 	"""Return a list of tuples breezecards where tuples are of the form (BreezecardNum, Value, Owner)
 	username (str) cardNumber (str) must be included but may be empty strings.
@@ -443,7 +443,7 @@ def BreezecardSearch(username='', cardNumber='', minValue=0, maxValue=1000.00, s
 								password = 'KAfx5IQr',
 								db = 'cs4400_Group_110')
 	if len(cardNumber) not in (0, 16):
-		return "Card number must be 16 digits long or an empty string; do not use spaces or non-numeric characters"
+        return "Card number must be 16 digits long or an empty string; do not use spaces or non-numeric characters"
 	sql = 'SELECT * FROM Breezecard WHERE (BreezecardNum NOT IN (SELECT BreezecardNum FROM Conflict)) AND ({} <= Value) AND (Value <= {});'.format(minValue, maxValue)
 	sql2 = 'SELECT BreezecardNum, Value, Username FROM Conflict NATURAL JOIN Breezecard;'
 	if username != '':
@@ -454,13 +454,37 @@ def BreezecardSearch(username='', cardNumber='', minValue=0, maxValue=1000.00, s
 		with connection.cursor() as cursor:
 			cursor.execute(sql)
 			m = cursor.fetchall()
-			cursor.execute(sql2)
-			n = cursor.fetchall()
-			if not showSuspended:
-				return [(x[0], round(float(x[1]), 2), 'Unassigned' if x[2]==None else x[2]) for x in m]
-			elif showSuspended:
-				return [(x[0], round(float(x[1]), 2), 'Suspended' if x[0] in [p[0] for p in n] else 'Unassigned' if x[2]==None else x[2]) for x in n+m]
+            cursor.execute(sql2)
+            n = cursor.fetchall()
+            print(n)
+            print(n+m)
+            if not showSuspended:
+			    return [(x[0], round(float(x[1]), 2), 'Unassigned' if x[2]==None else x[2]) for x in m]
+            elif username != '' and showSuspended:
+                return [(x[0], round(float(x[1]), 2), 'Unassigned' if x[2]==None else x[2]) for x in m]
+            elif cardNumber != '' and showSuspended:
+                return [(x[0], round(float(x[1]), 2), 'Unassigned' if x[2]==None else x[2]) for x in m]
+            elif showSuspended:
+                return [(x[0], round(float(x[1]), 2), 'Suspended' if x[0] in [p[0] for p in n] else 'Unassigned' if x[2]==None else x[2]) for x in n+m]
 	except:
 		return sys.exc_info()[0]
 	finally:
 		connection.close()
+
+def ViewPassengerCards():
+    """View all the breezecards of a passenger and the associated values associated with the breesecards.
+    Returns a list of tuples from the database of the form (BreezecardNum, Username)."""
+    connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+                                user = 'cs4400_Group_110',
+                                password = 'KAfx5IQr',
+                                db = 'cs4400_Group_110')
+    sql = 'SELECT BreezecardNum, Value FROM Breezecard where BelongsTo="{}";'.format(passenger_username)
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            m = cursor.fetchall()
+            return list(m)
+    except:
+        print("Something went wrong. Blame Joel.")
+    finally:
+        connection.close()
