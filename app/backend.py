@@ -442,19 +442,24 @@ def BreezecardSearch(username='', cardNumber='', minValue=0, maxValue=1000.00, s
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',
 								db = 'cs4400_Group_110')
-	if not showSuspended:
-		sql = 'SELECT * FROM Breezecard WHERE (BreezecardNum NOT IN (SELECT BreezecardNum FROM Conflict)) AND ({} <= Value) AND (Value <= {});'.format(minValue, maxValue)
-	else:
-		sql = 'SELECT * FROM Breezecard WHERE ({} <= Value) AND (Value <= {});'.format(minValue, maxValue)
+	if len(cardNumber) not in (0, 16):
+		return "Card number must be 16 digits long or an empty string; do not use spaces or non-numeric characters"
+	sql = 'SELECT * FROM Breezecard WHERE (BreezecardNum NOT IN (SELECT BreezecardNum FROM Conflict)) AND ({} <= Value) AND (Value <= {});'.format(minValue, maxValue)
+	sql2 = 'SELECT BreezecardNum, Value, Username FROM Conflict NATURAL JOIN Breezecard;'
 	if username != '':
-		sql = sql[:-1] + 'AND (BelongsTo = "{}");'.format(username)
+		sql = sql[:-1] + ' AND (BelongsTo = "{}");'.format(username)
 	if cardNumber != '':
-		sql = sql[:-1] + 'AND (BreezecardNum = "{}");'.format(cardNumber)
+		sql = sql[:-1] + ' AND (BreezecardNum = "{}");'.format(cardNumber)
 	try:
 		with connection.cursor() as cursor:
 			cursor.execute(sql)
 			m = cursor.fetchall()
-			return [(x[0], round(float(x[1]), 2), None if x[2]==None else x[2]) for x in m]
+			cursor.execute(sql2)
+			n = cursor.fetchall()
+			if not showSuspended:
+				return [(x[0], round(float(x[1]), 2), 'Unassigned' if x[2]==None else x[2]) for x in m]
+			elif showSuspended:
+				return [(x[0], round(float(x[1]), 2), 'Suspended' if x[2] in [p[2] for p in n] else 'Unassigned' if x[2]==None else x[2]) for x in n+m]
 	except:
 		return sys.exc_info()[0]
 	finally:
