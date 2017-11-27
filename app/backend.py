@@ -459,7 +459,7 @@ def BreezecardSearch(username='', cardNumber='', minValue=0, maxValue=1000.00, s
 			if not showSuspended:
 				return [(x[0], round(float(x[1]), 2), 'Unassigned' if x[2]==None else x[2]) for x in m]
 			elif showSuspended:
-				return [(x[0], round(float(x[1]), 2), 'Suspended' if x[2] in [p[2] for p in n] else 'Unassigned' if x[2]==None else x[2]) for x in n+m]
+				return [(x[0], round(float(x[1]), 2), 'Suspended' if x[0] in [p[0] for p in n] else 'Unassigned' if x[2]==None else x[2]) for x in n+m]
 	except:
 		return sys.exc_info()[0]
 	finally:
