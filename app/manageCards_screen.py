@@ -26,10 +26,15 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 	def AddCard(self): 
 		cardNum = str(self.cardNumberTextEdit.text())
 		#Specfies range of 1e15 to 1e16 to cover all possible 16 digit numbers
-		validator = QtGui.QDoubleValidator(1000000000000000,10000000000000000,0)
+		validator = QtGui.QDoubleValidator(0,10000000000000000,0)
 
-		if (validator.validate(cardNum,0)[0] != 2):
-			self.error = "BreezeCard Numbers must be 16 digits - no spaces"
+		if len(cardNum) == 16:
+			if (validator.validate(cardNum,0)[0] != 2):
+				self.error = "BreezeCard Numbers must be 16 digits - no spaces"
+				self.OpenError()
+				return
+		else: 
+			self.error = "Invalid card number"
 			self.OpenError()
 			return
 
@@ -84,8 +89,8 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 	def CreateView(self):
 		data = backend.ViewPassengerCards()
 		self.tableWidget.setRowCount = len(data)
-		font = QtGui.Qfont()
-		font.setUnderline()
+		font = QtGui.QFont()
+		font.setUnderline(True)
 		for i in range(0,len(data)):
 			self.tableWidget.insertRow(i)
 			for j in range(0,self.tableWidget.columnCount()):
