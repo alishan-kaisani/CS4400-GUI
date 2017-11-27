@@ -146,6 +146,18 @@ def ViewStations(orderBy='Name'):
 def AddBreezeCard(cardnum):
 	"""A user inputs a Breeze card number and makes it theirs. The card must exist somewhere in the database."""
 	sql = 'UPDATE Breezecard SET BelongsTo="{}" WHERE BreezecardNum="{}";'.format(passenger_username, cardnum)
+	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+								user = 'cs4400_Group_110',
+								password = 'KAfx5IQr',
+								db = 'cs4400_Group_110')
+	try:
+		with connection.cursor() as cursor:
+			cursor.execute(sql)
+			cursor.commit()
+	except:
+		return sys.exc_info()[0]
+	finally:
+		connection.close()
 
 def PrettifyViewStations(orderBy='Name'):
 	"""Makes the station listing from the ViewStations() function usable, since each station's fare will no longer be a Decimal object.
