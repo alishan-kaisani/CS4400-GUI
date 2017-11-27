@@ -25,7 +25,7 @@ class PassengerFlowReportFrame(QtWidgets.QFrame, Ui_Frame):
 	def CreateView(self, startTime, endTime):
 		startTime = self.startDateTimeEdit.dateTime().toPyDateTime()
 		endTime = self.endDateTimeEdit.dateTime().toPyDateTime()	
-		data = backend.PassengerFlowReport(startTime,endTime)
+		data = backend.ViewPassengerFlowReport(startTime,endTime)
 
 		if type(data) != list:
 			self.error = "Unkown Error\n" + str(data)
@@ -33,27 +33,18 @@ class PassengerFlowReportFrame(QtWidgets.QFrame, Ui_Frame):
 			return
 
 		self.tableWidget.setRowCount = len(data)
-		font = QtGui.QFont()
-		font.setBold(True)
 		for i in range(0,len(data)):
 			self.tableWidget.insertRow(i)
-			suspended = False;
-			if data[i][2] == "Suspended":
-				suspended = True
 			for j in range(0,self.tableWidget.columnCount()):
-				if j == 0:
-					cardNum = str(data[i][j])
-					cardNum = cardNum[0:4] + " " + cardNum[4:8] + " " + cardNum[8:12] + " " + cardNum[12:16] 
-					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(cardNum))
-				elif j == 1:
+				if j == 4:
 					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem("$"+"{0:.2f}".format(data[i][j])))
 				else:
 					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(data[i][j]))
-				if suspended:
-					self.tableWidget.item(i,j).setFont(font)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(0,QtWidgets.QHeaderView.Stretch)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(1,QtWidgets.QHeaderView.Stretch)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(2,QtWidgets.QHeaderView.Stretch)
+		self.tableWidget.horizontalHeader().setSectionResizeMode(3,QtWidgets.QHeaderView.ResizeToContents)
+		self.tableWidget.horizontalHeader().setSectionResizeMode(4,QtWidgets.QHeaderView.Stretch)
 	def UpdateFilter(self): 
 		startTime = self.startDateTimeEdit.dateTime().toPyDateTime()
 		endTime = self.endDateTimeEdit.dateTime().toPyDateTime()
