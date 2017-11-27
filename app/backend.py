@@ -433,7 +433,7 @@ def TripHistorySingleBreezecard(bnum):
 
 #EDIT: Changed defulat maxValue to 1000.00 bc that's what front end is doing anyway
 #Cards Can be unassigned v. Suspended; a None value doesn't automatically imply suspension
-def BreezecardSearch(username, cardNumber, minValue=0, maxValue=1000.00, showSuspended=False):
+def BreezecardSearch(username='', cardNumber='', minValue=0, maxValue=1000.00, showSuspended=False):
 	"""Return a list of tuples breezecards where tuples are of the form (BreezecardNum, Value, Owner)
 	username (str) cardNumber (str) must be included but may be empty strings.
 	minValue (float or str) maxValue (float or str) are both optional since their defaults are the min and max allowable values of Breezecards.
@@ -454,7 +454,7 @@ def BreezecardSearch(username, cardNumber, minValue=0, maxValue=1000.00, showSus
 		with connection.cursor() as cursor:
 			cursor.execute(sql)
 			m = cursor.fetchall()
-			return [(x[0], round(float(x[1]), 2), 'Suspended' if x[2]==None else x[2]) for x in m]
+			return [(x[0], round(float(x[1]), 2), None if x[2]==None else x[2]) for x in m]
 	except:
 		return sys.exc_info()[0]
 	finally:
