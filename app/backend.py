@@ -143,6 +143,10 @@ def ViewStations(orderBy='Name'):
 	finally:
 		connection.close()
 
+def AddBreezeCard(cardnum):
+	"""A user inputs a Breeze card number and makes it theirs. The card must exist somewhere in the database."""
+	sql = 'UPDATE Breezecard SET BelongsTo="{}" WHERE BreezecardNum="{}";'.format(passenger_username, cardnum)
+
 def PrettifyViewStations(orderBy='Name'):
 	"""Makes the station listing from the ViewStations() function usable, since each station's fare will no longer be a Decimal object.
 	orderBy (str) takes the same values and has the same meaning as in the ViewStations() function.
@@ -176,6 +180,7 @@ def ViewSingleStation(stopID):
 		connection.close()
 
 def ViewIntersection(stopID):
+	"""Return a list of one tuple of the form (StopID, Nearest Intersection) for a specific station."""
 	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',
