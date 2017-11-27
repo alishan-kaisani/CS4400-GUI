@@ -102,7 +102,7 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 			return
 
 		row_ndx = self.tableWidget.selectedItems()[0].row()
-		breezeCardNum = str(self.tableWdiget.item(row_ndx,0).data(0))
+		breezeCardNum = str(self.tableWidget.item(row_ndx,0).data(0)).replace(" ", "")
 
 		res = -1
 		res = backend.AddValue(breezeCardNum, value)
