@@ -23,6 +23,13 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 		self.addCardButton.clicked.connect(self.AddCard)
 		self.addValueButton.clicked.connect(self.AddValue)
 		self.CreateView()
+	def RemoveCard(self):
+		if (len(self.tableWidget.selectedItems()) == 0):
+			self.error = "No Card Selected"
+			self.OpenError()
+			return
+		cardNum = self.tableWidget.item(row,0).data(0)
+
 	def AddCard(self): 
 		cardNum = str(self.cardNumberTextEdit.text())
 		#Specfies range of 1e15 to 1e16 to cover all possible 16 digit numbers
@@ -60,11 +67,16 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 			return
 
 		cardNum = str(self.creditCardNumberTextEdit.text())
-		value = cardValueSpinBox.value
-		validator = QtGui.QIntValidator(1e15,1e16)
+		value = cardValueSpinBox.value()
+		validator = QtGui.QDoubleValidator(0,10000000000000000)
 
-		if (validator.validate(cardNum,0)[0] != 2):
-			self.error = "BreezeCard Numbers must be 16 digits - no spaces"
+		if len(cardNum) != 16
+			if (validator.validate(cardNum,0)[0] != 2):
+				self.error = "CC Numbers must be 16 digits - no spaces"
+				self.OpenError()
+				return
+		else:
+			self.error = "CC must be 16 digits"
 			self.OpenError()
 			return
 
@@ -72,15 +84,15 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 		breezeCardNum = self.tableWdiget.item(row_ndx,0)
 
 		res = -1
-		res = backend.AddValue(breezeCardNum, cardNum, value)
+		res = backend.AddValue(breezeCardNum, value)
 
 		if res == 1: 
-			self.success = "Card Added Successfully"
+			self.success = "Value Added Successfully"
 			self.hide()
 			self.OpenSuccess()
 			self.show()
 		elif res == -1:
-			self.error = "Error in Adding BreezeCard"
+			self.error = "Error in Adding Value"
 			self.OpenError()
 			return
 		else:
@@ -105,8 +117,8 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 				else:
 					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem("Remove"))
 					self.tableWidget.item(i,j).setFont(font)
-		self.tableWidget.horizontalHeader().setSectionResizeMode(0,QtWidgets.QHeaderView.ResizeToContents)
-		self.tableWidget.horizontalHeader().setSectionResizeMode(1,QtWidgets.QHeaderView.ResizeToContents)
+		self.tableWidget.horizontalHeader().setSectionResizeMode(0,QtWidgets.QHeaderView.Stretch)
+		self.tableWidget.horizontalHeader().setSectionResizeMode(1,QtWidgets.QHeaderView.Stretch)
 	def OpenError(self):
 		self.newframe = error_screen.ErrorFrame()
 		self.newframe.InitFromOtherFile(Ui_Frame)
