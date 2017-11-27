@@ -3,6 +3,7 @@ import sys
 from PyQt5 import QtCore, QtGui, uic, QtWidgets
 import error_screen
 import success_screen
+from datetime import datetime
 
 qtCreatorFile = "ui/passengerFlowReport.ui" # Enter file here.
 
@@ -15,13 +16,13 @@ class PassengerFlowReportFrame(QtWidgets.QFrame, Ui_Frame):
 		self.setupUi(self)
 		self.updateButton.clicked.connect(self.UpdateFilter)
 		self.resetButton.clicked.connect(self.ResetFilter)
-		self.CreateView(startTime,endTime)
+		self.CreateView(datetime(2017,1,1,1,0,0,0),datetime(2017,12,31,11,59,0,0))
 	def InitFromOtherFile(self,Ui_Frame):
 		Ui_Frame.__init__(self)
 		self.setupUi(self)
 		self.updateButton.clicked.connect(self.UpdateFilter)
 		self.resetButton.clicked.connect(self.ResetFilter)
-		self.CreateView(startTime,endTime)
+		self.CreateView(datetime(2017,1,1,1,0,0,0),datetime(2017,12,31,11,59,0,0))
 	def CreateView(self, startTime, endTime):
 		startTime = self.startDateTimeEdit.dateTime().toPyDateTime()
 		endTime = self.endDateTimeEdit.dateTime().toPyDateTime()	
@@ -56,8 +57,8 @@ class PassengerFlowReportFrame(QtWidgets.QFrame, Ui_Frame):
 		endTime = self.endDateTimeEdit.dateTime().toPyDateTime()
 		self.hide()
 		self.createView(startTime,endTime)
-		self.success = "Updated View!"
 		self.show()
+		self.success = "Updated View!"
 		self.OpenSuccess()
 	def ResetFilter(self): 
 		#year,month,day,hour,min
