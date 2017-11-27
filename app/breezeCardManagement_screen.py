@@ -48,7 +48,7 @@ class BreezeCardManagementFrame(QtWidgets.QFrame, Ui_Frame):
 		for i in range(0,len(data)):
 			self.tableWidget.insertRow(i)
 			suspended = False;
-			if data[i][2] == "Suspended":
+			if (data[i][2] == "Suspended" or data[i][2] == "Unassigned"):
 				suspended = True
 			for j in range(0,self.tableWidget.columnCount()):
 				if j == 0:
@@ -70,9 +70,13 @@ class BreezeCardManagementFrame(QtWidgets.QFrame, Ui_Frame):
 		showSuspended = self.checkBox.isChecked()
 		minVal = self.money1SpinBox.value()
 		maxVal = self.money2SpinBox.value()
-		validator = QtGui.QDoubleValidator(1000000000000000,10000000000000000,0)
+		validator = QtGui.QDoubleValidator(0,10000000000000000,0)
 
 		if cardNum != '':
+			if len(cardNum) != 16:
+				self.error = "Not 16 digit input on cardNum"
+				self.OpenError()
+				return
 			if (validator.validate(cardNum,0)[0] != 2):
 				#validate() method returns  a tuple (QValiditatorState,QString,int) - look at first index in tuple
 				#Qvalidator State is an enum: {0:"invlaid",1:"Intermediate",2:"Acceptable"}
@@ -80,7 +84,7 @@ class BreezeCardManagementFrame(QtWidgets.QFrame, Ui_Frame):
 				self.OpenError()
 				return
 
-		self.UpdateView(owner,cardNum,showSuspended,minVal,maxVal)
+		self.UpdateView(owner,cardNum,minVal,maxVal,showSuspended)
 	def SetValue(self): 
 		if (self.CheckSelected() == -1):
 			return

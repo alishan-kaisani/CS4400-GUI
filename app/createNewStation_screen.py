@@ -32,6 +32,8 @@ class CreateNewStationFrame(QtWidgets.QFrame, Ui_Frame):
 		self.busStationButton.toggled.connect(self.BusButtonClicked)
 		self.trainStationButton.toggled.connect(self.TrainButtonClicked)
 		self.returnStationButton.clicked.connect(self.OpenStationListing)
+
+		
 	def CreateStation(self): 
 		#Read out data into vars
 		stationName = str(self.stationNameTextEdit.text())

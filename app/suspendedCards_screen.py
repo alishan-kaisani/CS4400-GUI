@@ -43,7 +43,7 @@ class SuspendedCardsFrame(QtWidgets.QFrame, Ui_Frame):
 		#Figure out which item is selected
 		row = self.tableWidget.selectedItems()[0].row()
 		cardNum = self.tableWidget.item(row,0).data(0)
-		cardNum = s.replace(" ", "") #remove spaces from table-formatted string
+		cardNum = cardNum.replace(" ", "") #remove spaces from table-formatted string
 		newOwner = self.tableWidget.item(row, index).data(0)
 
 		res = -1
