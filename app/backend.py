@@ -60,8 +60,10 @@ def GenerateNewCardNumber():
 		if len(result) == 0:
 			return newnum
 
-def EnsureIsEmail(string):
-	mylist = string.split("@")
+def EnsureIsEmail(email):
+	"""Ensure that a given input (email (str)) is in a valid email format.
+	Returns True or False."""
+	mylist = email.split("@")
 	if len(mylist) != 2:
 		return False
 	for char in mylist[0]:
@@ -154,6 +156,7 @@ def RemoveCard(cardnum):
 		with connection.cursor() as cursor:
 			cursor.execute(sql)
 			connection.commit()
+			return 1
 	except:
 		return sys.exc_info()[0]
 	finally:
@@ -166,7 +169,20 @@ def AddValue(cardnum, value):
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',
 								db = 'cs4400_Group_110')
-	sql = 'UPDATE Breezecard SET Value={} WHERE BreezecardNum="{}";'.format(value, cardnum)
+	sql_first = 'SELECT Value FROM Breezecard WHERE BreezecardNum="{}";'.format(cardnum)
+	with connection.cursor() as cursor:
+		cursor.execute(sql_first)
+		current_value = float(str(cursor.fetchall()[0][0]))
+	sql = 'UPDATE Breezecard SET Value={} WHERE BreezecardNum="{}";'.format(value + current_value, cardnum)
+	try:
+		with connection.cursor() as cursor:
+			cursor.execute(sql)
+			connection.commit()
+			return 1
+	except:
+		return sys.exc_info()[0]
+	finally:
+		connection.close()
 
 def ViewStations(orderBy='Name'):
 	"""Returns a tuple of tuples, where each nested tuple is of the form (Station name, StopID, Decimal('fare amount'), ClosedStatus).
@@ -230,8 +246,8 @@ def ViewIntersection(stopID):
 	try:
 		with connection.cursor() as cursor:
 			cursor.execute(sql)
-			m = cursor.fetchall()
-			return m
+			m = cursor.fetchone()
+			return m[0]
 	except:
 		return sys.exc_info()[0]
 	finally:
