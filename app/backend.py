@@ -145,7 +145,9 @@ def ViewStations(orderBy='Name'):
 
 def AddBreezeCard(cardnum):
 	"""A user inputs a Breeze card number and makes it theirs. The card must exist somewhere in the database.
-	Returns 1 to indicate success."""
+	Returns 1 to indicate success."""\
+	print(type(cardnum))
+	"""A user inputs a Breeze card number and makes it theirs. The card must exist somewhere in the database."""
 	sql = 'UPDATE Breezecard SET BelongsTo="{}" WHERE BreezecardNum="{}";'.format(passenger_username, cardnum)
 	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
 								user = 'cs4400_Group_110',
@@ -157,6 +159,7 @@ def AddBreezeCard(cardnum):
 			cursor.commit()
 			return 1
 	except:
+		print('bad')
 		return sys.exc_info()[0]
 	finally:
 		connection.close()
