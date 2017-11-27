@@ -158,7 +158,23 @@ def AddBreezeCard(cardnum):
 			connection.commit()
 			return 1
 	except:
-		print('bad')
+		return sys.exc_info()[0]
+	finally:
+		connection.close()
+
+def RemoveCard(cardnum):
+	"""Disassociate a user from a breeze card.
+	Returns 1 to indicate success"""
+	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+								user = 'cs4400_Group_110',
+								password = 'KAfx5IQr',
+								db = 'cs4400_Group_110')
+	sql = 'UPDATE Breezecard SET BelongsTo=null where BreezecardNum="{}";'.format(cardnum)
+	try:
+		with connection.cursor() as cursor:
+			cursor.execute(sql)
+			connection.commit()
+	except:
 		return sys.exc_info()[0]
 	finally:
 		connection.close()
