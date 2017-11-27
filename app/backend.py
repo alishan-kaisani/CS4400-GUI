@@ -176,14 +176,20 @@ def ViewSingleStation(stopID):
 		connection.close()
 
 def ViewIntersection(stopID):
-    connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
-                                user = 'cs4400_Group_110',
-                                password = 'KAfx5IQr',
-                                db = 'cs4400_Group_110')
-    sql = 'SELECT Intersection FROM BusStationIntersection WHERE StopID="{}";'.format(stopID)
-    try:
-        with connection.cursor() as cursor:
-            sql.execute(sql)
+	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+								user = 'cs4400_Group_110',
+								password = 'KAfx5IQr',
+								db = 'cs4400_Group_110')
+	sql = 'SELECT Intersection FROM BusStationIntersection WHERE StopID="{}";'.format(stopID)
+	try:
+		with connection.cursor() as cursor:
+			cursor.execute(sql)
+			m = cursor.fetchall()
+			return m
+	except:
+		return sys.exc_info()[0]
+	finally:
+		connection.close()
 
 def CreateTrainStation(stationName, stopID, entryFare, closedStatus):
 	"""Creates a new train station by inserting a tuple into the Station table.
@@ -217,18 +223,18 @@ def CreateBusStation(stationName, stopID, entryFare, closedStatus, *args):
 								password = 'KAfx5IQr',
 								db = 'cs4400_Group_110')
 	closedStatus = 'true' if closedStatus in (1, True) else 'false' if closedStatus in (0, False) else None
-    if args[0] == '':
-        args = ()
+	if args[0] == '':
+		args = ()
 	sql = 'INSERT INTO Station VALUES ("{}", "{}", {}, {}, false);'.format(stopID, stationName, entryFare, closedStatus)
 	if args:
 		sql2 = 'INSERT INTO BusStationIntersection VALUES ("{}", "{}");'.format(stopID, args[0])
-    else:
-        sql2 = 'INSERT INTO BusStationIntersection VALUES ("{}", null);'.format(stopID)
+	else:
+		sql2 = 'INSERT INTO BusStationIntersection VALUES ("{}", null);'.format(stopID)
 	try:
 		with connection.cursor() as cursor:
 			cursor.execute(sql)
 			connection.commit()
-		    cursor.execute(sql2)
+			cursor.execute(sql2)
 			connection.commit()
 			return 1
 	except:
@@ -485,19 +491,20 @@ def BreezecardSearch(username='', cardNumber='', minValue=0, maxValue=1000.00, s
 		connection.close()
 
 def ViewPassengerCards():
-    """View all the breezecards of a passenger and the associated values associated with the breesecards.
-    Returns a list of tuples from the database of the form (BreezecardNum, Username)."""
-    connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
-                                user = 'cs4400_Group_110',
-                                password = 'KAfx5IQr',
-                                db = 'cs4400_Group_110')
-    sql = 'SELECT BreezecardNum, Value FROM Breezecard where BelongsTo="{}";'.format(passenger_username)
-    try:
-        with connection.cursor() as cursor:
-            cursor.execute(sql)
-            m = cursor.fetchall()
-            return [(x[0], round(float(x[1])), 2) for x in m]
-    except:
-        print("Something went wrong. Blame Joel.")
-    finally:
-        connection.close()
+	"""View all the breezecards of a passenger and the associated values associated with the breesecards.
+	Returns a list of tuples from the database of the form (BreezecardNum, Username)."""
+	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+								user = 'cs4400_Group_110',
+								password = 'KAfx5IQr',
+								db = 'cs4400_Group_110')
+	sql = 'SELECT BreezecardNum, Value FROM Breezecard where BelongsTo="{}";'.format(passenger_username)
+	try:
+		with connection.cursor() as cursor:
+			cursor.execute(sql)
+			m = cursor.fetchall()
+			return [(x[0], round(float(x[1])), 2) for x in m]
+	except:
+		print("Something went wrong. Blame Joel.")
+	finally:
+		connection.close()
+
