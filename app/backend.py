@@ -183,7 +183,13 @@ def ViewIntersection(stopID):
 	sql = 'SELECT Intersection FROM BusStationIntersection WHERE StopID="{}";'.format(stopID)
 	try:
 		with connection.cursor() as cursor:
-			sql.execute(sql)
+			cursor.execute(sql)
+			m = cursor.fetchall()
+			return m
+	except:
+		return sys.exc_info()[0]
+	finally:
+		connection.close()
 
 def CreateTrainStation(stationName, stopID, entryFare, closedStatus):
 	"""Creates a new train station by inserting a tuple into the Station table.
