@@ -564,6 +564,25 @@ def ViewPassengerCards():
 			m = cursor.fetchall()
 			return [(x[0], round(float(x[1])), 2) for x in m]
 	except:
-		print("Something went wrong. Blame Joel.")
+		return sys.exc_info()[0]
+	finally:
+		connection.close()
+
+def ViewPassengerFlowReport(startTime, endTime):
+	"""View the passenger flow report for all stations.
+	Returns a list of tuples of the form (StationName, # In, # Out, Flow, Revenue)
+	startTime (datetime.datetime) and endTime (datetime.datetime) are self-explanatory."""
+	sql = 'SELECT * FROM PassengerFlowReport WHERE StartTime BETWEEN "{}" AND "{}";'.format(DTTUS(startTime), DTTUS(endTime))
+	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+								user = 'cs4400_Group_110',
+								password = 'KAfx5IQr',
+								db = 'cs4400_Group_110')
+	try:
+		with connection.cursor() as cursor:
+			cursor.execute(sql)
+			m = cursor.fetchall()
+			return m
+	except:
+		return sys.exc_info()[0]
 	finally:
 		connection.close()
