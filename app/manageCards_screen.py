@@ -67,10 +67,10 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 			return
 
 		cardNum = str(self.creditCardNumberTextEdit.text())
-		value = cardValueSpinBox.value()
-		validator = QtGui.QDoubleValidator(0,10000000000000000)
+		value = self.cardValueSpinBox.value()
+		validator = QtGui.QDoubleValidator(0,10000000000000000,0)
 
-		if len(cardNum) != 16
+		if len(cardNum) == 16:
 			if (validator.validate(cardNum,0)[0] != 2):
 				self.error = "CC Numbers must be 16 digits - no spaces"
 				self.OpenError()
@@ -81,7 +81,7 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 			return
 
 		row_ndx = self.tableWidget.selectedItems()[0].row()
-		breezeCardNum = self.tableWdiget.item(row_ndx,0)
+		breezeCardNum = self.tableWidget.item(row_ndx,0)
 
 		res = -1
 		res = backend.AddValue(breezeCardNum, value)

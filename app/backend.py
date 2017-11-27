@@ -154,6 +154,7 @@ def RemoveCard(cardnum):
 		with connection.cursor() as cursor:
 			cursor.execute(sql)
 			connection.commit()
+			return 1
 	except:
 		return sys.exc_info()[0]
 	finally:
@@ -166,7 +167,23 @@ def AddValue(cardnum, value):
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',
 								db = 'cs4400_Group_110')
-	sql = 'UPDATE Breezecard SET Value={} WHERE BreezecardNum="{}";'.format(value, cardnum)
+	sql_first = 'SELECT Value FROM Breezecard WHERE BreezecardNum="{}";'.format(cardnum)
+	print(cardnum)
+	with connection.cursor() as cursor:
+		cursor.execute(sql_first)
+		print(cursor.fetchall())
+		print(cursor.fetchone())
+		current_value = float(cursor.fetchall()[0][0])
+	sql = 'UPDATE Breezecard SET Value={} WHERE BreezecardNum="{}";'.format(value + current_value, cardnum)
+	try:
+		with connection.cursor() as cursor:
+			cursor.execute(sql)
+			connection.commit()
+			return 1
+	except:
+		return sys.exc_info()[0]
+	finally:
+		connection.close()
 
 def ViewStations(orderBy='Name'):
 	"""Returns a tuple of tuples, where each nested tuple is of the form (Station name, StopID, Decimal('fare amount'), ClosedStatus).
