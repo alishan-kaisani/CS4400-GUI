@@ -572,7 +572,7 @@ def ViewPassengerFlowReport(startTime, endTime):
 	"""View the passenger flow report for all stations.
 	Returns a list of tuples of the form (StationName, # In, # Out, Flow, Revenue)
 	startTime (datetime.datetime) and endTime (datetime.datetime) are self-explanatory."""
-	sql = 'SELECT * FROM PassengerFlowReport WHERE STartTime BETWEEN "{}" AND "{}";'.format(DTTUS(startTime), DTTUS(endTime))
+	sql = 'SELECT * FROM PassengerFlowReport WHERE StartTime BETWEEN "{}" AND "{}";'.format(DTTUS(startTime), DTTUS(endTime))
 	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',
