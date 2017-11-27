@@ -125,7 +125,7 @@ class BreezeCardManagementFrame(QtWidgets.QFrame, Ui_Frame):
 
 		cardNum = self.tableWidget.item(row,0).data(0)
 		cardNum = cardNum.replace(" ","")
-		newOwner = str(transferTextEdit.text())
+		newOwner = str(self.transferTextEdit.text())
 
 		if (newOwner == ""):
 			self.error = "No owner specified"
@@ -136,7 +136,7 @@ class BreezeCardManagementFrame(QtWidgets.QFrame, Ui_Frame):
 		res = backend.AssignCardToOwner(cardNum,newOwner)
 
 		if res == 1:
-			self.UpdateView()
+			self.UpdateView('','',0,1000.00,False)
 			self.newframe.hide()
 			self.success = "Card Reassigned!"
 			self.OpenSuccess()
