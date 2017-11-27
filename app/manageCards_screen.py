@@ -16,6 +16,7 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 		self.setupUi(self)
 		self.addCardButton.clicked.connect(self.AddCard)
 		self.addValueButton.clicked.connect(self.AddValue)
+		self.tableWidget.cellClicked.connect(self.RemoveCard)
 		#self.CreateView()
 	def InitFromOtherFile(self,Ui_Frame):
 		Ui_Frame.__init__(self)
@@ -23,13 +24,33 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 		self.addCardButton.clicked.connect(self.AddCard)
 		self.addValueButton.clicked.connect(self.AddValue)
 		self.CreateView()
-	def RemoveCard(self):
+	def RemoveCard(self,row,col):
+		if col != 2:
+			#wrong area to click
+			return
+
 		if (len(self.tableWidget.selectedItems()) == 0):
 			self.error = "No Card Selected"
 			self.OpenError()
 			return
-		cardNum = self.tableWidget.item(row,0).data(0)
 
+		cardNum = self.tableWidget.item(row,0).data(0)
+		
+		res = -1
+		res = backend.RemoveCard(cardNum)
+
+		if res == 1: 
+			self.success = "Card Removed Successfully"
+			self.hide()
+			self.OpenSuccess()
+			self.show()
+		elif res == -1:
+			self.error = "Error in Adding BreezeCard"
+			self.OpenError()
+			return
+		else:
+			self.error = "Unknown Error:\n" + str(res)
+			self.OpenError()
 	def AddCard(self): 
 		cardNum = str(self.cardNumberTextEdit.text())
 		#Specfies range of 1e15 to 1e16 to cover all possible 16 digit numbers
@@ -67,10 +88,10 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 			return
 
 		cardNum = str(self.creditCardNumberTextEdit.text())
-		value = cardValueSpinBox.value()
-		validator = QtGui.QDoubleValidator(0,10000000000000000)
+		value = self.cardValueSpinBox.value()
+		validator = QtGui.QDoubleValidator(0,10000000000000000,0)
 
-		if len(cardNum) != 16
+		if len(cardNum) == 16:
 			if (validator.validate(cardNum,0)[0] != 2):
 				self.error = "CC Numbers must be 16 digits - no spaces"
 				self.OpenError()
@@ -81,7 +102,7 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 			return
 
 		row_ndx = self.tableWidget.selectedItems()[0].row()
-		breezeCardNum = self.tableWdiget.item(row_ndx,0)
+		breezeCardNum = str(self.tableWdiget.item(row_ndx,0).data(0))
 
 		res = -1
 		res = backend.AddValue(breezeCardNum, value)
