@@ -175,6 +175,16 @@ def ViewSingleStation(stopID):
 	finally:
 		connection.close()
 
+def ViewIntersection(stopID):
+    connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+                                user = 'cs4400_Group_110',
+                                password = 'KAfx5IQr',
+                                db = 'cs4400_Group_110')
+    sql = 'SELECT Intersection FROM BusStationIntersection WHERE StopID="{}";'.format(stopID)
+    try:
+        with connection.cursor() as cursor:
+            sql.execute(sql)
+
 def CreateTrainStation(stationName, stopID, entryFare, closedStatus):
 	"""Creates a new train station by inserting a tuple into the Station table.
 	stationName (str), stopID (str), and entryFare (float) all have fairly obvious meanings.
@@ -207,16 +217,19 @@ def CreateBusStation(stationName, stopID, entryFare, closedStatus, *args):
 								password = 'KAfx5IQr',
 								db = 'cs4400_Group_110')
 	closedStatus = 'true' if closedStatus in (1, True) else 'false' if closedStatus in (0, False) else None
+    if args[0] == '':
+        args = ()
 	sql = 'INSERT INTO Station VALUES ("{}", "{}", {}, {}, false);'.format(stopID, stationName, entryFare, closedStatus)
 	if args:
 		sql2 = 'INSERT INTO BusStationIntersection VALUES ("{}", "{}");'.format(stopID, args[0])
+    else:
+        sql2 = 'INSERT INTO BusStationIntersection VALUES ("{}", null);'.format(stopID)
 	try:
 		with connection.cursor() as cursor:
 			cursor.execute(sql)
 			connection.commit()
-			if args:
-				cursor.execute(sql2)
-				connection.commit()
+		    cursor.execute(sql2)
+			connection.commit()
 			return 1
 	except:
 		return sys.exc_info()[0]
@@ -432,7 +445,7 @@ def TripHistorySingleBreezecard(bnum):
 		connection.close()
 
 #EDIT: Changed defulat maxValue to 1000.00 bc that's what front end is doing anyway
-
+#Cards Can be unassigned v. Suspended; a None value doesn't automatically imply suspension
 def BreezecardSearch(username='', cardNumber='', minValue=0, maxValue=1000.00, showSuspended=False):
 	"""Return a list of tuples breezecards where tuples are of the form (BreezecardNum, Value, Owner)
 	username (str) cardNumber (str) must be included but may be empty strings.
@@ -472,19 +485,19 @@ def BreezecardSearch(username='', cardNumber='', minValue=0, maxValue=1000.00, s
 		connection.close()
 
 def ViewPassengerCards():
-	"""View all the breezecards of a passenger and the associated values associated with the breesecards.
-	Returns a list of tuples from the database of the form (BreezecardNum, Username)."""
-	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
-								user = 'cs4400_Group_110',
-								password = 'KAfx5IQr',
-								db = 'cs4400_Group_110')
-	sql = 'SELECT BreezecardNum, Value FROM Breezecard where BelongsTo="{}";'.format(passenger_username)
-	try:
-		with connection.cursor() as cursor:
-			cursor.execute(sql)
-			m = cursor.fetchall()
-			return list(m)
-	except:
-		print("Something went wrong. Blame Joel.")
-	finally:
-		connection.close()
+    """View all the breezecards of a passenger and the associated values associated with the breesecards.
+    Returns a list of tuples from the database of the form (BreezecardNum, Username)."""
+    connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+                                user = 'cs4400_Group_110',
+                                password = 'KAfx5IQr',
+                                db = 'cs4400_Group_110')
+    sql = 'SELECT BreezecardNum, Value FROM Breezecard where BelongsTo="{}";'.format(passenger_username)
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            m = cursor.fetchall()
+            return [(x[0], round(float(x[1])), 2) for x in m]
+    except:
+        print("Something went wrong. Blame Joel.")
+    finally:
+        connection.close()
