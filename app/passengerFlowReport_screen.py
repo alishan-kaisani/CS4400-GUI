@@ -47,7 +47,7 @@ class PassengerFlowReportFrame(QtWidgets.QFrame, Ui_Frame):
 				if j == 4:
 					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem("$"+"{0:.2f}".format(data[i][j])))
 				else:
-					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(data[i][j]))
+					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(str(data[i][j])))
 		self.tableWidget.horizontalHeader().setSectionResizeMode(0,QtWidgets.QHeaderView.Stretch)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(1,QtWidgets.QHeaderView.Stretch)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(2,QtWidgets.QHeaderView.Stretch)

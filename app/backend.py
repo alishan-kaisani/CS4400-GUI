@@ -599,7 +599,6 @@ GROUP BY StartsAt;""".format(DTTUS(startTime), DTTUS(endTime)).replace("\n", " "
 		with connection.cursor() as cursor:
 			cursor.execute(sql)
 			m = cursor.fetchall()
-			print(m)
 			return [(x[0], x[1], x[2], x[3], float(x[4])) for x in m]
 	except:
 		return sys.exc_info()[0]
