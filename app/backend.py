@@ -512,4 +512,3 @@ def ViewPassengerCards():
 		print("Something went wrong. Blame Joel.")
 	finally:
 		connection.close()
-
