@@ -159,6 +159,15 @@ def RemoveCard(cardnum):
 	finally:
 		connection.close()
 
+def AddValue(cardnum, value):
+	"""cardnum (str) and value (float) are self-explanatory.
+	User adds value to his or her card"""
+	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+								user = 'cs4400_Group_110',
+								password = 'KAfx5IQr',
+								db = 'cs4400_Group_110')
+	sql = 'UPDATE Breezecard SET Value={} WHERE BreezecardNum="{}";'.format(value, cardnum)
+
 def ViewStations(orderBy='Name'):
 	"""Returns a tuple of tuples, where each nested tuple is of the form (Station name, StopID, Decimal('fare amount'), ClosedStatus).
 	orderBy (str) is a string that is one of 'Name', 'StopID', 'EnterFare', 'ClosedStatus'; orderBy is assigned 'Name' by default
