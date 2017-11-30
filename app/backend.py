@@ -67,7 +67,7 @@ def EnsureIsEmail(email):
 	if len(mylist) != 2:
 		return False
 	for char in mylist[0]:
-		if char not in (string.ascii_letters + string.digits):
+		if char not in (string.ascii_letters + string.digits + '.'):
 			return False
 	for char in mylist[1]:
 		if char not in (string.ascii_letters + string.digits + '.'):
