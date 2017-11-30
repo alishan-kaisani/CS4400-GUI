@@ -32,7 +32,7 @@ class PassengerFlowReportFrame(QtWidgets.QFrame, Ui_Frame):
 
 		data = backend.ViewPassengerFlowReport(startTime,endTime)
 		print(data)
-		
+
 		if type(data) != list:
 			self.error = "Unkown Error\n" + str(data)
 			self.OpenError()
@@ -52,6 +52,8 @@ class PassengerFlowReportFrame(QtWidgets.QFrame, Ui_Frame):
 		self.tableWidget.horizontalHeader().setSectionResizeMode(3,QtWidgets.QHeaderView.ResizeToContents)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(4,QtWidgets.QHeaderView.Stretch)
 	def UpdateFilter(self): 
+		while (self.tableWidget.rowCount() > 0):
+			self.tableWidget.removeRow(0)
 		startTime = self.startDateTimeEdit.dateTime().toPyDateTime()
 		endTime = self.endDateTimeEdit.dateTime().toPyDateTime()
 		self.hide()

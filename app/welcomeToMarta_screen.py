@@ -53,6 +53,9 @@ class WelcomeToMartaFrame(QtWidgets.QFrame, Ui_Frame):
 		cur_breezeCard = self.breezeCardBox.currentText()
 		cur_breezeCard = cur_breezeCard.replace(" ","")
 
+		val = backend.BreezeCardMoney(cur_breezeCard)
+		self.balanceAmount.setText('$ {0.2f}'.format(val))
+
 		details = backend.TripHistorySingleBreezecard(cur_breezeCard)
 		#details is tuple of form (breezecardNum,value,username, fare, StartTime,StartsAt,EndsAt)
 		
@@ -82,11 +85,11 @@ class WelcomeToMartaFrame(QtWidgets.QFrame, Ui_Frame):
 
 			val = backend.BreezeCardMoney(cur_breezeCard)
 			val = round(val,2)
-			self.balanceAmount.setText("$" + val)
+			self.balanceAmount.setText("$ {0.2f}".fomrat(val))
 		elif len(details) > 0:
 			val = details[1]
 			val = round(val,2)
-			self.balanceAmount.setText("$" + val)
+			self.balanceAmount.setText("$ {0.2f}".format(val))
 			if (details[6] == None):
 				#They're in a trip so display trip start & disable startTrip
 				station = backend.ViewSingleStation(StartsAt)

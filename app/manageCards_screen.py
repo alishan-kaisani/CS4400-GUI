@@ -42,7 +42,9 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 			return
 
 		cardNum = self.tableWidget.item(row,0).data(0)
-		
+		print(type(cardNum))
+		cardNum = cardNum.replace(" ", "")
+
 		res = -1
 		res = backend.RemoveCard(cardNum)
 
