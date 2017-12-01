@@ -615,7 +615,7 @@ def ViewPassengerCards():
 		with connection.cursor() as cursor:
 			cursor.execute(sql)
 			m = cursor.fetchall()
-			return [(x[0], round(float(x[1])), 2) for x in m]
+			return [(x[0], float(x[1])) for x in m]
 	except:
 		return sys.exc_info()[0]
 	finally:
@@ -699,7 +699,6 @@ def EndTrip(cardnum, stopID):
 		connection.close()
 
 # TO FIX: Make sure that the value on the breezecard is sufficient
-# TO FIX: Use the PassengerInTrip() function to determine if a passenger is already in a trip
 def StartTrip(cardnum, stationID):
 	"""Start a trip on a given breezecard.
 	cardnum (str) and stationID (str) are self-explanatory.
@@ -708,15 +707,8 @@ def StartTrip(cardnum, stationID):
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',
 								db = 'cs4400_Group_110')
-	sql_check = 'SELECT * FROM Trip WHERE BreezecardNum="{}" AND EndsAt IS NULL;'.format(cardnum) # For testing whether there is already a trip in progress
-	try:
-		with connection.cursor() as cursor:
-			cursor.execute(sql_check)
-			k = cursor.fetchall()
-	except:
-		return sys.exc_info()[0]
-	if k:
-		return sys.exc_info()[0] # Because there is already a trip in progress
+	if PassengerInTrip():
+		return "Already in trip."
 	sql_findfare = 'SELECT EnterFare FROM Station WHERE StopID="{}";'.format(stationID)
 	try:
 		with connection.cursor() as cursor:
@@ -729,11 +721,11 @@ def StartTrip(cardnum, stationID):
 		with connection.cursor() as cursor:
 			cursor.execute(sql_update)
 			connection.commit()
-			return 1
 	except:
 		return sys.exc_info()[0]
 	finally:
 		connection.close()
+	
 
 def PassengerInTrip():
 	"""Determine whether the user currently logged on is currently taking a trip.
