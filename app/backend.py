@@ -676,7 +676,6 @@ def BreezeCardMoney(cardnum):
 	finally:
 		connection.close()
 
-#ISSUE: StartTime always updates to the current time, even though it shouldn't. This is an issue with the schema, not this function. It still needs to be fixed ASAP.
 def EndTrip(cardnum, stopID):
 	"""End a user's trip taken on a specified Breeze Card.
 	cardnum (str) is self-explanatory; stopID (str) is the station ID of the ending destination.
@@ -685,7 +684,7 @@ def EndTrip(cardnum, stopID):
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',
 								db = 'cs4400_Group_110')
-	sql = 'UPDATE Trip Set EndsAt="S7" WHERE "{}" IN (SELECT BreezecardNum FROM (SELECT BreezecardNum FROM Trip WHERE EndsAt IS NULL) AS b);'.format(stopID, cardnum)
+	sql = 'UPDATE Trip Set EndsAt="{}" WHERE BreezecardNum="{}" AND EndsAt IS NULL;'.format(stopID, cardnum)
 	try:
 		with connection.cursor() as cursor:
 			cursor.execute(sql)
