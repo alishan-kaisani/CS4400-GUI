@@ -82,8 +82,7 @@ def CreateNewUser(username, email, password, cardnumber=None):
 	if not EnsureIsEmail(email):
 		# GUI error because the email address as entered is not of a valid email format
 		return "Bad Email"
-	sql = 'INSERT INTO User VALUES ("{}", "{}", false);'.format(username, hashlib.md5(password.encode('utf-8')).hexdigest()) 
-	#New users are always passengers, not admins
+	sql = 'INSERT INTO User VALUES ("{}", "{}", false);'.format(username, hashlib.md5(password.encode('utf-8')).hexdigest())
 	sql2 = 'INSERT INTO Passenger VALUES ("{}", "{}");'.format(username, email)
 	sql3 = 'INSERT INTO Breezecard VALUES ("{}", 0.00, "{}");'.format(cardnumber, username)
 	sql_query = 'SELECT * FROM Breezecard WHERE BreezecardNum="{}";'.format(cardnumber)
@@ -106,7 +105,6 @@ def CreateNewUser(username, email, password, cardnumber=None):
 			else:
 				cursor.execute(sql_if_needed)
 				connection.commit()
-			# Tell the GUI to do something (if necessary)
 			return 1
 	except:
 		return sys.exc_info()[0]
@@ -151,6 +149,12 @@ def RemoveCard(cardnum):
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',
 								db = 'cs4400_Group_110')
+	sql_check = 'SELECT COUNT(*) FROM Breezecard WHERE BelongsTo="{}";'.format(passenger_username)
+	with connection.cursor() as cursor:
+		cursor.execute(sql_check)
+		m = cursor.fetchone()
+		if m[0] == 1:
+			return "You can't delete your only breezecard."
 	sql = 'UPDATE Breezecard SET BelongsTo=null WHERE BreezecardNum="{}";'.format(cardnum)
 	try:
 		with connection.cursor() as cursor:
@@ -174,6 +178,8 @@ def AddValue(cardnum, value):
 	with connection.cursor() as cursor:
 		cursor.execute(sql_first)
 		current_value = float(str(cursor.fetchall()[0][0]))
+	if current_value + value > 1000:
+		return "Max value exceeded. No value added to card as a result."
 	sql = 'UPDATE Breezecard SET Value={} WHERE BreezecardNum="{}";'.format(value + current_value, cardnum)
 	try:
 		with connection.cursor() as cursor:
