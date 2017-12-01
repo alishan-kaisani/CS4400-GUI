@@ -218,11 +218,10 @@ def PrettifyViewStations(orderBy='Name'):
 			newlisting.append((tup[0], tup[1], round(float(tup[2]), 2), "Open"))
 	return newlisting
 
-def ViewAllBusStations(onlyOpen=True):
+def ViewAllBusStations():
 	"""Return a list of all bus stations, where each bus station is a tuple of the form (Name, StopID, fare, ClosedStatus, NearestIntersection).
-	Set the parameter onlyOpen (bool) to True if you only want to display the open stations.
-	onlyOpen is true by default."""
-	sql = 'SELECT Name, StopID, EnterFare, ClosedStatus FROM Station NATURAL JOIN BusStationIntersection ORDER BY NAME;'
+	The function only shows stations that are open."""
+	sql = 'SELECT Name, StopID, EnterFare FROM Station WHERE ClosedStatus=0 and isTrain=0 ORDER BY NAME;'
 	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',
@@ -231,39 +230,31 @@ def ViewAllBusStations(onlyOpen=True):
 		with connection.cursor() as cursor:
 			cursor.execute(sql)
 			m = cursor.fetchall()
-			if onlyOpen:
-				mylist = []
-				for tup in m:
-					if tup[3]==1:
-						mylist.append((tup[0], tup[1], float(tup[2])))
-				return mylist
-			else:
-				return [(x[0], x[1], float(x[2]), "Closed" if x[3]==1 else "Open") for x in m]
+			mylist = []
+			for tup in m:
+				mylist.append((tup[0], tup[1], float(tup[2])))
+			return mylist
 	except:
 		return sys.exc_info()[0]
 	finally:
 		connection.close()
 
-def ViewAllTrainStations(onlyOpen=True):
+def ViewAllTrainStations():
 	"""Return a list of all train stations, where each train station is a tuple of the form (Name, StopID, fare, ClosedStatus).
-	Set the parameter onlyOpen (bool) to True is you only want to display the open stations."""
+	This function only shows stations that are open."""
 	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',
 								db = 'cs4400_Group_110')
-	sql = 'SELECT Name, StopID, EnterFare, ClosedStatus FROM Station WHERE IsTrain=1 ORDER BY Name;'
+	sql = 'SELECT Name, StopID, EnterFare FROM Station WHERE IsTrain=1 AND ClosedStatus=0 ORDER BY Name;'
 	try:
 		with connection.cursor() as cursor:
 			cursor.execute(sql)
 			m = cursor.fetchall()
-			if onlyOpen:
-				mylist = []
-				for tup in mylist:
-					if tup[3]==1:
-						mylist.append((tup[0], tup[1], float(tup[2])))
-				return mylist
-			else:
-				return [(x[0], x[1], float(x[2]), "Closed" if x[3]==1 else "Open") for x in m]
+			mylist = []
+			for tup in m:
+				mylist.append((tup[0], tup[1], float(tup[2])))
+			return mylist
 	except:
 		return sys.exc_info()[0]
 	finally:
