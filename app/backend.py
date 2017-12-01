@@ -698,7 +698,6 @@ def EndTrip(cardnum, stopID):
 	finally:
 		connection.close()
 
-# TO FIX: Make sure that the value on the breezecard is sufficient
 def StartTrip(cardnum, stationID):
 	"""Start a trip on a given breezecard.
 	cardnum (str) and stationID (str) are self-explanatory.
@@ -716,7 +715,17 @@ def StartTrip(cardnum, stationID):
 			fare = cursor.fetchone()[0]
 	except:
 		return sys.exc_info()[0]
+	sql_findvalue = 'SELECT Value FROM Breezecard WHERE BreezecardNum="{}";'.format(cardnum)
+	try:
+		with connection.cursor() as cursor:
+			cursor.execute(sql_findvalue)
+			value = cursor.fetchone()[0]
+	except:
+		return sys.exc_info()[0]
+	if value < fare:
+		return "Insufficient funds"
 	sql_update = 'INSERT INTO Trip VALUES ({}, CURRENT_TIMESTAMP, "{}", "{}", NULL);'.format(fare, cardnum, stationID)
+	sql_changevalue = 'UPDATE Breezecard SET Value={} WHERE BreezecardNum="{}";'.format(value - fare, cardnum)
 	try:
 		with connection.cursor() as cursor:
 			cursor.execute(sql_update)
@@ -725,7 +734,6 @@ def StartTrip(cardnum, stationID):
 		return sys.exc_info()[0]
 	finally:
 		connection.close()
-	
 
 def PassengerInTrip():
 	"""Determine whether the user currently logged on is currently taking a trip.
