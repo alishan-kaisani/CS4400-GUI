@@ -222,7 +222,7 @@ def ViewAllBusStations(onlyOpen=False):
 	"""Return a list of all bus stations, where each bus station is a tuple of the form (Name, StopID, fare, ClosedStatus, NearestIntersection).
 	Set the parameter onlyOpen (bool) to True if you only want to display the open stations.
 	onlyOpen is False by default."""
-	sql = 'SELECT Name, StopID, EnterFare, ClosedStatus, Intersection FROM Station NATURAL JOIN BusStationIntersection ORDER BY NAME;'
+	sql = 'SELECT Name, StopID, EnterFare, ClosedStatus FROM Station NATURAL JOIN BusStationIntersection ORDER BY NAME;'
 	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',
@@ -238,7 +238,7 @@ def ViewAllBusStations(onlyOpen=False):
 						mylist.append((tup[0], tup[1], float(tup[2])))
 				return mylist
 			else:
-				return [(x[0], x[1], float(x[2]), "Closed" if x[3]==1 else "Open", x[4]) for x in m]
+				return [(x[0], x[1], float(x[2]), "Closed" if x[3]==1 else "Open") for x in m]
 	except:
 		return sys.exc_info()[0]
 	finally:
