@@ -481,7 +481,7 @@ def AssignCardToOwner(cardNumber, newOwner):
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',
 								db = 'cs4400_Group_110')
-	sql = 'UPDATE Breezecard SET BelongsTo="{}" WHERE BreezecardNum="{}" AND "{}" NOT IN (SELECT Username FROM User WHERE IsAdmin=1);'.format(newOwner, cardNumber, newOwner)
+	sql = 'UPDATE Breezecard SET BelongsTo="{}" WHERE BreezecardNum="{}" AND "{}" IN (SELECT Username FROM User WHERE IsAdmin=0);'.format(newOwner, cardNumber, newOwner)
 	sql2 = 'DELETE FROM Conflict WHERE BreezecardNum="{}";'.format(cardNumber)
 	try:
 		with connection.cursor() as cursor:
