@@ -677,11 +677,12 @@ def BreezeCardMoney(cardnum):
 	finally:
 		connection.close()
 
-# TO FIX: If passenger not already in trip, don't run this function; return 1 automatically instead
 def EndTrip(cardnum, stopID):
 	"""End a user's trip taken on a specified Breeze Card.
 	cardnum (str) is self-explanatory; stopID (str) is the station ID of the ending destination.
 	Returns 1 to indicate success."""
+	if PassengerInTrip():
+		return 1
 	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',
