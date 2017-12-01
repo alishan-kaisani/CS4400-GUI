@@ -525,10 +525,9 @@ def TripHistoryOfUser(startTime, endTime):
 	sql = 'SELECT StartTime, StartsAt, EndsAt, Tripfare, BreezecardNum FROM Breezecard NATURAL JOIN Trip WHERE BreezecardNum in (SELECT BreezecardNum FROM Breezecard WHERE BelongsTo="{}") AND ("{}" <= StartTime) AND (StartTime <= "{}");'.format(passenger_username, DTTUS(startTime), DTTUS(endTime))
 	try:
 		with connection.cursor() as cursor:
-			main_list = []
 			cursor.execute(sql)
 			m = list(cursor.fetchall())
-			return [(x[0], x[1], x[2], str(x[3]), x[4]) for x in m]
+			return [(DTTUS(x[0]), x[1], x[2], str(x[3]), x[4]) for x in m]
 	except:
 		return sys.exc_info()[0]
 	finally:
