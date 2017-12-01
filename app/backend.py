@@ -218,6 +218,40 @@ def PrettifyViewStations(orderBy='Name'):
 			newlisting.append((tup[0], tup[1], round(float(tup[2]), 2), "Open"))
 	return newlisting
 
+def ViewAllBusStations():
+	"""Return a list of all bus stations, where each bus station is a tuple of the form (Name, StopID, fare, ClosedStatus, NearestIntersection)."""
+	sql = 'SELECT Name, StopID, EnterFare, ClosedStatus, Intersection FROM Station NATURAL JOIN BusStationIntersection ORDER BY NAME;'
+	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+								user = 'cs4400_Group_110',
+								password = 'KAfx5IQr',
+								db = 'cs4400_Group_110')
+	try:
+		with connection.cursor() as cursor:
+			cursor.execute(sql)
+			m = cursor.fetchall()
+			return [(x[0], x[1], float(x[2]), "Closed" if x[3]==1 else "Open", x[4]) for x in m]
+	except:
+		return sys.exc_info()[0]
+	finally:
+		connection.close()
+
+def ViewAllTrainStations():
+	"""Return a list of all train stations, where each train station is a tuple of the form (Name, StopID, fare, ClosedStatus)."""
+	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+								user = 'cs4400_Group_110',
+								password = 'KAfx5IQr',
+								db = 'cs4400_Group_110')
+	sql = 'SELECT Name, StopID, EnterFare, ClosedStatus FROM Station WHERE IsTrain=1 ORDER BY Name;'
+	try:
+		with connection.cursor() as cursor:
+			cursor.execute(sql)
+			m = cursor.fetchall()
+			return [(x[0], x[1], float(x[2]), "Closed" if x[3]==1 else "Open") for x in m]
+	except:
+		return sys.exc_info()[0]
+	finally:
+		connection.close()
+
 #EDIT: I added IsTrain to the query bc I need it to format the station detail page
 def ViewSingleStation(stopID):
 	"""Returns a tuple with information on a single station.
