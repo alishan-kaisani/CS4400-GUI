@@ -527,7 +527,7 @@ def TripHistoryOfUser(startTime, endTime):
 		with connection.cursor() as cursor:
 			cursor.execute(sql)
 			m = list(cursor.fetchall())
-			return [(DTTUS(x[0]), x[1], x[2], str(x[3]), x[4]) for x in m]
+			return [(DTTUS(x[0]), x[1], x[2], float(x[3]), x[4]) for x in m]
 	except:
 		return sys.exc_info()[0]
 	finally:
