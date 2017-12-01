@@ -729,6 +729,7 @@ def StartTrip(cardnum, stationID):
 	try:
 		with connection.cursor() as cursor:
 			cursor.execute(sql_update)
+			cursor.execute(sql_changevalue)
 			connection.commit()
 	except:
 		return sys.exc_info()[0]
