@@ -218,10 +218,10 @@ def PrettifyViewStations(orderBy='Name'):
 			newlisting.append((tup[0], tup[1], round(float(tup[2]), 2), "Open"))
 	return newlisting
 
-def ViewAllBusStations(onlyOpen=False):
+def ViewAllBusStations(onlyOpen=True):
 	"""Return a list of all bus stations, where each bus station is a tuple of the form (Name, StopID, fare, ClosedStatus, NearestIntersection).
 	Set the parameter onlyOpen (bool) to True if you only want to display the open stations.
-	onlyOpen is False by default."""
+	onlyOpen is true by default."""
 	sql = 'SELECT Name, StopID, EnterFare, ClosedStatus FROM Station NATURAL JOIN BusStationIntersection ORDER BY NAME;'
 	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
 								user = 'cs4400_Group_110',
@@ -244,7 +244,7 @@ def ViewAllBusStations(onlyOpen=False):
 	finally:
 		connection.close()
 
-def ViewAllTrainStations(onlyOpen=False):
+def ViewAllTrainStations(onlyOpen=True):
 	"""Return a list of all train stations, where each train station is a tuple of the form (Name, StopID, fare, ClosedStatus).
 	Set the parameter onlyOpen (bool) to True is you only want to display the open stations."""
 	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
@@ -688,6 +688,45 @@ def EndTrip(cardnum, stopID):
 	try:
 		with connection.cursor() as cursor:
 			cursor.execute(sql)
+			connection.commit()
+			return 1
+	except:
+		return sys.exc_info()[0]
+	finally:
+		connection.close()
+
+def StartTrip(cardnum, stationID):
+	"""Start a trip on a given breezecard.
+	cardnum (str) and stationID (str) are self-explanatory.
+	Returns 1 to indicate success."""
+	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+								user = 'cs4400_Group_110',
+								password = 'KAfx5IQr',
+								db = 'cs4400_Group_110')
+	sql_check = 'SELECT * FROM Trip WHERE BreezecardNum="{}" AND EndsAt IS NULL;'.format(cardnum) # For testing whether there is already a trip in progress
+	try:
+		with connection.cursor() as cursor:
+			cursor.execute(sql_check)
+			k = cursor.fetchall()
+	except:
+		return sys.exc_info()[0]
+	finally:
+		connection.close()
+	if k:
+		return sys.exc_info()[0] # Because there is already a trip in progress
+	sql_findfare = 'SELECT EnterFare FROM Station WHERE StopID="{}";'.format(stationID)
+	try:
+		with connection.cursor() as cursor:
+			cursor.execute(sql_findfare)
+			fare = cursor.fetchone()[0]
+	except:
+		return sys.exc_info()[0]
+	finally:
+		connection.close()
+	sql_update = 'INSERT INTO Trip VALUES ({}, CURRENT_TIMESTAMP, "{}", "{}", NULL);'.format(fare, cardnum, stationID)
+	try:
+		with connection.cursor() as cursor:
+			cursor.execute(sql_update)
 			connection.commit()
 			return 1
 	except:
