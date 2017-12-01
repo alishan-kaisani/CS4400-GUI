@@ -553,7 +553,7 @@ def TripHistorySingleBreezecard(bnum):
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',
 								db = 'cs4400_Group_110')
-	sql = 'SELECT * FROM Breezecard NATURAL JOIN Trip WHERE (BreezecardNum="{}");'.format(bnum)
+	sql = 'SELECT * FROM Breezecard NATURAL JOIN Trip WHERE (BreezecardNum="{}") ORDER BY StartTime DESC;'.format(bnum)
 	try:
 		with connection.cursor() as cursor:
 			cursor.execute(sql)
