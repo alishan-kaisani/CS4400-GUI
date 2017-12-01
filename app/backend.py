@@ -639,3 +639,22 @@ GROUP BY StartsAt;""".format(DTTUS(startTime), DTTUS(endTime)).replace("\n", " "
 		return sys.exc_info()[0]
 	finally:
 		connection.close()
+
+def BreezeCardMoney(cardnum):
+	"""Return the amount of money on a breeze card (float).
+	Input is cardnum (str), which must be 16 digits long and have no spaces (all digits).
+	It is not checked to make sure that there are 16 digits in the breezecard, as it will be assumed that the input comes straight from the GUI, not a human."""
+	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+								user = 'cs4400_Group_110',
+								password = 'KAfx5IQr',
+								db = 'cs4400_Group_110')
+	sql = 'SELECT Value FROM Breezecard WHERE BreezecardNum="{}";'.format(cardnum)
+	try:
+		with connection.cursor() as cursor:
+			cursor.execute(sql)
+			m = cursor.fetchone()
+			return float(m[0])
+	except:
+		return sys.exc_info()[0]
+	finally:
+		connection.close()
