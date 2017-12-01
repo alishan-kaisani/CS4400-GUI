@@ -602,6 +602,7 @@ def BreezecardSearch(username='', cardNumber='', minValue=0, maxValue=1000.00, s
 	finally:
 		connection.close()
 
+# POSSIBLE FIX: Make query so that it does not show suspended cards
 def ViewPassengerCards():
 	"""View all the breezecards of a passenger and the associated values associated with the breesecards.
 	Returns a list of tuples from the database of the form (BreezecardNum, Username)."""
@@ -676,6 +677,7 @@ def BreezeCardMoney(cardnum):
 	finally:
 		connection.close()
 
+# TO FIX: If passenger not already in trip, don't run this function; return 1 automatically instead
 def EndTrip(cardnum, stopID):
 	"""End a user's trip taken on a specified Breeze Card.
 	cardnum (str) is self-explanatory; stopID (str) is the station ID of the ending destination.
@@ -695,6 +697,8 @@ def EndTrip(cardnum, stopID):
 	finally:
 		connection.close()
 
+# TO FIX: Make sure that the value on the breezecard is sufficient
+# TO FIX: Use the PassengerInTrip() function to determine if a passenger is already in a trip
 def StartTrip(cardnum, stationID):
 	"""Start a trip on a given breezecard.
 	cardnum (str) and stationID (str) are self-explanatory.
@@ -710,8 +714,6 @@ def StartTrip(cardnum, stationID):
 			k = cursor.fetchall()
 	except:
 		return sys.exc_info()[0]
-	finally:
-		connection.close()
 	if k:
 		return sys.exc_info()[0] # Because there is already a trip in progress
 	sql_findfare = 'SELECT EnterFare FROM Station WHERE StopID="{}";'.format(stationID)
@@ -721,8 +723,6 @@ def StartTrip(cardnum, stationID):
 			fare = cursor.fetchone()[0]
 	except:
 		return sys.exc_info()[0]
-	finally:
-		connection.close()
 	sql_update = 'INSERT INTO Trip VALUES ({}, CURRENT_TIMESTAMP, "{}", "{}", NULL);'.format(fare, cardnum, stationID)
 	try:
 		with connection.cursor() as cursor:
@@ -733,3 +733,24 @@ def StartTrip(cardnum, stationID):
 		return sys.exc_info()[0]
 	finally:
 		connection.close()
+
+def PassengerInTrip():
+	"""Determine whether the user currently logged on is currently taking a trip.
+	passenger_username is a global variable, so this function does not need any input parameters.
+	Returns True if passenger is in a trip or False if not."""
+	cardlist = [x[0] for x in ViewPassengerCards()]
+	for card in cardlist:
+		connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+								user = 'cs4400_Group_110',
+								password = 'KAfx5IQr',
+								db = 'cs4400_Group_110')
+		sql = 'SELECT * FROM Trip WHERE BreezecardNum="{}" AND EndsAt IS NULL;'.format(card)
+		try:
+			with connection.cursor() as cursor:
+				cursor.execute(sql)
+				m = cursor.fetchall()
+				if m:
+					return True
+		except:
+			return sys.exc_info()[0]
+	return False
