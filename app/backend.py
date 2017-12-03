@@ -478,6 +478,10 @@ def AssignCardToOwner(cardNumber, newOwner):
 	"""Updates the Breezecard table with the new owner of selected Breezecard.
 	cardNumber (str) and newOwner (str) have fairly obvious meanings.
 	Function returns 1 if successful or prints error message to console (whilst returning None)."""
+	curOwner = BreezeCardUser(cardNumber)
+	if PassengerInTrip(curOwner):
+		if cardNumber == BreezecardForTrip():
+			return "Passenger In Trip. Card Cannot be Assigned"
 	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',

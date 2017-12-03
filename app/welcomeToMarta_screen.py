@@ -64,12 +64,22 @@ class WelcomeToMartaFrame(QtWidgets.QFrame, Ui_Frame):
 	def UpdateBreezeCard(self): 
 		cur_breezeCard = self.breezeCardBox.currentText()
 		cur_breezeCard = cur_breezeCard.replace(" ","")
-		
-		self.startAtBox.clear()
-		self.endingAtBox.clear()
 
 		val = backend.BreezeCardMoney(cur_breezeCard)
 		self.balanceAmount.setText('$ {:0.2f}'.format(val))
+
+		if backend.PassengerInTrip():
+			if cur_breezeCard != backend.BreezecardForTrip():
+				self.endingAtBox.setEnabled(False)
+				slef.startAtBox.setEnabled(False)
+				self.startTripLabel.setStyleSheet("color:red")
+				self.endTripLabel.setStyleSheet("color:red")
+				self.tripLabel.setStyleSheet("color:red")
+				self.tripLabel.setText("Trip in Progress")
+				return
+
+		self.startAtBox.clear()
+		self.endingAtBox.clear()
 
 		details = backend.TripHistorySingleBreezecard(cur_breezeCard)
 		#details is tuple of form (breezecardNum,value,username, fare, StartTime,StartsAt,EndsAt)
