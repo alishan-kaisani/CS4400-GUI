@@ -511,7 +511,6 @@ def AssignCardToOwner(cardNumber, newOwner):
 				cursor.execute(sql_newCardInsert)
 				connection.commit()
 			cursor.execute(sql)
-			# connection.commit()
 			cursor.execute(sql2)
 			connection.commit()
 			return 1
