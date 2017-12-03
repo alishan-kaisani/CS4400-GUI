@@ -169,7 +169,6 @@ def RemoveCard(cardnum):
 	sql = 'UPDATE Breezecard SET BelongsTo=null, Value=0.00 WHERE BreezecardNum="{}";'.format(cardnum)
 	try:
 		with connection.cursor() as cursor:
-			print(sql)
 			cursor.execute(sql)
 			connection.commit()
 			return 1
