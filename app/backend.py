@@ -167,6 +167,11 @@ def AddBreezeCard(cardnum):
 def RemoveCard(cardnum):
 	"""Disassociate a user from a breeze card.
 	Returns 1 to indicate success"""
+	if IsSuspended(cardnum):
+		return "Can't remove suspendd card"
+	if PassengerInTrip():
+		if cardnum == BreezecardForTrip():
+			return "Can't remove Breezecard while in Trip"
 	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',
@@ -533,6 +538,8 @@ def AssignCardToOwner(cardNumber, newOwner):
 			connection.commit
 			cursor.execute(sql2)
 			connection.commit()
+			if n and n[0]==1:
+				return "Card Transferred and Previous Owner Assigned new Random Card"
 			return 1
 	except:
 		return sys.exc_info()[0]
@@ -655,7 +662,7 @@ def ViewPassengerCards(username=None):
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',
 								db = 'cs4400_Group_110')
-	sql = 'SELECT BreezecardNum, Value FROM Breezecard where BelongsTo="{}";'.format(username)
+	sql = 'SELECT BreezecardNum, Value FROM Breezecard where BelongsTo="{}" AND BreezecardNum NOT IN (SELECT BreezecardNum FROM Conflict);'.format(username)
 	try:
 		with connection.cursor() as cursor:
 			cursor.execute(sql)

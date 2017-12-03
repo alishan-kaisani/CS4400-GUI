@@ -37,7 +37,9 @@ class WelcomeToMartaFrame(QtWidgets.QFrame, Ui_Frame):
 		self.PopulateBreezeCards()
 		self.breezeCardBox.currentIndexChanged.connect(self.UpdateBreezeCard)
 	def Refresh(self):
-		self.UpdateView();
+		self.hide()
+		self.PopulateBreezeCards()
+		self.show()
 		return
 	def UpdateView(self):
 		self.hide()
@@ -65,6 +67,9 @@ class WelcomeToMartaFrame(QtWidgets.QFrame, Ui_Frame):
 		cur_breezeCard = self.breezeCardBox.currentText()
 		cur_breezeCard = cur_breezeCard.replace(" ","")
 
+		if cur_breezeCard == '':
+			return
+
 		if backend.IsSuspended(cur_breezeCard):
 			self.balanceAmount.setText("Card Suspended")
 			self.endingAtBox.setEnabled(False)
@@ -80,7 +85,6 @@ class WelcomeToMartaFrame(QtWidgets.QFrame, Ui_Frame):
 
 		if backend.PassengerInTrip():
 			if cur_breezeCard != backend.BreezecardForTrip():
-				print('bad')
 				self.endingAtBox.setEnabled(False)
 				self.startAtBox.setEnabled(False)
 				self.startTripLabel.setStyleSheet("color:red")
@@ -114,8 +118,11 @@ class WelcomeToMartaFrame(QtWidgets.QFrame, Ui_Frame):
 			self.endingAtBox.addItems(endList)
 
 			self.startAtBox.setEnabled(True)
+			self.endingAtBox.setEnabled(False)
 			self.startTripLabel.setStyleSheet("color:rgb(57, 140, 78)")
+			self.endTripLabel.setStyleSheet("color:red")
 			self.tripLabel.setText("No Trip In Progress")
+			self.tripLabel.setStyleSheet("color: green")
 
 			val = backend.BreezeCardMoney(cur_breezeCard)
 			self.balanceAmount.setText("$ {:0.2f}".format(val))
@@ -248,6 +255,7 @@ class WelcomeToMartaFrame(QtWidgets.QFrame, Ui_Frame):
 		self.newframe.UpdateText()
 		self.newframe.show()
 	def OpenSuccess(self):
+		return
 		self.newframe = success_screen.SuccessFrame()
 		self.newframe.InitFromOtherFile(Ui_Frame)
 		self.newframe.text = self.success;

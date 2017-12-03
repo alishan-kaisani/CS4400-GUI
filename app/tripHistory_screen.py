@@ -38,21 +38,20 @@ class TripHistoryFrame(QtWidgets.QFrame, Ui_Frame):
 		self.show()
 		self.OpenSuccess()
 	def CreateView(self, startTime, endTime):
+		self.tableWidget.setSortingEnabled(False)
 		data = backend.TripHistoryOfUser(startTime,endTime)
 		self.tableWidget.setRowCount = len(data)
 		for i in range(0,len(data)):
-			print(data[i][2])
 			self.tableWidget.insertRow(i)
 			if (data[i][1]) != None:
 				start_name = str(backend.ViewSingleStation(data[i][1])[0]) #get data from start_stopId
 			else:
 				start_name = "NULL"
 			if (data[i][2]) != None:
-				print(backend.ViewSingleStation(data[i][2]))
 				end_name = str(backend.ViewSingleStation(data[i][2])[0]) #get data from end_stopId
 			else:
 				end_name = "NULL"
-			data[i] = [str(data[i][0])[0:4], start_name, end_name, ("$"+"{:0.2f}".format(data[i][3])), data[i][4]]
+			data[i] = [data[i][0], start_name, end_name, ("$"+"{:0.2f}".format(data[i][3])), (data[i][4])[0:4]]
 			#entry 1: replace breezecardnum with first 4 digits
 			#entry 2: replace start_stopId with start_name
 			#entry 3: repalce end_stopId with end_name
@@ -66,6 +65,7 @@ class TripHistoryFrame(QtWidgets.QFrame, Ui_Frame):
 		self.tableWidget.horizontalHeader().setSectionResizeMode(2,QtWidgets.QHeaderView.ResizeToContents)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(3,QtWidgets.QHeaderView.ResizeToContents)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(3,QtWidgets.QHeaderView.Stretch)
+		self.tableWidget.setSortingEnabled(True)
 	def Reset(self): 
 		#year,month,day,hour,min
 		start = QtCore.QDateTime(1900,1,1,12,0)
@@ -79,6 +79,7 @@ class TripHistoryFrame(QtWidgets.QFrame, Ui_Frame):
 		self.newframe.UpdateText()
 		self.newframe.show()
 	def OpenSuccess(self):
+		return
 		self.newframe = success_screen.SuccessFrame()
 		self.newframe.InitFromOtherFile(Ui_Frame)
 		self.newframe.text = self.success;

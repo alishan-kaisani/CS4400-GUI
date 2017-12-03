@@ -40,6 +40,7 @@ class StationListingFrame(QtWidgets.QFrame, Ui_Frame):
 		self.show()
 		self.OpenSuccess()
 	def CreateView(self):
+		self.tableWidget.setSortingEnabled(False)
 		data = backend.PrettifyViewStations()
 		self.tableWidget.setRowCount = len(data)
 		font = QtGui.QFont()
@@ -59,6 +60,7 @@ class StationListingFrame(QtWidgets.QFrame, Ui_Frame):
 		self.tableWidget.horizontalHeader().setSectionResizeMode(0,QtWidgets.QHeaderView.ResizeToContents)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(1,QtWidgets.QHeaderView.ResizeToContents)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(2,QtWidgets.QHeaderView.ResizeToContents)
+		self.tableWidget.setSortingEnabled(True)
 	def ViewStation(self):
 		# cur_stopId = cur_station.data("Stop Id")
 		if (len(self.tableWidget.selectedItems()) == 0):
@@ -83,7 +85,7 @@ class StationListingFrame(QtWidgets.QFrame, Ui_Frame):
 			data_dict["Nearest Intersection"] = "Not Available for Trains"
 		else:
 			if (backend.ViewIntersection(data_dict["Stop ID"]) == None):
-				data_dict["Nearest Intersection"] = "Null"
+				data_dict["Nearest Intersection"] = "Not Provided for this Bus Station"
 			else: 
 				data_dict["Nearest Intersection"] = backend.ViewIntersection(data_dict["Stop ID"])
 		self.OpenStationDetail(data_dict)
@@ -104,6 +106,7 @@ class StationListingFrame(QtWidgets.QFrame, Ui_Frame):
 		self.newframe.UpdateText()
 		self.newframe.show()
 	def OpenSuccess(self):
+		return
 		self.newframe = success_screen.SuccessFrame()
 		self.newframe.InitFromOtherFile(Ui_Frame)
 		self.newframe.text = self.success;

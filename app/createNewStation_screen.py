@@ -83,6 +83,7 @@ class CreateNewStationFrame(QtWidgets.QFrame, Ui_Frame):
 		self.newframe.UpdateText()
 		self.newframe.show()
 	def OpenSuccess(self):
+		return
 		self.newframe = success_screen.SuccessFrame()
 		self.newframe.InitFromOtherFile(Ui_Frame)
 		self.newframe.text = self.success;

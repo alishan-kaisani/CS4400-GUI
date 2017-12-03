@@ -40,6 +40,9 @@ QLabel {color: #009fd7; font-weight: bold;}
      <height>23</height>
     </rect>
    </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
    <property name="text">
     <string>Update</string>
    </property>
@@ -52,6 +55,9 @@ QLabel {color: #009fd7; font-weight: bold;}
      <width>75</width>
      <height>23</height>
     </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="text">
     <string>Reset</string>
@@ -160,6 +166,9 @@ QLabel {color: #009fd7; font-weight: bold;}
      <height>21</height>
     </rect>
    </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
    <property name="dateTime">
     <datetime>
      <hour>0</hour>
@@ -182,6 +191,9 @@ QLabel {color: #009fd7; font-weight: bold;}
      <width>151</width>
      <height>21</height>
     </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="dateTime">
     <datetime>

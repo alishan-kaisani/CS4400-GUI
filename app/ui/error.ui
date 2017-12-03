@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>385</width>
-    <height>166</height>
+    <width>341</width>
+    <height>168</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,7 +31,7 @@
     <rect>
      <x>0</x>
      <y>10</y>
-     <width>391</width>
+     <width>341</width>
      <height>41</height>
     </rect>
    </property>
@@ -39,7 +39,7 @@
     <string notr="true">#errorLabel {font-size: 30px; color: red; font-weight: bold;}</string>
    </property>
    <property name="text">
-    <string>ERROR! Ya Dun Goofed!</string>
+    <string>ERROR</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
@@ -52,9 +52,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>70</y>
+     <y>60</y>
      <width>141</width>
-     <height>31</height>
+     <height>81</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -73,11 +73,14 @@
   <widget class="QPushButton" name="closeButton">
    <property name="geometry">
     <rect>
-     <x>160</x>
+     <x>130</x>
      <y>140</y>
      <width>75</width>
      <height>23</height>
     </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="text">
     <string>Close</string>
@@ -87,9 +90,9 @@
    <property name="geometry">
     <rect>
      <x>150</x>
-     <y>70</y>
-     <width>231</width>
-     <height>61</height>
+     <y>60</y>
+     <width>191</width>
+     <height>81</height>
     </rect>
    </property>
    <property name="styleSheet">

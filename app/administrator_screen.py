@@ -55,6 +55,7 @@ class AdministratorFrame(QtWidgets.QFrame, Ui_Frame):
 		self.success = "Logged Out Successfully"
 		self.OpenSuccess()
 	def OpenSuccess(self):
+		return
 		self.newframe = success_screen.SuccessFrame()
 		self.newframe.InitFromOtherFile(Ui_Frame)
 		self.newframe.text = self.success

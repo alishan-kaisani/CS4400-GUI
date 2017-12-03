@@ -25,6 +25,7 @@ class PassengerFlowReportFrame(QtWidgets.QFrame, Ui_Frame):
 		self.resetButton.clicked.connect(self.ResetFilter)
 		self.CreateView(datetime(2017,1,1,1,0,0,0),datetime(2017,12,31,11,59,0,0))
 	def CreateView(self, startTime, endTime):
+		self.tableWidget.setSortingEnabled(False)
 		if not (endTime > startTime):
 			self.error = "End Time must be greater than Start Time"
 			self.OpenError()
@@ -50,6 +51,7 @@ class PassengerFlowReportFrame(QtWidgets.QFrame, Ui_Frame):
 		self.tableWidget.horizontalHeader().setSectionResizeMode(2,QtWidgets.QHeaderView.Stretch)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(3,QtWidgets.QHeaderView.ResizeToContents)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(4,QtWidgets.QHeaderView.Stretch)
+		self.tableWidget.setSortingEnabled(True)
 	def UpdateFilter(self): 
 		while (self.tableWidget.rowCount() > 0):
 			self.tableWidget.removeRow(0)
@@ -73,6 +75,7 @@ class PassengerFlowReportFrame(QtWidgets.QFrame, Ui_Frame):
 		self.newframe.UpdateText()
 		self.newframe.show()
 	def OpenSuccess(self):
+		return
 		self.newframe = success_screen.SuccessFrame()
 		self.newframe.InitFromOtherFile(Ui_Frame)
 		self.newframe.text = self.success;

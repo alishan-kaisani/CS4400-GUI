@@ -62,6 +62,7 @@ class SuspendedCardsFrame(QtWidgets.QFrame, Ui_Frame):
 			self.error = "Unknown Error:\n" + str(res)
 			self.OpenError()
 	def CreateView(self): 
+		self.tableWidget.setSortingEnabled(False)
 		data = backend.PrettifyViewSuspendedCards()
 		self.tableWidget.setRowCount = len(data)
 		for i in range(0,len(data)):
@@ -77,6 +78,7 @@ class SuspendedCardsFrame(QtWidgets.QFrame, Ui_Frame):
 		self.tableWidget.horizontalHeader().setSectionResizeMode(0,QtWidgets.QHeaderView.ResizeToContents)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(1,QtWidgets.QHeaderView.ResizeToContents)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(2,QtWidgets.QHeaderView.ResizeToContents)
+		self.tableWidget.setSortingEnabled(True)
 	def OpenError(self):
 		self.newframe = error_screen.ErrorFrame()
 		self.newframe.InitFromOtherFile(Ui_Frame)
@@ -84,6 +86,7 @@ class SuspendedCardsFrame(QtWidgets.QFrame, Ui_Frame):
 		self.newframe.UpdateText()
 		self.newframe.show()
 	def OpenSuccess(self):
+		return
 		self.newframe = success_screen.SuccessFrame()
 		self.newframe.InitFromOtherFile(Ui_Frame)
 		self.newframe.text = self.success;

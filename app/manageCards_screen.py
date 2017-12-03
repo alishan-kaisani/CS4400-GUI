@@ -42,7 +42,6 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 			return
 
 		cardNum = self.tableWidget.item(row,0).data(0)
-		print(type(cardNum))
 		cardNum = cardNum.replace(" ", "")
 
 		res = -1
@@ -126,6 +125,7 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 			self.error = "Unknown Error:\n" + str(res)
 			self.OpenError()
 	def CreateView(self):
+		self.tableWidget.setSortingEnabled(False)
 		data = backend.ViewPassengerCards()
 		self.tableWidget.setRowCount = len(data)
 		font = QtGui.QFont()
@@ -146,6 +146,7 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 					self.tableWidget.item(i,j).setFont(font)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(0,QtWidgets.QHeaderView.Stretch)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(1,QtWidgets.QHeaderView.Stretch)
+		self.tableWidget.setSortingEnabled(True)
 	def OpenError(self):
 		self.newframe = error_screen.ErrorFrame()
 		self.newframe.InitFromOtherFile(Ui_Frame)
@@ -153,6 +154,7 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 		self.newframe.UpdateText()
 		self.newframe.show()
 	def OpenSuccess(self):
+		return
 		self.newframe = success_screen.SuccessFrame()
 		self.newframe.InitFromOtherFile(Ui_Frame)
 		self.newframe.text = self.success;
