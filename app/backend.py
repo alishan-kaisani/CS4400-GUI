@@ -517,9 +517,9 @@ def AssignCardToOwner(cardNumber, newOwner):
 		connection.close()
 
 def GetAllBreezeCardsOfPassenger():
-	"""Return a list of tuples of all a user's breezecards (except those that are suspended).
+	"""Return a list of tuples of all a user's breezecards (including those that are suspended).
 	There are no parameters because passenger_username is always the username of the individual using the GUI at a given time."""
-	sql = 'SELECT BreezecardNum FROM Breezecard WHERE BelongsTo = "{}" AND BreezecardNum NOT IN (SELECT BreezecardNum FROM Conflict);'.format(passenger_username)
+	sql = 'SELECT BreezecardNum FROM Breezecard WHERE BelongsTo = "{}"'.format(passenger_username)
 	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',
