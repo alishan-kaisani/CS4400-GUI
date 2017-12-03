@@ -152,6 +152,9 @@ def AddBreezeCard(cardnum):
 			n = cursor.fetchall()
 			if not n:
 				sql_insert = 'INSERT INTO Breezecard VALUES ("{}", 0.00, "{}");'.format(cardnum, passenger_username)
+				cursor.execute(sql_insert)
+				connection.commit()
+				return "New card created with owner current user"
 			else:
 				cursor.execute(sql)
 				connection.commit()
