@@ -518,7 +518,7 @@ def AssignCardToOwner(cardNumber, newOwner):
 			cursor.execute(sql_curOwnerNumCards)
 			n = cursor.fetchone()
 			if n and n[0]==1:
-				newnum = GenerateNewCardNumber
+				newnum = GenerateNewCardNumber()
 				sql_newCardInsert = 'INSERT INTO Breezecard VALUES ("{}", 0.00, "{}");'.format(newnum, curOwner)
 				cursor.execute(sql_newCardInsert)
 				connection.commit()
