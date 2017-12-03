@@ -105,6 +105,7 @@ def CreateNewUser(username, email, password, cardnumber=None):
 				connection.commit()
 			else:
 				cursor.execute(sql_if_needed)
+				cursor.execute(sql_if_needed_2)
 				connection.commit()
 			return 1
 	except:
