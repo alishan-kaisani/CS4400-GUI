@@ -163,9 +163,19 @@ QLabel {color: #009fd7; font-weight: bold;}
    <property name="accelerated">
     <bool>true</bool>
    </property>
+   <property name="dateTime">
+    <datetime>
+     <hour>0</hour>
+     <minute>0</minute>
+     <second>0</second>
+     <year>1900</year>
+     <month>1</month>
+     <day>1</day>
+    </datetime>
+   </property>
    <property name="date">
     <date>
-     <year>2017</year>
+     <year>1900</year>
      <month>1</month>
      <day>1</day>
     </date>
@@ -182,14 +192,14 @@ QLabel {color: #009fd7; font-weight: bold;}
      <hour>0</hour>
      <minute>0</minute>
      <second>0</second>
-     <year>2000</year>
+     <year>1900</year>
      <month>1</month>
      <day>1</day>
     </datetime>
    </property>
    <property name="minimumDate">
     <date>
-     <year>2000</year>
+     <year>1900</year>
      <month>1</month>
      <day>1</day>
     </date>
@@ -228,9 +238,9 @@ QLabel {color: #009fd7; font-weight: bold;}
      <hour>0</hour>
      <minute>0</minute>
      <second>0</second>
-     <year>2017</year>
-     <month>12</month>
-     <day>31</day>
+     <year>2100</year>
+     <month>1</month>
+     <day>1</day>
     </datetime>
    </property>
    <property name="minimumDateTime">
@@ -330,7 +340,7 @@ QLabel {color: #009fd7; font-weight: bold;}
    </column>
    <column>
     <property name="text">
-     <string>Revenue</string>
+     <string>$Revenue</string>
     </property>
    </column>
   </widget>

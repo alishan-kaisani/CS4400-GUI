@@ -22,6 +22,8 @@ class WelcomeToMartaFrame(QtWidgets.QFrame, Ui_Frame):
 		self.startTripLabel.mousePressEvent= self.StartTrip
 		self.viewTripHistoryButton.clicked.connect(self.ViewTripHistory)
 		self.logOutButton.clicked.connect(self.LogOut)
+		self.refreshButton.clicked.connect(self.Refresh)
+		self.PopulateBreezeCards()
 		self.breezeCardBox.currentIndexChanged.connect(self.UpdateBreezeCard)
 	def InitFromOtherFile(self,Ui_Frame):
 		Ui_Frame.__init__(self)
@@ -31,11 +33,21 @@ class WelcomeToMartaFrame(QtWidgets.QFrame, Ui_Frame):
 		self.startTripLabel.mousePressEvent= self.StartTrip
 		self.viewTripHistoryButton.clicked.connect(self.ViewTripHistory)
 		self.logOutButton.clicked.connect(self.LogOut)
+		self.refreshButton.clicked.connect(self.Refresh)
 		self.PopulateBreezeCards()
 		self.breezeCardBox.currentIndexChanged.connect(self.UpdateBreezeCard)
+	def Refresh(self):
+		self.UpdateView();
+		return
+	def UpdateView(self):
+		self.hide()
+		self.UpdateBreezeCard()
+		self.show()
+		return
 	def PopulateBreezeCards(self): 
 		#backend function that returns a list of breezecard numbers
 		cardList = backend.GetAllBreezeCardsOfPassenger()
+		self.breezeCardBox.clear()
 
 		if (type(cardList) != list):
 			self.error = "Error in Populating Breeze Cards - backend gave bad data"
@@ -48,69 +60,71 @@ class WelcomeToMartaFrame(QtWidgets.QFrame, Ui_Frame):
 			card = card[0:4] + " " + card[4:8] + " " + card[8:12] + " " + card[12:16]
 			newList.append(card)
 		self.breezeCardBox.addItems(newList)
-		#self.UpdateBreezeCard()
+		self.UpdateBreezeCard()
 	def UpdateBreezeCard(self): 
 		cur_breezeCard = self.breezeCardBox.currentText()
 		cur_breezeCard = cur_breezeCard.replace(" ","")
+		
+		self.startAtBox.clear()
+		self.endingAtBox.clear()
 
 		val = backend.BreezeCardMoney(cur_breezeCard)
-		self.balanceAmount.setText('$ {0.2f}'.format(val))
+		self.balanceAmount.setText('$ {:0.2f}'.format(val))
 
 		details = backend.TripHistorySingleBreezecard(cur_breezeCard)
 		#details is tuple of form (breezecardNum,value,username, fare, StartTime,StartsAt,EndsAt)
 		
-		if len(details) == 0:
-			#this query only returns empty when this card hasn't been involved in a trip
+		if not backend.PassengerInTrip() or len(details) == 0:
+			#this occurs when the passenger is not in a trip
 			startList = []
 			endList = []
 			station_list = backend.PrettifyViewStations()
 			
 			#Fill in Start at Values
 			for station in station_list:
-				#if isTrain
-				if ViewSingleStation(station[1])[4]: 
-					item = station[0] + " -T-  $" + str(round(station[2],2))
-				else:
-					item = station[0] + "-B-  $" + str(round(station[2],2))
+				item = ('{} - {} - ${:0.2f}'.format(station[1],station[0],station[2]))
 				startList.append(item)
 			self.startAtBox.addItems(startList)
 			
 			#Fill in End at Values
 			for station in station_list:
-				item = station[0]
+				item = ('{} - {}'.format(station[1],station[0]))
 				endList.append(item)
 			self.endingAtBox.addItems(endList)
 
+			self.startAtBox.setEnabled(True)
+			self.startTripLabel.setStyleSheet("color:rgb(57, 140, 78")
 			self.tripLabel.setText("No Trip In Progress")
 
 			val = backend.BreezeCardMoney(cur_breezeCard)
-			val = round(val,2)
-			self.balanceAmount.setText("$ {0.2f}".fomrat(val))
-		elif len(details) > 0:
-			val = details[1]
-			val = round(val,2)
-			self.balanceAmount.setText("$ {0.2f}".format(val))
-			if (details[6] == None):
+			self.balanceAmount.setText("$ {:0.2f}".format(val))
+		else:
+			trip_detail = details[0]
+			val = float(trip_detail[1])
+			self.balanceAmount.setText("$ {:0.2f}".format(val))
+			if (trip_detail[6] == None):
 				#They're in a trip so display trip start & disable startTrip
-				station = backend.ViewSingleStation(StartsAt)
-				stationName = station[0]
-				item = stationName + round(details[3],2)
+				station = backend.ViewSingleStation(trip_detail[5])
+				item = ('{} - {}'.format(station[1],station[0]))
 				self.startAtBox.addItem(item)
-				self.startAtBox.enabled = False
+				self.startAtBox.setEnabled(False)
 
-				self.startTripLabel.enabled = False
+				self.startTripLabel.setStyleSheet("color: red")
 				
 				self.tripLabel.setText("Trip in Progress")
 
-				#pass in IsTrain to get the right type of stations to view
-				station_list = backend.ViewAllTypeStations(station[4])
+				if station[4]:
+					#if IsTrain
+					station_list = backend.ViewAllTrainStations()
+				else:
+					station_list = backend.ViewAllBusStations()
 
+				newList = []
 				for station in station_list:
-					newList = []
-					newList.append(station[0]) #stationName
-				self.endAtBox.addItems(newList)
+					newList.append("{} - {}".format(station[1],station[0]) )#stationName
+				self.endingAtBox.addItems(newList)
 	def StartTrip(self, event): 
-		if PassengerInTrip():
+		if backend.PassengerInTrip():
 			self.error = "Passenger In Trip"
 			self.OpenError()
 			return
@@ -119,25 +133,61 @@ class WelcomeToMartaFrame(QtWidgets.QFrame, Ui_Frame):
 		cur_breezeCard = cur_breezeCard.replace(" ","")
 
 		cur_station = self.startAtBox.currentText()
-		pieces = cur_station.split('$') #will split into  pieces, last with fare as decimal - 'x.xx'
-		station_fare = float(pieces[-1])
-		pieces = cur_station.split('-')
-		isTrain = True
-		if pieces[1] == "B":
-			isTrain = False
+		pieces = cur_station.split('-') #will split into  pieces, last with fare as decimal - 'x.xx'
+		station_stopId = pieces[0][:-1]
+		data = backend.ViewSingleStation(station_stopId)
 
-		if BreezeCardMoney(cur_breezeCard) < station_fare:
+		station_fare = data[2]
+		isTrain = data[4]
+
+		if backend.BreezeCardMoney(cur_breezeCard) < station_fare:
 			self.error = "Insufficient Funds"
 			self.OpenError()
 			return
 
-		backend.startTrip(cur_breezeCard,cur_station,isTrain)
-
-		self.error = "StartTrip Function Not Defined Yet"
-		self.OpenError()
+		res = -1
+		res = backend.StartTrip(cur_breezeCard,station_stopId)
+		
+		if res == 1:
+			self.UpdateView()
+			self.success = "Trip Started!"
+			self.OpenSuccess()
+		elif res == -1:
+			self.error = "Error in Starting Trip"
+			self.OpenError()
+			return
+		else: 
+			self.error = "Unkown Error:\n" + str(res)
+			self.OpenError()
+			return
 	def EndTrip(self, event): 
-		self.error = "EndTrip Function Not Defined Yet"
-		self.OpenError()
+		if not backend.PassengerInTrip():
+			self.error = "Passenger Not In Trip"
+			self.OpenError()
+			return
+
+		cur_breezeCard = self.breezeCardBox.currentText()
+		cur_breezeCard = cur_breezeCard.replace(" ","")
+
+		end_station = self.endingAtBox.currentText()
+		pieces = end_station.split('-') #will split into  pieces, last with fare as decimal - 'x.xx'
+		station_stopId = pieces[0][:-1]
+
+		res = -1
+		res = backend.EndTrip(cur_breezeCard,station_stopId)
+		
+		if res == 1:
+			self.UpdateView()
+			self.success = "Trip Ended!"
+			self.OpenSuccess()
+		elif res == -1:
+			self.error = "Error in Ending Trip"
+			self.OpenError()
+			return
+		else: 
+			self.error = "Unkown Error:\n" + str(res)
+			self.OpenError()
+			return
 	def ViewTripHistory(self):
 		self.frame = tripHistory_screen.TripHistoryFrame()
 		self.frame.InitFromOtherFile(Ui_Frame)

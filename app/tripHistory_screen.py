@@ -3,6 +3,7 @@ import sys
 from PyQt5 import QtCore, QtGui, uic, QtWidgets
 import error_screen
 import success_screen
+import backend
 
 qtCreatorFile = "ui/tripHistory.ui" # Enter file here.
 
@@ -17,46 +18,50 @@ class TripHistoryFrame(QtWidgets.QFrame, Ui_Frame):
 		self.resetButton.clicked.connect(self.Reset)
 		startTime = self.startDateTimeEdit.dateTime().toPyDateTime()
 		endTime = self.endDateTimeEdit.dateTime().toPyDateTime()
+		self.CreateView(startTime,endTime)
 	def InitFromOtherFile(self,Ui_Frame):
 		Ui_Frame.__init__(self)
 		self.setupUi(self)
 		self.updateButton.clicked.connect(self.Update)
 		self.resetButton.clicked.connect(self.Reset)
-		sstartTime = self.startDateTimeEdit.dateTime().toPyDateTime()
+		startTime = self.startDateTimeEdit.dateTime().toPyDateTime()
 		endTime = self.endDateTimeEdit.dateTime().toPyDateTime()
+		self.CreateView(startTime,endTime)
 	def Update(self): 
 		startTime = self.startDateTimeEdit.dateTime().toPyDateTime()
 		endTime = self.endDateTimeEdit.dateTime().toPyDateTime()
 		self.hide()
-		self.createView(startTime,endTime)
+		while (self.tableWidget.rowCount() > 0):
+			self.tableWidget.removeRow(0)
+		self.CreateView(startTime,endTime)
 		self.success = "Updated View!"
 		self.show()
 		self.OpenSuccess()
 	def CreateView(self, startTime, endTime):
-		data = backend.ViewTripHistory(startTime,endTime)
+		data = backend.TripHistoryOfUser(startTime,endTime)
 		self.tableWidget.setRowCount = len(data)
 		for i in range(0,len(data)):
 			self.tableWidget.insertRow(i)
+			start_name = str(backend.ViewSingleStation(data[i][1])[0]) #get data from start_stopId
+			end_name = str(backend.ViewSingleStation(data[i][2])[0]) #get data from end_stopId
+			data[i] = [str(data[i][0])[0:4], start_name, end_name, ("$"+"{:0.2f}".format(data[i][3])), data[i][4]]
+			#entry 1: replace breezecardnum with first 4 digits
+			#entry 2: replace start_stopId with start_name
+			#entry 3: repalce end_stopId with end_name
+			#entry 4: replace fare with nicely formatted string
 			for j in range(0,self.tableWidget.columnCount()):
-				if j == 4: 
-					#if dealing with breezecard #.. insert spaces
-					cardNum = str(data[i][j])
-					cardNum = str[0:4] + " " + str[4:8] + " " + str[8:12] + " " + str[12:16]
-					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(cardNum))
-				elif j == 3:
-					#if dealing with fare paid.. adjust formating 
-					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem("$"+"{0:.2f}".format(data[i][j])))
-				else:
-					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(data[i][j]))
-					self.tableWidget.item(i,j).setFont(font)
+				self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(data[i][j]))
+		
+		#formatting
 		self.tableWidget.horizontalHeader().setSectionResizeMode(0,QtWidgets.QHeaderView.ResizeToContents)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(1,QtWidgets.QHeaderView.ResizeToContents)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(2,QtWidgets.QHeaderView.ResizeToContents)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(3,QtWidgets.QHeaderView.ResizeToContents)
+		self.tableWidget.horizontalHeader().setSectionResizeMode(3,QtWidgets.QHeaderView.Stretch)
 	def Reset(self): 
 		#year,month,day,hour,min
-		start = QtCore.QDateTime(2017,1,1,12,0)
-		end = QtCore.QDateTime(2017,12,31,12,0)
+		start = QtCore.QDateTime(1900,1,1,12,0)
+		end = QtCore.QDateTime(2100,12,31,12,0)
 		self.startDateTimeEdit.setDateTime(start)
 		self.endDateTimeEdit.setDateTime(end)
 	def OpenError(self):

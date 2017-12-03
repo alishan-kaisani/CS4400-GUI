@@ -140,7 +140,7 @@ class ManageCardsFrame(QtWidgets.QFrame, Ui_Frame):
 					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(cardNum))
 				elif j == 1:
 					#if dealing with card values.. adjust formating 
-					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem("$"+"{0:.2f}".format(data[i][j])))
+					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem("$"+"{:0.2f}".format(data[i][j])))
 				else:
 					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem("Remove"))
 					self.tableWidget.item(i,j).setFont(font)

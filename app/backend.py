@@ -605,14 +605,16 @@ def BreezecardSearch(username='', cardNumber='', minValue=0, maxValue=1000.00, s
 		connection.close()
 
 # POSSIBLE FIX: Make query so that it does not show suspended cards
-def ViewPassengerCards():
+def ViewPassengerCards(username=None):
 	"""View all the breezecards of a passenger and the associated values associated with the breesecards.
 	Returns a list of tuples from the database of the form (BreezecardNum, Username)."""
+	if username == None:
+		username = passenger_username
 	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',
 								db = 'cs4400_Group_110')
-	sql = 'SELECT BreezecardNum, Value FROM Breezecard where BelongsTo="{}";'.format(passenger_username)
+	sql = 'SELECT BreezecardNum, Value FROM Breezecard where BelongsTo="{}";'.format(username)
 	try:
 		with connection.cursor() as cursor:
 			cursor.execute(sql)
@@ -739,11 +741,16 @@ def StartTrip(cardnum, stationID):
 	finally:
 		connection.close()
 
-def PassengerInTrip():
+def PassengerInTrip(username=None):
 	"""Determine whether the user currently logged on is currently taking a trip.
 	passenger_username is a global variable, so this function does not need any input parameters.
 	Returns True if passenger is in a trip or False if not."""
-	cardlist = [x[0] for x in ViewPassengerCards()]
+	if username == None:
+		#Passenger is logged in
+		cardlist = [x[0] for x in ViewPassengerCards()]
+	else:
+		#Admin is logged in
+		cardlist = [x[0] for x in ViewPassengerCards()]
 	for card in cardlist:
 		connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
 								user = 'cs4400_Group_110',
@@ -759,3 +766,24 @@ def PassengerInTrip():
 		except:
 			return sys.exc_info()[0]
 	return False
+
+def BreezeCardUser(cardNum):
+	"""Return the username associated with a provided BreezeCard.Returns username of a breezecard.
+	Input: BreezeCard #
+	Output: Username in BreezeCard table"""
+	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+							user = 'cs4400_Group_110',
+							password = 'KAfx5IQr',
+							db = 'cs4400_Group_110')
+	sql = 'SELECT BelongsTo FROM Breezecard WHERE BreezecardNum="{}";'.format(cardNum)
+	try:
+		with connection.cursor() as cursor:
+			cursor.execute(sql)
+			m = cursor.fetchall()
+			if len(m) != 0:
+				#gets exact string out of tuple
+				return m[0][0]
+			else:
+				return None
+	except:
+		return sys.exc_info()[0]

@@ -31,7 +31,6 @@ class PassengerFlowReportFrame(QtWidgets.QFrame, Ui_Frame):
 			return
 
 		data = backend.ViewPassengerFlowReport(startTime,endTime)
-		print(data)
 
 		if type(data) != list:
 			self.error = "Unkown Error\n" + str(data)
@@ -43,7 +42,7 @@ class PassengerFlowReportFrame(QtWidgets.QFrame, Ui_Frame):
 			self.tableWidget.insertRow(i)
 			for j in range(0,self.tableWidget.columnCount()):
 				if j == 4:
-					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem("$"+"{0:.2f}".format(data[i][j])))
+					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem("$" + "{0:.2f}".format(data[i][j])))
 				else:
 					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(str(data[i][j])))
 		self.tableWidget.horizontalHeader().setSectionResizeMode(0,QtWidgets.QHeaderView.Stretch)
