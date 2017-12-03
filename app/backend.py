@@ -166,7 +166,7 @@ def RemoveCard(cardnum):
 		m = cursor.fetchone()
 		if m[0] == 1:
 			return "You can't delete your only breezecard."
-	sql = 'UPDATE Breezecard SET BelongsTo=null WHERE BreezecardNum="{}";'.format(cardnum)
+	sql = 'UPDATE Breezecard SET BelongsTo=null, Value=0.00 WHERE BreezecardNum="{}";'.format(cardnum)
 	try:
 		with connection.cursor() as cursor:
 			print(sql)
