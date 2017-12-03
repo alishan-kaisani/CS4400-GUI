@@ -825,3 +825,22 @@ def BreezecardForTrip():
 			return sys.exc_info()[0]
 	connection.close()
 	return "Passenger not currently in trip"
+
+def IsSuspended(cardnum):
+	"""Determine whether a given breezecard is suspended.
+	cardnum (str) is self-explanatory.
+	Return True if suspended, else False."""
+	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+								user = 'cs4400_Group_110',
+								password = 'KAfx5IQr',
+								db = 'cs4400_Group_110')
+	sql = 'SELECT * FROM Conflict WHERE BreezecardNum="{}";'.format(cardnum)
+	try:
+		with connection.cursor() as cursor:
+			cursor.execute(sql)
+			m = cursor.fetchall()
+			return True if m else False
+	except:
+		return sys.exc_info()[0]
+	finally:
+		connection.close()
