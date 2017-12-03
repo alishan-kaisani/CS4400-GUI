@@ -133,7 +133,7 @@ class BreezeCardManagementFrame(QtWidgets.QFrame, Ui_Frame):
 			return
 
 		curOwner = backend.BreezeCardUser(cardNum)
-		if curOwner != NULL:
+		if curOwner != None:
 			#Breezecard is already assigned so check if in Trip 
 			if backend.PassengerInTrip(curOwner):
 				self.error = "Passenger is in Trip. Wait to change card Owner"

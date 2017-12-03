@@ -784,7 +784,7 @@ def PassengerInTrip(username=None):
 		cardlist = [x[0] for x in ViewPassengerCards()]
 	else:
 		#Admin is logged in
-		cardlist = [x[0] for x in ViewPassengerCards()]
+		cardlist = [x[0] for x in ViewPassengerCards(username)]
 	for card in cardlist:
 		connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
 								user = 'cs4400_Group_110',

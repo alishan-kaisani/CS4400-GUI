@@ -65,13 +65,24 @@ class WelcomeToMartaFrame(QtWidgets.QFrame, Ui_Frame):
 		cur_breezeCard = self.breezeCardBox.currentText()
 		cur_breezeCard = cur_breezeCard.replace(" ","")
 
+		if backend.IsSuspended(cur_breezeCard):
+			self.balanceAmount.setText("Card Suspended")
+			self.endingAtBox.setEnabled(False)
+			self.startAtBox.setEnabled(False)
+			self.startTripLabel.setStyleSheet("color:red")
+			self.endTripLabel.setStyleSheet("color:red")
+			self.tripLabel.setStyleSheet("color:red")
+			self.tripLabel.setText("Suspended card can't start trip")
+			return
+
 		val = backend.BreezeCardMoney(cur_breezeCard)
 		self.balanceAmount.setText('$ {:0.2f}'.format(val))
 
 		if backend.PassengerInTrip():
 			if cur_breezeCard != backend.BreezecardForTrip():
+				print('bad')
 				self.endingAtBox.setEnabled(False)
-				slef.startAtBox.setEnabled(False)
+				self.startAtBox.setEnabled(False)
 				self.startTripLabel.setStyleSheet("color:red")
 				self.endTripLabel.setStyleSheet("color:red")
 				self.tripLabel.setStyleSheet("color:red")
@@ -84,7 +95,7 @@ class WelcomeToMartaFrame(QtWidgets.QFrame, Ui_Frame):
 		details = backend.TripHistorySingleBreezecard(cur_breezeCard)
 		#details is tuple of form (breezecardNum,value,username, fare, StartTime,StartsAt,EndsAt)
 		
-		if not backend.PassengerInTrip() or len(details) == 0:
+		if not backend.PassengerInTrip():
 			#this occurs when the passenger is not in a trip
 			startList = []
 			endList = []
@@ -103,7 +114,7 @@ class WelcomeToMartaFrame(QtWidgets.QFrame, Ui_Frame):
 			self.endingAtBox.addItems(endList)
 
 			self.startAtBox.setEnabled(True)
-			self.startTripLabel.setStyleSheet("color:rgb(57, 140, 78")
+			self.startTripLabel.setStyleSheet("color:rgb(57, 140, 78)")
 			self.tripLabel.setText("No Trip In Progress")
 
 			val = backend.BreezeCardMoney(cur_breezeCard)
@@ -118,8 +129,11 @@ class WelcomeToMartaFrame(QtWidgets.QFrame, Ui_Frame):
 				item = ('{} - {}'.format(station[1],station[0]))
 				self.startAtBox.addItem(item)
 				self.startAtBox.setEnabled(False)
+				self.endingAtBox.setEnabled(True)
 
-				self.startTripLabel.setStyleSheet("color: red")
+				self.startTripLabel.setStyleSheet("color:red")
+				self.endTripLabel.setStyleSheet("color:rgb(57,140,78)")
+				self.tripLabel.setStyleSheet("color:rgb(57,140,78)")
 				
 				self.tripLabel.setText("Trip in Progress")
 
@@ -134,6 +148,14 @@ class WelcomeToMartaFrame(QtWidgets.QFrame, Ui_Frame):
 					newList.append("{} - {}".format(station[1],station[0]) )#stationName
 				self.endingAtBox.addItems(newList)
 	def StartTrip(self, event): 
+		cur_breezeCard = self.breezeCardBox.currentText()
+		cur_breezeCard = cur_breezeCard.replace(" ","")
+
+		if backend.IsSuspended(cur_breezeCard):
+			self.error = "Suspeneded Card can't start trip"
+			self.OpenError()
+			return		
+
 		if backend.PassengerInTrip():
 			self.error = "Passenger In Trip"
 			self.OpenError()
@@ -171,13 +193,18 @@ class WelcomeToMartaFrame(QtWidgets.QFrame, Ui_Frame):
 			self.OpenError()
 			return
 	def EndTrip(self, event): 
+		cur_breezeCard = self.breezeCardBox.currentText()
+		cur_breezeCard = cur_breezeCard.replace(" ","")
+
+		if backend.IsSuspended(cur_breezeCard):
+			self.error = "Suspeneded Card can't end trip"
+			self.OpenError()
+			return		
+
 		if not backend.PassengerInTrip():
 			self.error = "Passenger Not In Trip"
 			self.OpenError()
 			return
-
-		cur_breezeCard = self.breezeCardBox.currentText()
-		cur_breezeCard = cur_breezeCard.replace(" ","")
 
 		end_station = self.endingAtBox.currentText()
 		pieces = end_station.split('-') #will split into  pieces, last with fare as decimal - 'x.xx'
