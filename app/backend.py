@@ -139,6 +139,8 @@ def AddBreezeCard(cardnum):
 			m = cursor.fetchall()
 			if m:
 				sql_makeConflict = 'INSERT INTO Conflict VALUES ("{}", "{}", CURRENT_TIMESTAMP);'.format(passenger_username, cardnum)
+				cursor.execute(sql_makeConflict)
+				connection.commit()
 			else:
 				cursor.execute(sql)
 				connection.commit()
