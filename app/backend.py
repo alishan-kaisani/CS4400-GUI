@@ -109,7 +109,10 @@ def CreateNewUser(username, email, password, cardnumber=None):
 				connection.commit()
 			return 1
 	except:
-		return sys.exc_info()[0]
+		if sys.exc_info()[0] == pymysql.err.IntegrityError:
+			return "Username and/or Email not unique"
+		else:
+			return sys.exc_info()[0]
 	finally:
 		connection.close()
 
