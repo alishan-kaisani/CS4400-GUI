@@ -499,15 +499,17 @@ def AssignCardToOwner(cardNumber, newOwner):
 	sql_curOwnerNumCards = 'SELECT COUNT(*) FROM Breezecard WHERE BelongsTo="{}";'.format(curOwner)
 	try:
 		with connection.cursor() as cursor:
-			cursor.execute(sql_curOwnerNumCards)
-			n = cursor.fetchone()
-			if n and n[0]==1:
-				newnum = GenerateNewCardNumber
-				sql = 'INSERT INTO Breezecard VALUES ("{}", 0.00, "{}");'.format(newnum, curOwner)
 			cursor.execute(sql_check)
 			m = cursor.fetchone()
 			if not m:
 				return "Invalid username; username given is either an admin or not in the database."
+			cursor.execute(sql_curOwnerNumCards)
+			n = cursor.fetchone()
+			if n and n[0]==1:
+				newnum = GenerateNewCardNumber
+				sql_newCardInsert = 'INSERT INTO Breezecard VALUES ("{}", 0.00, "{}");'.format(newnum, curOwner)
+				cursor.execute(sql_newCardInsert)
+				connection.commit()
 			cursor.execute(sql)
 			# connection.commit()
 			cursor.execute(sql2)
