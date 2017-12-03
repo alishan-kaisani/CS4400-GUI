@@ -522,6 +522,7 @@ def AssignCardToOwner(cardNumber, newOwner):
 				cursor.execute(sql_newCardInsert)
 				connection.commit()
 			cursor.execute(sql)
+			connection.commit
 			cursor.execute(sql2)
 			connection.commit()
 			return 1
@@ -768,6 +769,7 @@ def StartTrip(cardnum, stationID):
 	try:
 		with connection.cursor() as cursor:
 			cursor.execute(sql_update)
+			connection.commit()
 			cursor.execute(sql_changevalue)
 			connection.commit()
 			return 1
