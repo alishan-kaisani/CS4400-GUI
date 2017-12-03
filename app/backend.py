@@ -154,7 +154,7 @@ def AddBreezeCard(cardnum):
 				sql_insert = 'INSERT INTO Breezecard VALUES ("{}", 0.00, "{}");'.format(cardnum, passenger_username)
 				cursor.execute(sql_insert)
 				connection.commit()
-				return "New card created with owner current user"
+				return 1
 			else:
 				cursor.execute(sql)
 				connection.commit()
