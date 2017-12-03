@@ -164,7 +164,6 @@ def AddBreezeCard(cardnum):
 	finally:
 		connection.close()
 
-# TO FIX: Make sure that users are allowed to remove their cards if they are suspended
 def RemoveCard(cardnum):
 	"""Disassociate a user from a breeze card.
 	Returns 1 to indicate success"""
