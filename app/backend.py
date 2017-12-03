@@ -142,6 +142,7 @@ def AddBreezeCard(cardnum):
 	finally:
 		connection.close()
 
+# TO FIX: Make sure that users are allowed to remove their cards if they are suspended
 def RemoveCard(cardnum):
 	"""Disassociate a user from a breeze card.
 	Returns 1 to indicate success"""
@@ -478,7 +479,6 @@ def SetCardValue(cardNumber, newValue):
 	finally:
 		connection.close()
 
-# TO FIX: Make sure that assigning a card to a new owner doesn't leave an owner cardless
 def AssignCardToOwner(cardNumber, newOwner):
 	"""Updates the Breezecard table with the new owner of selected Breezecard.
 	cardNumber (str) and newOwner (str) have fairly obvious meanings.
@@ -500,7 +500,8 @@ def AssignCardToOwner(cardNumber, newOwner):
 			cursor.execute(sql_curOwnerNumCards)
 			n = cursor.fetchone()
 			if n and n[0]==1:
-				return "You can't leave a user without a Breezecard"
+				newnum = GenerateNewCardNumber
+				sql = 'INSERT INTO Breezecard VALUES ("{}", 0.00, "{}");'.format(newnum, curOwner)
 			cursor.execute(sql_check)
 			m = cursor.fetchone()
 			if not m:
