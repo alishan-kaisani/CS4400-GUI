@@ -696,6 +696,7 @@ def BreezeCardMoney(cardnum):
 	finally:
 		connection.close()
 
+# TO FIX: If cards are allowed to be suspended mid-trip, then update this function
 def EndTrip(cardnum, stopID):
 	"""End a user's trip taken on a specified Breeze Card.
 	cardnum (str) is self-explanatory; stopID (str) is the station ID of the ending destination.
@@ -728,8 +729,13 @@ def StartTrip(cardnum, stationID):
 	if PassengerInTrip():
 		return "Already in trip."
 	sql_findfare = 'SELECT EnterFare FROM Station WHERE StopID="{}";'.format(stationID)
+	sql_isSuspended = 'SELECT * FROM Conflict WHERE BreezecardNum="{}";'.format(cardnum)
 	try:
 		with connection.cursor() as cursor:
+			cursor.execute(sql_isSuspended)
+			m = cursor.fetchall()
+			if m:
+				return "Breezecard is suspended."
 			cursor.execute(sql_findfare)
 			fare = cursor.fetchone()[0]
 	except:
