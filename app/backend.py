@@ -181,8 +181,13 @@ def AddValue(cardnum, value):
 	if current_value + value > 1000:
 		return "Max value exceeded. No value added to card as a result."
 	sql = 'UPDATE Breezecard SET Value={} WHERE BreezecardNum="{}";'.format(value + current_value, cardnum)
+	sql_isConflicted = 'SELECT * FROM Conflict WHERE BreezecardNum="{}";'.format(cardnum)
 	try:
 		with connection.cursor() as cursor:
+			cursor.execute(sql_isConflicted)
+			m = cursor.fetchall()
+			if m:
+				return "Cannot add value to suspended card."
 			cursor.execute(sql)
 			connection.commit()
 			return 1
@@ -473,7 +478,7 @@ def SetCardValue(cardNumber, newValue):
 	finally:
 		connection.close()
 
-# TO FIX: Make sure that assigning a card to a new owner doesn;t leave an owner cardless
+# TO FIX: Make sure that assigning a card to a new owner doesn't leave an owner cardless
 def AssignCardToOwner(cardNumber, newOwner):
 	"""Updates the Breezecard table with the new owner of selected Breezecard.
 	cardNumber (str) and newOwner (str) have fairly obvious meanings.
@@ -489,8 +494,13 @@ def AssignCardToOwner(cardNumber, newOwner):
 	sql = 'UPDATE Breezecard SET BelongsTo="{}" WHERE BreezecardNum="{}" AND "{}" IN (SELECT Username FROM User WHERE IsAdmin=0);'.format(newOwner, cardNumber, newOwner)
 	sql2 = 'DELETE FROM Conflict WHERE BreezecardNum="{}";'.format(cardNumber)
 	sql_check = 'SELECT * FROM User WHERE Username="{}" AND IsAdmin=0;'.format(newOwner)
+	sql_curOwnerNumCards = 'SELECT COUNT(*) FROM Breezecard WHERE BelongsTo="{}";'.format(curOwner)
 	try:
 		with connection.cursor() as cursor:
+			cursor.execute(sql_curOwnerNumCards)
+			n = cursor.fetchone()
+			if n and n[0]==1:
+				return "You can't leave a user without a Breezecard"
 			cursor.execute(sql_check)
 			m = cursor.fetchone()
 			if not m:
