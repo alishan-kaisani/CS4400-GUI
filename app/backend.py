@@ -364,6 +364,8 @@ def CreateStationWrapper(isTrain, stationName, stopID, entryFare, closedStatus, 
 	isTrain (bool) determines whether the new station is a train station.
 	*args creates variable args (tuple) with 0 or 1 elements (that element, if it exists, is a string of the nearest intersection for bus stations only).
 	Parameters stationName (str), stopID (str), entryFare (float), and closedStatus (bool or int) have the same meaning as before."""
+	if len(stationName) > 50:
+		return "Station name must be <= 50 characters"
 	if isTrain:
 		return CreateTrainStation(stationName, stopID, entryFare, closedStatus)
 	elif not args:
