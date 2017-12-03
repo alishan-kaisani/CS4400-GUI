@@ -609,7 +609,10 @@ def BreezecardSearch(username='', cardNumber='', minValue=0, maxValue=1000.00, s
 								db = 'cs4400_Group_110')
 	if len(cardNumber) not in (0, 16):
 		return "Card number must be 16 digits long or an empty string; do not use spaces or non-numeric characters"
-	sql = 'SELECT * FROM Breezecard WHERE (BreezecardNum NOT IN (SELECT BreezecardNum FROM Conflict)) AND ({} <= Value) AND (Value <= {});'.format(minValue, maxValue)
+	if not showSuspended:
+		sql = 'SELECT * FROM Breezecard WHERE (BreezecardNum NOT IN (SELECT BreezecardNum FROM Conflict)) AND ({} <= Value) AND (Value <= {});'.format(minValue, maxValue)
+	else:
+		sql = 'SELECT * FROM Breezecard WHERE ({} <= Value) AND (Value <= {});'.format(minValue, maxValue)
 	sql2 = 'SELECT BreezecardNum, Value, Username FROM Conflict NATURAL JOIN Breezecard;'
 	if username != '':
 		sql = sql[:-1] + ' AND (BelongsTo = "{}");'.format(username)
