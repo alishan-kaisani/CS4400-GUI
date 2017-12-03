@@ -30,13 +30,12 @@ class BreezeCardManagementFrame(QtWidgets.QFrame, Ui_Frame):
 		self.hide()
 		while (self.tableWidget.rowCount() > 0):
 			self.tableWidget.removeRow(0)
-		self.CreateView(owner, cardNum, minVal, maxVal, showSuspended)
+		self.CreateView(owner, cardNum, minVal, maxVal, showSuspended,True)
 		self.success = "Updated View!"
 		self.show()
 		self.OpenSuccess()
-	def CreateView(self, owner, cardNum, minVal, maxVal, showSuspended):
+	def CreateView(self, owner, cardNum, minVal, maxVal, showSuspended,rint=False):
 		data = backend.BreezecardSearch(owner, cardNum, minVal, maxVal, showSuspended)
-
 		if type(data) != list:
 			self.error = "Unkown Error\n" + str(data)
 			self.OpenError()
@@ -46,6 +45,8 @@ class BreezeCardManagementFrame(QtWidgets.QFrame, Ui_Frame):
 		font = QtGui.QFont()
 		font.setBold(True)
 		for i in range(0,len(data)):
+			print(data[i])
+			print()
 			self.tableWidget.insertRow(i)
 			suspended = False;
 			if (data[i][2] == "Suspended" or data[i][2] == "Unassigned"):
@@ -56,11 +57,11 @@ class BreezeCardManagementFrame(QtWidgets.QFrame, Ui_Frame):
 					cardNum = cardNum[0:4] + " " + cardNum[4:8] + " " + cardNum[8:12] + " " + cardNum[12:16] 
 					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(cardNum))
 				elif j == 1:
-					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem("$"+"{0:.2f}".format(data[i][j])))
+					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem("$"+"{:0.2f}".format(data[i][j])))
 				else:
 					self.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(data[i][j]))
-				if suspended:
-					self.tableWidget.item(i,j).setFont(font)
+				# if suspended:
+				# 	self.tableWidget.item(i,j).setFont(font)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(0,QtWidgets.QHeaderView.Stretch)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(1,QtWidgets.QHeaderView.Stretch)
 		self.tableWidget.horizontalHeader().setSectionResizeMode(2,QtWidgets.QHeaderView.Stretch)
@@ -92,9 +93,15 @@ class BreezeCardManagementFrame(QtWidgets.QFrame, Ui_Frame):
 
 		cardNum = self.tableWidget.item(row,0).data(0)
 		cardNum = cardNum.replace(" ","")
+		print(cardNum)
 		val = self.cardValueSpinBox.value()
 
-		validator = QtGui.QDoubleValidator(1000000000000000,10000000000000000,0)
+		if len(cardNum) != 16:
+			self.error = "Cardnumber is not valid - Must be 16 digits no spaces"
+			self.OpenError()
+			return
+
+		validator = QtGui.QDoubleValidator(0,10000000000000000,0)
 		if (validator.validate(cardNum,0)[0] != 2):
 			#validate() method returns  a tuple (QValiditatorState,QString,int) - look at first index in tuple
 			#Qvalidator State is an enum: {0:"invlaid",1:"Intermediate",2:"Acceptable"}
@@ -145,7 +152,7 @@ class BreezeCardManagementFrame(QtWidgets.QFrame, Ui_Frame):
 
 		if res == 1:
 			self.UpdateView('','',0,1000.00,False)
-			self.newframe.hide()
+			# self.newframe.hide()
 			self.success = "Card Reassigned!"
 			self.OpenSuccess()
 		elif res == -1:
