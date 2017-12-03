@@ -128,14 +128,20 @@ def AddBreezeCard(cardnum):
 	Returns 1 to indicate success.
 	A user inputs a Breeze card number and makes it theirs. The card must exist somewhere in the database."""
 	sql = 'UPDATE Breezecard SET BelongsTo="{}" WHERE BreezecardNum="{}";'.format(passenger_username, cardnum)
+	sql_check = 'SELECT BreezecardNum FROM Breezecard WHERE BreezecardNum="{}" AND BelongsTo IS NOT NULL;'.format(cardnum)
 	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',
 								db = 'cs4400_Group_110')
 	try:
 		with connection.cursor() as cursor:
-			cursor.execute(sql)
-			connection.commit()
+			cursor.execute(sql_check)
+			m = curspopr.fetchall()
+			if m:
+				sql_makeConflict = 'INSERT INTO Conflict VALUES ("{}", "{}", CURRENT_TIMESTAMP);'.format(passenger_username, cardnum)
+			else:
+				cursor.execute(sql)
+				connection.commit()
 			return 1
 	except:
 		return sys.exc_info()[0]
