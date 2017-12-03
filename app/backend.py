@@ -787,3 +787,27 @@ def BreezeCardUser(cardNum):
 				return None
 	except:
 		return sys.exc_info()[0]
+	finally:
+		connection.close()
+
+def BreezecardForTrip():
+	"""Determine whether the passenger using the application is currently on a trip.
+	If the passenger is on a trip, return the Breezecard they're using on the trip.
+	If the passenger is not on a trip, returns a string indicating that the passenger is in a trip"""
+	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
+								user = 'cs4400_Group_110',
+								password = 'KAfx5IQr',
+								db = 'cs4400_Group_110')
+	for card in GetAllBreezeCardsOfPassenger():
+		sql = 'SELECT * FROM Trip WHERE BreezecardNum="{}" AND EndsAt IS NULL;'.format(card)
+		try:
+			with connection.cursor() as cursor:
+				cursor.execute(sql)
+				m = cursor.fetchone()
+				if m:
+					connection.close()
+					return m[0]
+		except:
+			return sys.exc_info()[0]
+	connection.close()
+	return "Passenger not currently in trip"
