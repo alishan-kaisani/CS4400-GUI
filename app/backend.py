@@ -827,7 +827,7 @@ def BreezecardForTrip():
 				m = cursor.fetchone()
 				if m:
 					connection.close()
-					return m[0]
+					return m[2]
 		except:
 			return sys.exc_info()[0]
 	connection.close()
