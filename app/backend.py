@@ -87,6 +87,7 @@ def CreateNewUser(username, email, password, cardnumber=None):
 	sql3 = 'INSERT INTO Breezecard VALUES ("{}", 0.00, "{}");'.format(cardnumber, username)
 	sql_query = 'SELECT * FROM Breezecard WHERE BreezecardNum="{}";'.format(cardnumber)
 	sql_if_needed = 'INSERT INTO Conflict VALUES ("{}", "{}", CURRENT_TIMESTAMP);'.format(username, cardnumber)
+	sql_if_needed_2 = 'INSERT INTO Breezecard VALUES ("{}", 0.00, "{}");'.format(GenerateNewCardNumber(), username)
 	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',
