@@ -473,6 +473,7 @@ def SetCardValue(cardNumber, newValue):
 	finally:
 		connection.close()
 
+# TO FIX: Make sure that assigning a card to a new owner doesn;t leave an owner cardless
 def AssignCardToOwner(cardNumber, newOwner):
 	"""Updates the Breezecard table with the new owner of selected Breezecard.
 	cardNumber (str) and newOwner (str) have fairly obvious meanings.
@@ -483,8 +484,13 @@ def AssignCardToOwner(cardNumber, newOwner):
 								db = 'cs4400_Group_110')
 	sql = 'UPDATE Breezecard SET BelongsTo="{}" WHERE BreezecardNum="{}" AND "{}" IN (SELECT Username FROM User WHERE IsAdmin=0);'.format(newOwner, cardNumber, newOwner)
 	sql2 = 'DELETE FROM Conflict WHERE BreezecardNum="{}";'.format(cardNumber)
+	sql_check = 'SELECT * FROM User WHERE Username="{}" AND IsAdmin=0;'.format(newOwner)
 	try:
 		with connection.cursor() as cursor:
+			cursor.execute(sql_check)
+			m = cursor.fetchone()
+			if not m:
+				return "Invalid username; username given is either an admin or not in the database."
 			cursor.execute(sql)
 			# connection.commit()
 			cursor.execute(sql2)
