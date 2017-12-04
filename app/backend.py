@@ -646,7 +646,6 @@ def BreezecardSearch(username='', cardNumber='', minValue=0, maxValue=1000.00, s
 	finally:
 		connection.close()
 
-# POSSIBLE FIX: Make query so that it does not show suspended cards
 def ViewPassengerCards(username=None):
 	"""View all the breezecards of a passenger and the associated values associated with the breesecards.
 	Returns a list of tuples from the database of the form (BreezecardNum, Username)."""
@@ -723,7 +722,6 @@ def BreezeCardMoney(cardnum):
 	finally:
 		connection.close()
 
-# TO FIX: If cards are allowed to be suspended mid-trip, then update this function
 def EndTrip(cardnum, stopID):
 	"""End a user's trip taken on a specified Breeze Card.
 	cardnum (str) is self-explanatory; stopID (str) is the station ID of the ending destination.
