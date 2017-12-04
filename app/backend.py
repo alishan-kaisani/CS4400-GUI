@@ -592,7 +592,7 @@ def TripHistoryOfUser(startTime, endTime):
 
 def TripHistorySingleBreezecard(bnum):
 	"""Return a list of tuples of all trips associated with a specific Breezecard.
-	bnum (stra) is Breezecard number, startTime (datetime.datetime) and endTime (datetime.datetime) are self-explanatory
+	bnum (str) is Breezecard number, startTime (datetime.datetime) and endTime (datetime.datetime) are self-explanatory
 	The tuples in the list are of the form (BreezecardNum, Value, Username, Fare, StartTime, StartsAt, EndsAt)."""
 	connection = pymysql.connect(host='academic-mysql.cc.gatech.edu',
 								user = 'cs4400_Group_110',
