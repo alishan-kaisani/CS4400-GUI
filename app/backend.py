@@ -579,7 +579,7 @@ def TripHistoryOfUser(startTime, endTime):
 								user = 'cs4400_Group_110',
 								password = 'KAfx5IQr',
 								db = 'cs4400_Group_110')
-	sql = 'SELECT StartTime, StartsAt, EndsAt, Tripfare, BreezecardNum FROM Breezecard NATURAL JOIN Trip WHERE BreezecardNum in (SELECT BreezecardNum FROM Breezecard WHERE BelongsTo="{}") AND ("{}" <= StartTime) AND (StartTime <= "{}");'.format(passenger_username, DTTUS(startTime), DTTUS(endTime))
+	sql = 'SELECT StartTime, StartsAt, EndsAt, Tripfare, BreezecardNum FROM Breezecard NATURAL JOIN Trip WHERE BreezecardNum in (SELECT BreezecardNum FROM Breezecard WHERE BelongsTo="{}") AND ("{}" <= StartTime) AND (StartTime <= "{}") AND BreezecardNum NOT IN (SELECT BreezecardNum FROM Conflict);'.format(passenger_username, DTTUS(startTime), DTTUS(endTime))
 	try:
 		with connection.cursor() as cursor:
 			cursor.execute(sql)
@@ -590,8 +590,6 @@ def TripHistoryOfUser(startTime, endTime):
 	finally:
 		connection.close()
 
-#EDIT: I need startTime and endTime as well, I'm not filtering anything
-#Removed those two inputs and from use in function
 def TripHistorySingleBreezecard(bnum):
 	"""Return a list of tuples of all trips associated with a specific Breezecard.
 	bnum (stra) is Breezecard number, startTime (datetime.datetime) and endTime (datetime.datetime) are self-explanatory
