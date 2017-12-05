@@ -82,6 +82,8 @@ def CreateNewUser(username, email, password, cardnumber=None):
 	if not EnsureIsEmail(email):
 		# GUI error because the email address as entered is not of a valid email format
 		return "Bad Email"
+	if len(password) < 8:
+		return "Password not long enough"
 	sql = 'INSERT INTO User VALUES ("{}", "{}", false);'.format(username, hashlib.md5(password.encode('utf-8')).hexdigest())
 	sql2 = 'INSERT INTO Passenger VALUES ("{}", "{}");'.format(username, email)
 	sql3 = 'INSERT INTO Breezecard VALUES ("{}", 0.00, "{}");'.format(cardnumber, username)
@@ -182,7 +184,7 @@ def RemoveCard(cardnum):
 		m = cursor.fetchone()
 		if m[0] == 1:
 			return "You can't delete your only breezecard."
-	sql = 'UPDATE Breezecard SET BelongsTo=null, Value=0.00 WHERE BreezecardNum="{}";'.format(cardnum)
+	sql = 'UPDATE Breezecard SET BelongsTo=null WHERE BreezecardNum="{}";'.format(cardnum)
 	try:
 		with connection.cursor() as cursor:
 			cursor.execute(sql)
